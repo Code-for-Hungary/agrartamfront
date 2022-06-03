@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Agrártámogatások 2022</title>
+    <script src="config.js"></script>
+    <script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+    <form x-data="searchForm()" x-init="getLists" @submit.prevent="submit">
+        <div>
+            <label for="nev">Név:</label>
+            <input id="nev" type="text" x-model="formData.nev">
+        </div>
+
+        <div>
+            <input id="isfirm" type="radio" value="" x-model="formData.isfirm">
+            <label for="isfirm">Mindegy</label>
+            <input id="isfirmjogi" type="radio" value="1" x-model="formData.isfirm">
+            <label for="isfirmjogi">Cég</label>
+            <input id="isfirmmagan" type="radio" value="0" x-model="formData.isfirm">
+            <label for="isfirmmagan">Őstermelő/egyéni vállalkozó/magánszemély</label>
+            <span x-text="formData.isfirm"></span>
+            <div x-show="formData.isfirm === '0'">
+                <input id="gender" type="radio" value="" x-model="formData.gender">
+                <label for="gender">Mindegy</label>
+                <input id="genderno" type="radio" value="female" x-model="formData.gender">
+                <label for="genderno">Nő</label>
+                <input id="genderferfi" type="radio" name="gender" value="male" x-model="formData.gender">
+                <label for="genderferfi">Férfi</label>
+                <span x-text="formData.gender"></span>
+            </div>
+        </div>
+
+        <div>
+            <label>Év:</label>
+            <template x-for="item in lists.evek">
+                <div x-id="['ev-input']">
+                    <input :id="$id('ev-input')" x-model="formData.ev" type="checkbox" :value="item.ev">
+                    <label :for="$id('ev-input')" x-text="item.ev"></label>
+                </div>
+            </template>
+        </div>
+
+        <div>
+            <label for="irszam">Irányítószám:</label>
+            <input id="irszam" type="text" maxlength="4" x-model="formData.irszam">
+        </div>
+
+        <div>
+            <label for="varos">Település:</label>
+            <input id="varos" type="text" x-model="formData.varos">
+        </div>
+
+        <div>
+            <label for="megye">Megye:</label>
+            <select id="megye" x-model="formData.megye">
+                <option value="">válasszon</option>
+                <template x-for="item in lists.megyek">
+                    <option x-text="item.name" :value="item.id"></option>
+                </template>
+            </select>
+        </div>
+
+        <div>
+            <label>Jogcím:</label>
+            <template x-for="item in lists.jogcimek">
+                <div x-id="['jogcim-input']">
+                    <input :id="$id('jogcim-input')" x-model="formData.jogcim" type="checkbox" :value="item.id">
+                    <label :for="$id('jogcim-input')" x-text="item.name"></label>
+                </div>
+            </template>
+        </div>
+
+        <div>
+            <label for="alap">Alap:</label>
+            <select id="alap" x-model="formData.alap">
+                <option value="">válasszon</option>
+                <template x-for="item in lists.alapok">
+                    <option x-text="item.name" :value="item.id"></option>
+                </template>
+            </select>
+        </div>
+
+        <div>
+            <label for="forras">Forrás:</label>
+            <select id="forras" x-model="formData.forras">
+                <option value="">válasszon</option>
+                <template x-for="item in lists.forrasok">
+                    <option x-text="item.name" :value="item.id"></option>
+                </template>
+            </select>
+        </div>
+
+        <div>
+            <label>Cégcsoport:</label>
+            <template x-for="item in lists.cegcsoportok">
+                <div x-id="['cegcsoport-input']">
+                    <input :id="$id('cegcsoport-input')" x-model="formData.cegcsoport" type="checkbox" :value="item.id">
+                    <label :for="$id('cegcsoport-input')" x-text="item.name"></label>
+                </div>
+            </template>
+            <span x-text="formData.cegcsoport"></span>
+        </div>
+
+        <div>
+            <label for="tamogatott">Támogatott entitás:</label>
+            <select id="tamogatott" x-model="formData.tamogatott">
+                <option value="">válasszon</option>
+                <template x-for="item in lists.tamogatottak">
+                    <option x-text="item.name + ' (' + item.cim + ')'" :value="item.id"></option>
+                </template>
+            </select>
+        </div>
+
+        <div>
+            <label fo="tamosszeg">Támogatás összege:</label>
+            <input id="tamosszeg" type="number" step="any" x-model="formData.tamosszegtol">
+            <input type="number" step="any" x-model="formData.tamosszegig">
+        </div>
+
+        <div>
+            <label fo="evestamosszeg">Éves támogatás összege:</label>
+            <input id="evestamosszeg" type="number" step="any" x-model="formData.evestamosszegtol">
+            <input type="number" step="any" x-model="formData.evestamosszegig">
+        </div>
+
+        <button type="submit" x-text="submitText" :disabled="submitting"></button>
+    </form>
+</body>
+<script>
+    function searchForm() {
+        return {
+            formData: {
+                nev: null,
+                isfirm: "",
+                gender: null,
+                irszam: null,
+                varos: null,
+                ev: [],
+                megye: null,
+                jogcim: [],
+                alap: null,
+                forras: null,
+                cegcsoport: [],
+                tamogatott: null,
+                tamosszegtol: 0,
+                tamosszegig: 0,
+                evestamosszegtol: 0,
+                evestamosszegig: 0,
+
+            },
+            lists: {
+                evek: null,
+                megyek: null,
+                jogcimek: null,
+                alapok: null,
+                forrasok: null,
+                cegcsoportok: null,
+                tamogatottak: null
+            },
+            submitText: 'Keresés',
+            submitting: false,
+            getLists() {
+                fetch(API_URL + '/api/evs')
+                    .then(response => response.json())
+                    .then(data => this.lists.evek = data.data);
+                fetch(API_URL + '/api/megyes')
+                    .then(response => response.json())
+                    .then(data => this.lists.megyek = data.data);
+                fetch(API_URL + '/api/jogcims')
+                    .then(response => response.json())
+                    .then(data => this.lists.jogcimek = data.data);
+                fetch(API_URL + '/api/alaps')
+                    .then(response => response.json())
+                    .then(data => this.lists.alapok = data.data);
+                fetch(API_URL + '/api/forras')
+                    .then(response => response.json())
+                    .then(data => this.lists.forrasok = data.data);
+                fetch(API_URL + '/api/cegcsoports')
+                    .then(response => response.json())
+                    .then(data => this.lists.cegcsoportok = data.data);
+                fetch(API_URL + '/api/tamogatotts')
+                    .then(response => response.json())
+                    .then(data => this.lists.tamogatottak = data.data);
+            },
+            disableSubmitBtn() {
+                this.submitText = '...';
+                this.submitting = true;
+            },
+            resetSubmitBtn() {
+                this.submitText = 'Keresés';
+                this.submitting = false;
+            },
+            submit() {
+                this.disableSubmitBtn();
+                let ures = true;
+                Object.keys(this.formData).forEach((key) => {
+                    if ((Array.isArray(this.formData[key]) && this.formData[key].length) || (!Array.isArray(this.formData[key]) && this.formData[key])) {
+                        ures = false;
+                    }
+                });
+                if (ures) {
+                    alert('Adjál meg szűrőket, ez így hosszú lesz');
+                    this.resetSubmitBtn();
+                }
+                else {
+                    fetch(API_URL + '/api/count', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(this.formData)
+                    })
+                    .then(response => response.json())
+                    .then(respdata => {
+                        if (respdata.data.count >= MAX_RESULT_COUNT) {
+                            alert('Túl sok az eredmény: ' + respdata.data.count);
+                            this.resetSubmitBtn();
+                            return false;
+                        }
+                        alert('Az eredmény: ' + respdata.data.count);
+                        /*
+                        return fetch(API_URL + '/api/search', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(this.formData)
+                        });
+                         */
+                    })
+                    .catch(() => {
+                        alert('Something went wrong');
+                    })
+                    .finally(() => {
+                        this.resetSubmitBtn()
+                    });
+                }
+            }
+        }
+    }
+</script>
+</html>
