@@ -21,7 +21,6 @@
             <label for="isfirmjogi">Cég</label>
             <input id="isfirmmagan" type="radio" value="0" x-model="formData.isfirm">
             <label for="isfirmmagan">Őstermelő/egyéni vállalkozó/magánszemély</label>
-            <span x-text="formData.isfirm"></span>
             <div x-show="formData.isfirm === '0'">
                 <input id="gender" type="radio" value="" x-model="formData.gender">
                 <label for="gender">Mindegy</label>
@@ -29,7 +28,6 @@
                 <label for="genderno">Nő</label>
                 <input id="genderferfi" type="radio" name="gender" value="male" x-model="formData.gender">
                 <label for="genderferfi">Férfi</label>
-                <span x-text="formData.gender"></span>
             </div>
         </div>
 
@@ -101,7 +99,6 @@
                     <label :for="$id('cegcsoport-input')" x-text="item.name"></label>
                 </div>
             </template>
-            <span x-text="formData.cegcsoport"></span>
         </div>
 
         <div>
