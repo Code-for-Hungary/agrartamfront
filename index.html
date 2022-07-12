@@ -10,7 +10,7 @@
 <body>
     <form x-data="searchForm()" x-init="getLists" @submit.prevent="submit">
         <div>
-            <label for="nev">Név:</label>
+            <label for="nev">Nyertes neve:</label>
             <input id="nev" type="text" x-model="formData.nev">
         </div>
 
@@ -18,9 +18,9 @@
             <input id="isfirm" type="radio" value="" x-model="formData.isfirm">
             <label for="isfirm">Mindegy</label>
             <input id="isfirmjogi" type="radio" value="1" x-model="formData.isfirm">
-            <label for="isfirmjogi">Cég</label>
+            <label for="isfirmjogi">Jogi személy</label>
             <input id="isfirmmagan" type="radio" value="0" x-model="formData.isfirm">
-            <label for="isfirmmagan">Őstermelő/egyéni vállalkozó/magánszemély</label>
+            <label for="isfirmmagan">Természetes személy</label>
             <div x-show="formData.isfirm === '0'">
                 <input id="gender" type="radio" value="" x-model="formData.gender">
                 <label for="gender">Mindegy</label>
@@ -42,8 +42,13 @@
         </div>
 
         <div>
-            <label for="irszam">Irányítószám:</label>
-            <input id="irszam" type="text" maxlength="4" x-model="formData.irszam">
+            <label for="megye">Megye:</label>
+            <select id="megye" x-model="formData.megye">
+                <option value="">válasszon</option>
+                <template x-for="item in lists.megyek">
+                    <option x-text="item.name" :value="item.id"></option>
+                </template>
+            </select>
         </div>
 
         <div>
@@ -52,13 +57,8 @@
         </div>
 
         <div>
-            <label for="megye">Megye:</label>
-            <select id="megye" x-model="formData.megye">
-                <option value="">válasszon</option>
-                <template x-for="item in lists.megyek">
-                    <option x-text="item.name" :value="item.id"></option>
-                </template>
-            </select>
+            <label for="irszam">Irányítószám:</label>
+            <input id="irszam" type="text" maxlength="4" x-model="formData.irszam">
         </div>
 
         <div>
