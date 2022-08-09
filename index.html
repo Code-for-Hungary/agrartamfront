@@ -41,7 +41,7 @@
 
     <div>
         <label for="evSelect">Év:</label>
-        <select id="evSelect" x-ref="evSelect" x-model="formData.ev" multiple>
+        <select id="evSelect" x-ref="evSelect" x-model="formData.ev" multiple="multiple">
         </select>
     </div>
 
@@ -67,7 +67,7 @@
 
     <div>
         <label for="jogcimSelect">Jogcím:</label>
-        <select id="jogcimSelect" x-ref="jogcimSelect" x-model="formData.jogcim" multiple>
+        <select id="jogcimSelect" x-ref="jogcimSelect" x-model="formData.jogcim" multiple="multiple">
         </select>
     </div>
 
@@ -92,13 +92,9 @@
     </div>
 
     <div>
-        <label>Cégcsoport:</label>
-        <template x-for="item in lists.cegcsoportok">
-            <div x-id="['cegcsoport-input']">
-                <input :id="$id('cegcsoport-input')" x-model="formData.cegcsoport" type="checkbox" :value="item.id">
-                <label :for="$id('cegcsoport-input')" x-text="item.name"></label>
-            </div>
-        </template>
+        <label for="cegcsoportSelect">Cégcsoport:</label>
+        <select id="cegcsoportSelect" x-ref="cegcsoportSelect" x-model="formData.cegcsoport" multiple="multiple">
+        </select>
     </div>
 
     <div>
@@ -230,7 +226,37 @@
                     .then(data => this.lists.forrasok = data.data);
                 fetch(API_URL + '/api/cegcsoports')
                     .then(response => response.json())
-                    .then(data => this.lists.cegcsoportok = data.data);
+                    .then(data => this.lists.cegcsoportok = data.data)
+                    .then(() => {
+                        this.$nextTick(() => {
+                            let choices = new Choices(this.$refs.cegcsoportSelect,
+                                {
+                                    silent: false,
+                                    allowHTML: false,
+                                    removeItemButton: true,
+                                    searchFloor: 4,
+                                    searchResultLimit: 100,
+                                    searchFields: ['label'],
+                                    fuseOptions: {
+                                        treshold: 0.0,
+                                        minMatchCharLength: 4,
+                                        ignoreLocation: true
+                                    }
+                                }
+                            );
+                            let refreshChoices = () => {
+                                choices.clearStore();
+                                choices.setChoices(this.lists.cegcsoportok.map(
+                                    ({id, name}) => ({value: id, label: name, selected: this.formData.cegcsoport.includes(id),})));
+                            };
+                            refreshChoices();
+                            this.$refs.cegcsoportSelect.addEventListener('change', () => {
+                                this.formData.cegcsoport = choices.getValue(true);
+                            });
+                            this.$watch('formData.cegcsoport', () => refreshChoices());
+                            this.$watch('lists.cegcsoportok', () => refreshChoices());
+                        });
+                    });
                 fetch(API_URL + '/api/tamogatotts')
                     .then(response => response.json())
                     .then(data => this.lists.tamogatottak = data.data);
