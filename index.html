@@ -211,6 +211,11 @@
                                     ({id, name}) => ({value: id, label: name, selected: this.formData.jogcim.includes(id),})));
                             };
                             refreshChoices();
+                            this.$refs.jogcimSelect.addEventListener('showDropdown', () => {
+                                if ('parentIFrame' in window) {
+                                    parentIFrame.size();
+                                }
+                            });
                             this.$refs.jogcimSelect.addEventListener('change', () => {
                                 this.formData.jogcim = choices.getValue(true);
                             });
