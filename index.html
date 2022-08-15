@@ -72,17 +72,13 @@
     </div>
 
     <div>
-        <label for="alap">Alap:</label>
-        <select id="alap" x-model="formData.alap">
-            <option value="">válasszon</option>
-            <template x-for="item in lists.alapok">
-                <option x-text="item.name" :value="item.id"></option>
-            </template>
+        <label for="alapSelect">Alap:</label>
+        <select id="alapSelect" x-ref="alapSelect" x-model="formData.alap" multiple="multiple">
         </select>
     </div>
 
     <div>
-        <label for="forras">Forrás:</label>
+        <label for="forrasSelect">Forrás:</label>
         <select id="forrasSelect" x-ref="forrasSelect" x-model="formData.forras" multiple="multiple">
         </select>
     </div>
@@ -104,13 +100,13 @@
     </div>
 
     <div>
-        <label fo="tamosszeg">Támogatás összege:</label>
+        <label for="tamosszeg">Támogatás összege:</label>
         <input id="tamosszeg" type="number" step="any" x-model="formData.tamosszegtol">
         <input type="number" step="any" x-model="formData.tamosszegig">
     </div>
 
     <div>
-        <label fo="evestamosszeg">Éves támogatás összege:</label>
+        <label for="evestamosszeg">Éves támogatás összege:</label>
         <input id="evestamosszeg" type="number" step="any" x-model="formData.evestamosszegtol">
         <input type="number" step="any" x-model="formData.evestamosszegig">
     </div>
@@ -130,7 +126,7 @@
                 ev: [],
                 megye: null,
                 jogcim: [],
-                alap: null,
+                alap: [],
                 forras: [],
                 cegcsoport: [],
                 tamogatott: null,
@@ -221,7 +217,37 @@
                     });
                 fetch(API_URL + '/api/alaps')
                     .then(response => response.json())
-                    .then(data => this.lists.alapok = data.data);
+                    .then(data => this.lists.alapok = data.data)
+                    .then(() => {
+                        this.$nextTick(() => {
+                            let choices = new Choices(this.$refs.alapSelect,
+                                {
+                                    silent: false,
+                                    allowHTML: false,
+                                    removeItemButton: true,
+                                    searchFloor: 4,
+                                    searchResultLimit: 100,
+                                    searchFields: ['label'],
+                                    fuseOptions: {
+                                        treshold: 0.0,
+                                        minMatchCharLength: 4,
+                                        ignoreLocation: true
+                                    }
+                                }
+                            );
+                            let refreshChoices = () => {
+                                choices.clearStore();
+                                choices.setChoices(this.lists.alapok.map(
+                                    ({id, name}) => ({value: id, label: name, selected: this.formData.alap.includes(id),})));
+                            };
+                            refreshChoices();
+                            this.$refs.alapSelect.addEventListener('change', () => {
+                                this.formData.alap = choices.getValue(true);
+                            });
+                            this.$watch('formData.alap', () => refreshChoices());
+                            this.$watch('lists.alapok', () => refreshChoices());
+                        });
+                    });
                 fetch(API_URL + '/api/forras')
                     .then(response => response.json())
                     .then(data => this.lists.forrasok = data.data)
