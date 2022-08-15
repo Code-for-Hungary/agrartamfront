@@ -90,12 +90,8 @@
     </div>
 
     <div>
-        <label for="tamogatott">Támogatott entitás:</label>
-        <select id="tamogatott" x-model="formData.tamogatott">
-            <option value="">válasszon</option>
-            <template x-for="item in lists.tamogatottak">
-                <option x-text="item.name + ' (' + item.cim + ')'" :value="item.id"></option>
-            </template>
+        <label for="tamogatottSelect">Támogatott entitás:</label>
+        <select id="tamogatottSelect" x-ref="tamogatottSelect" x-model="formData.tamogatott">
         </select>
     </div>
 
@@ -316,7 +312,45 @@
                     });
                 fetch(API_URL + '/api/tamogatotts')
                     .then(response => response.json())
-                    .then(data => this.lists.tamogatottak = data.data);
+                    .then(data => this.lists.tamogatottak = data.data)
+                    .then(() => {
+                        this.$nextTick(() => {
+                            let choices = new Choices(this.$refs.tamogatottSelect,
+                                {
+                                    silent: false,
+                                    allowHTML: false,
+                                    searchFloor: 4,
+                                    searchResultLimit: 100,
+                                    searchFields: ['label'],
+                                    fuseOptions: {
+                                        treshold: 0.0,
+                                        minMatchCharLength: 4,
+                                        ignoreLocation: true
+                                    }
+                                }
+                            );
+                            let refreshChoices = () => {
+                                choices.clearStore();
+                                choices.setChoices(this.lists.tamogatottak.map(
+                                    ({id, name, cim}) => ({
+                                        value: id,
+                                        label: name + (cim ? ' (' + cim + ')' : ''),
+                                        selected: this.formData.tamogatott === id,
+                                    })));
+                            };
+                            refreshChoices();
+                            this.$refs.tamogatottSelect.addEventListener('showDropdown', () => {
+                                if ('parentIFrame' in window) {
+                                    parentIFrame.size();
+                                }
+                            });
+                            this.$refs.tamogatottSelect.addEventListener('change', () => {
+                                this.formData.tamogatott = choices.getValue(true);
+                            });
+                            this.$watch('formData.tamogatott', () => refreshChoices());
+                            this.$watch('lists.tamogatottak', () => refreshChoices());
+                        });
+                    });
             },
             disableSubmitBtn() {
                 this.submitText = '...';
