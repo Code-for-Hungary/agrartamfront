@@ -83,11 +83,7 @@
 
     <div>
         <label for="forras">Forrás:</label>
-        <select id="forras" x-model="formData.forras">
-            <option value="">válasszon</option>
-            <template x-for="item in lists.forrasok">
-                <option x-text="item.name" :value="item.id"></option>
-            </template>
+        <select id="forrasSelect" x-ref="forrasSelect" x-model="formData.forras" multiple="multiple">
         </select>
     </div>
 
@@ -135,7 +131,7 @@
                 megye: null,
                 jogcim: [],
                 alap: null,
-                forras: null,
+                forras: [],
                 cegcsoport: [],
                 tamogatott: null,
                 tamosszegtol: 0,
@@ -228,7 +224,37 @@
                     .then(data => this.lists.alapok = data.data);
                 fetch(API_URL + '/api/forras')
                     .then(response => response.json())
-                    .then(data => this.lists.forrasok = data.data);
+                    .then(data => this.lists.forrasok = data.data)
+                    .then(() => {
+                        this.$nextTick(() => {
+                            let choices = new Choices(this.$refs.forrasSelect,
+                                {
+                                    silent: false,
+                                    allowHTML: false,
+                                    removeItemButton: true,
+                                    searchFloor: 4,
+                                    searchResultLimit: 100,
+                                    searchFields: ['label'],
+                                    fuseOptions: {
+                                        treshold: 0.0,
+                                        minMatchCharLength: 4,
+                                        ignoreLocation: true
+                                    }
+                                }
+                            );
+                            let refreshChoices = () => {
+                                choices.clearStore();
+                                choices.setChoices(this.lists.forrasok.map(
+                                    ({id, name}) => ({value: id, label: name, selected: this.formData.forras.includes(id),})));
+                            };
+                            refreshChoices();
+                            this.$refs.forrasSelect.addEventListener('change', () => {
+                                this.formData.forras = choices.getValue(true);
+                            });
+                            this.$watch('formData.forras', () => refreshChoices());
+                            this.$watch('lists.forrasok', () => refreshChoices());
+                        });
+                    });
                 fetch(API_URL + '/api/cegcsoports')
                     .then(response => response.json())
                     .then(data => this.lists.cegcsoportok = data.data)
