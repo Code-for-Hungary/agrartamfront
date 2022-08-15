@@ -156,28 +156,28 @@
                     .then(response => response.json())
                     .then(data => this.lists.evek = data.data)
                     .then(() => {
-                    this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.evSelect,
-                            {
-                                silent: false,
-                                allowHTML: false,
-                                removeItemButton: true,
-                                searchFloor: 4,
-                            }
-                        );
-                        let refreshChoices = () => {
-                            choices.clearStore();
-                            choices.setChoices(this.lists.evek.map(
-                                ({ev}) => ({value: ev, label: ev.toString(), selected: this.formData.ev.includes(ev),})));
-                        };
-                        refreshChoices();
-                        this.$refs.evSelect.addEventListener('change', () => {
-                            this.formData.ev = choices.getValue(true);
+                        this.$nextTick(() => {
+                            let choices = new Choices(this.$refs.evSelect,
+                                {
+                                    silent: false,
+                                    allowHTML: false,
+                                    removeItemButton: true,
+                                    searchFloor: 4,
+                                }
+                            );
+                            let refreshChoices = () => {
+                                choices.clearStore();
+                                choices.setChoices(this.lists.evek.map(
+                                    ({ev}) => ({value: ev, label: ev.toString(), selected: this.formData.ev.includes(ev),})));
+                            };
+                            refreshChoices();
+                            this.$refs.evSelect.addEventListener('change', () => {
+                                this.formData.ev = choices.getValue(true);
+                            });
+                            this.$watch('formData.ev', () => refreshChoices());
+                            this.$watch('lists.evek', () => refreshChoices());
                         });
-                        this.$watch('formData.ev', () => refreshChoices());
-                        this.$watch('lists.evek', () => refreshChoices());
                     });
-                });
                 fetch(API_URL + '/api/megyes')
                     .then(response => response.json())
                     .then(data => this.lists.megyek = data.data);
