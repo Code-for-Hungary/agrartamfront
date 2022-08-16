@@ -5,6 +5,7 @@
     <title>Agrártámogatások 2022</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
+    <link rel="stylesheet" href="/css/nouislider.min.css"/>
 
     <script src="config.js"></script>
 
@@ -14,6 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
     <script src="/js/iframeResizer.contentWindow.min.js"></script>
+    <script src="/js/nouislider.min.js"></script>
 </head>
 <body>
 <form x-data="searchForm()" x-init="getLists" @submit.prevent="submit">
@@ -96,9 +98,11 @@
     </div>
 
     <div>
-        <label for="tamosszeg">Támogatás összege:</label>
-        <input id="tamosszeg" type="number" step="any" x-model="formData.tamosszegtol">
-        <input type="number" step="any" x-model="formData.tamosszegig">
+        <label for="tamosszegtol">Támogatás összege (ezer Ft):</label>
+        <div id="tamosszegSlider" x-ref="tamosszegSlider"></div>
+        <input id="tamosszegtol" type="number" step="any" x-model="formData.tamosszegtol">
+        <input id="tamosszegig" type="number" step="any" x-model="formData.tamosszegig">
+        1000 Ft
     </div>
 
     <div>
@@ -139,7 +143,8 @@
                 alapok: null,
                 forrasok: null,
                 cegcsoportok: null,
-                tamogatottak: null
+                tamogatottak: null,
+                tamogatasosszeg: null
             },
             submitText: 'Keresés',
             submitting: false,
@@ -349,6 +354,35 @@
                             });
                             this.$watch('formData.tamogatott', () => refreshChoices());
                             this.$watch('lists.tamogatottak', () => refreshChoices());
+                        });
+                    });
+                fetch(API_URL + '/api/tamogatasosszeg')
+                    .then(response => response.json())
+                    .then(data => this.lists.tamogatasosszeg = data.data)
+                    .then(() => {
+                        this.$nextTick(() => {
+                            noUiSlider.create(this.$refs.tamosszegSlider,
+                                {
+                                    start: [this.lists.tamogatasosszeg.min, this.lists.tamogatasosszeg.max],
+                                    range: {
+                                        'min': this.lists.tamogatasosszeg.min,
+                                        'max': this.lists.tamogatasosszeg.max
+                                    }
+                                });
+
+                            this.formData.tamosszegtol = this.lists.tamogatasosszeg.min;
+                            this.formData.tamosszegig = this.lists.tamogatasosszeg.max;
+
+                            this.$refs.tamosszegSlider.noUiSlider.on('change', (values) => {
+                                this.formData.tamosszegtol = values[0];
+                                this.formData.tamosszegig = values[1];
+                            });
+                            this.$watch('formData.tamosszegtol', () => {
+                                this.$refs.tamosszegSlider.noUiSlider.set([this.formData.tamosszegtol, null]);
+                            });
+                            this.$watch('formData.tamosszegig', () => {
+                                this.$refs.tamosszegSlider.noUiSlider.set([null, this.formData.tamosszegig]);
+                            });
                         });
                     });
             },
