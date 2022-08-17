@@ -266,9 +266,8 @@ body {
 .ags-toggle {
   padding: 0;
   border: none;
-
+  cursor: pointer;
   -webkit-appearance: none;
-
   background: none;
 }
 
