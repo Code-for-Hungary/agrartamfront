@@ -1,427 +1,732 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+<html lang="hu" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agrártámogatások 2022</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
-    <link rel="stylesheet" href="/css/nouislider.min.css"/>
+    <link
+      media="print"
+      onload="this.media='all'"
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+    />
+    <link
+      media="print"
+      onload="this.media='all'"
+      rel="stylesheet"
+      href="/css/nouislider.min.css"
+    />
 
-    <script src="config.js"></script>
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
 
-    <script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net/" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net/" crossorigin />
 
-    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script defer src="config.js"></script>
 
-    <script src="/js/iframeResizer.contentWindow.min.js"></script>
-    <script src="/js/nouislider.min.js"></script>
-</head>
-<body>
-<form x-data="searchForm()" x-init="getLists" @submit.prevent="submit">
-    <div>
-        <label for="nev">Nyertes neve:</label>
-        <input id="nev" type="text" x-model="formData.nev">
-    </div>
+    <script
+      defer
+      src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
 
-    <div>
-        <input id="isfirm" type="radio" value="" x-model="formData.isfirm">
-        <label for="isfirm">Mindegy</label>
-        <input id="isfirmjogi" type="radio" value="1" x-model="formData.isfirm">
-        <label for="isfirmjogi">Jogi személy</label>
-        <input id="isfirmmagan" type="radio" value="0" x-model="formData.isfirm">
-        <label for="isfirmmagan">Természetes személy</label>
-        <div x-show="formData.isfirm === '0'">
-            <input id="gender" type="radio" value="" x-model="formData.gender">
-            <label for="gender">Mindegy</label>
-            <input id="genderno" type="radio" value="female" x-model="formData.gender">
-            <label for="genderno">Nő</label>
-            <input id="genderferfi" type="radio" name="gender" value="male" x-model="formData.gender">
-            <label for="genderferfi">Férfi</label>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"
+    ></script>
+
+    <script defer src="/js/iframeResizer.contentWindow.min.js"></script>
+    <script defer src="/js/nouislider.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      media="print"
+      onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link media="all" href="/css/app.css" rel="stylesheet" />
+  </head>
+  <body>
+    <form
+      x-data="searchForm()"
+      x-init="getLists"
+      @submit.prevent="submit"
+      class="ags-form"
+    >
+      <div class="ags-form-row">
+        <label for="nev" class="ags-label">Nyertes neve:</label>
+        <div class="ags-icon-wrapper">
+          <input
+            id="nev"
+            type="search"
+            x-model="formData.nev"
+            class="ags-textbox"
+          />
+          <img
+            src="/assets/search.svg"
+            alt=""
+            width="15"
+            height="15"
+            class="ags-icon"
+          />
         </div>
-    </div>
+      </div>
 
-    <div>
-        <label for="evSelect">Év:</label>
-        <select id="evSelect" x-ref="evSelect" x-model="formData.ev" multiple="multiple">
-        </select>
-    </div>
+      <div class="ags-form-row">
+        <div class="ags-radio-row">
+          <label class="ags-radio-button">
+            <input
+              type="radio"
+              value="1"
+              x-model="formData.isfirm"
+              name="isfirm"
+            />
+            <span class="ags-radio-text">Jogi személy</span>
+          </label>
+          <label class="ags-radio-button">
+            <input
+              type="radio"
+              value="0"
+              x-model="formData.isfirm"
+              name="isfirm"
+            />
+            <span class="ags-radio-text">Természetes személy</span>
+          </label>
+          <label class="ags-radio-button">
+            <input
+              checked
+              type="radio"
+              value=""
+              x-model="formData.isfirm"
+              name="isfirm"
+            />
+            <span class="ags-radio-text">Mindegy</span>
+          </label>
+        </div>
+      </div>
 
-    <div>
-        <label for="megye">Megye:</label>
-        <select id="megye" x-model="formData.megye">
-            <option value="">válasszon</option>
-            <template x-for="item in lists.megyek">
+      <div
+        x-show="formData.isfirm === '0'"
+        x-transition
+        x-cloak
+        class="ags-form-row"
+      >
+        <div class="ags-radio-row">
+          <label class="ags-radio-button">
+            <input
+              type="radio"
+              name="gender"
+              value="female"
+              x-model="formData.gender"
+            />
+            <span class="ags-radio-text">Nő</span>
+          </label>
+          <label class="ags-radio-button">
+            <input
+              type="radio"
+              name="gender"
+              value="male"
+              x-model="formData.gender"
+            />
+            <span class="ags-radio-text">Férfi</span>
+          </label>
+          <label class="ags-radio-button">
+            <input
+              type="radio"
+              name="gender"
+              checked
+              value=""
+              x-model="formData.gender"
+            />
+            <span class="ags-radio-text">Mindegy</span>
+          </label>
+        </div>
+      </div>
+
+      <div x-show="detailedSearchOpened" x-transition.scale.origin.top x-cloak>
+        <div class="ags-form-row">
+          <label for="evSelect" class="ags-label">Év:</label>
+          <select
+            id="evSelect"
+            x-ref="evSelect"
+            x-model="formData.ev"
+            multiple="multiple"
+            class="ags-textbox"
+          ></select>
+          <span class="ags-hint">Többet is megadhat</span>
+        </div>
+
+        <div class="ags-col-container">
+          <div class="ags-form-row" style="flex-basis: 50%">
+            <label for="megye" class="ags-label">Megye:</label>
+            <select id="megye" x-model="formData.megye" class="ags-textbox">
+              <option value="">válasszon</option>
+              <template x-for="item in lists.megyek">
                 <option x-text="item.name" :value="item.id"></option>
+              </template>
+            </select>
+          </div>
+
+          <div class="ags-form-row" style="flex-basis: calc(50% - 180px)">
+            <div class="ags-padded-x-col">
+              <label for="varos" class="ags-label">Település:</label>
+              <input
+                id="varos"
+                type="text"
+                x-model="formData.varos"
+                class="ags-textbox"
+              />
+            </div>
+          </div>
+          <div class="ags-form-row" style="flex-basis: 180px">
+            <label for="irszam" class="ags-label">Irányítószám:</label>
+            <input
+              id="irszam"
+              type="number"
+              maxlength="4"
+              x-model="formData.irszam"
+              class="ags-textbox"
+            />
+          </div>
+        </div>
+
+        <div class="ags-form-row">
+          <label for="jogcimSelect" class="ags-label">Jogcím:</label>
+          <select
+            id="jogcimSelect"
+            x-ref="jogcimSelect"
+            x-model="formData.jogcim"
+            multiple="multiple"
+            class="ags-textbox"
+          ></select>
+          <span class="ags-hint">Többet is megadhat</span>
+        </div>
+
+        <div
+          class="ags-col-container ags-col-container-wrap"
+          style="z-index: 3"
+        >
+          <div class="ags-form-row ags-col-2-mobile-3-desktop">
+            <label for="alapSelect" class="ags-label">Alap:</label>
+            <select
+              id="alapSelect"
+              x-ref="alapSelect"
+              x-model="formData.alap"
+              multiple="multiple"
+            ></select>
+            <span class="ags-hint">Többet is megadhat</span>
+          </div>
+          <div class="ags-form-row ags-col-2-mobile-3-desktop">
+            <div class="ags-padd-x-middle">
+              <label for="forrasSelect" class="ags-label">Forrás:</label>
+              <select
+                id="forrasSelect"
+                x-ref="forrasSelect"
+                x-model="formData.forras"
+                multiple="multiple"
+              ></select>
+              <span class="ags-hint">Többet is megadhat</span>
+            </div>
+          </div>
+          <div class="ags-form-row ags-col-1-mobile-3-desktop">
+            <label for="cegcsoportSelect" class="ags-label">Cégcsoport:</label>
+            <select
+              class="ags-textbox"
+              id="cegcsoportSelect"
+              x-ref="cegcsoportSelect"
+              x-model="formData.cegcsoport"
+              multiple="multiple"
+            ></select>
+            <span class="ags-hint">Többet is megadhat</span>
+          </div>
+        </div>
+
+        <div class="ags-form-row" style="z-index: 2">
+          <label for="tamogatottSelect" class="ags-label"
+            >Támogatott entitás:</label
+          >
+          <select
+            id="tamogatottSelect"
+            x-ref="tamogatottSelect"
+            x-model="formData.tamogatott"
+          ></select>
+        </div>
+
+        <div class="ags-form-row">
+          <label for="tamosszegtol" class="ags-label">
+            Támogatás összege (ezer Ft):
+          </label>
+          <div class="ags-slider-container">
+            <div id="tamosszegSlider" x-ref="tamosszegSlider"></div>
+          </div>
+          <div style="display: flex; flex-wrap: nowrap; align-items: center">
+            <div class="ags-min-max-container" style="flex: 1">
+              <div class="ags-min-max-input-box">
+                <input
+                  id="tamosszegtol"
+                  type="number"
+                  step="any"
+                  x-model="formData.tamosszegtol"
+                  class="ags-textbox"
+                />
+              </div>
+              <div class="ags-min-max-dash">—</div>
+              <div class="ags-min-max-input-box">
+                <input
+                  id="tamosszegig"
+                  class="ags-textbox"
+                  type="number"
+                  step="any"
+                  x-model="formData.tamosszegig"
+                />
+              </div>
+            </div>
+            <div style="padding-left: 8px">1000 Ft</div>
+          </div>
+        </div>
+
+        <div class="ags-form-row">
+          <label for="evestamosszeg" class="ags-label">
+            Éves támogatás összege:
+          </label>
+          <div class="ags-min-max-container">
+            <div class="ags-min-max-input-box">
+              <input
+                id="evestamosszeg"
+                type="number"
+                min="0"
+                step="any"
+                class="ags-textbox"
+                x-model="formData.evestamosszegtol"
+              />
+            </div>
+            <div class="ags-min-max-dash">—</div>
+            <div class="ags-min-max-input-box">
+              <input
+                type="number"
+                step="any"
+                class="ags-textbox"
+                x-model="formData.evestamosszegig"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ags-button-row">
+        <div class="ags-submit-container">
+          <button
+            type="submit"
+            class="ags-button"
+            x-text="submitText"
+            x-cloak
+            :disabled="submitting"
+          ></button>
+        </div>
+        <div class="ags-toggle-container">
+          <button
+            type="button"
+            class="ags-toggle"
+            x-on:click="detailedSearchOpened = !detailedSearchOpened"
+          >
+            <template x-if="!detailedSearchOpened">
+              <span class="ags-toggle-text">
+                Részletes keresés
+                <img
+                  src="/assets/plus.svg"
+                  class="ags-icon"
+                  alt=""
+                  width="20"
+                  height="21"
+                />
+              </span>
             </template>
-        </select>
-    </div>
+            <template x-if="detailedSearchOpened">
+              <span class="ags-toggle-text">
+                Egyszerű keresés
+                <img
+                  src="/assets/minus.svg"
+                  class="ags-icon"
+                  alt=""
+                  width="20"
+                  height="21"
+                />
+              </span>
+            </template>
+          </button>
+        </div>
+      </div>
+    </form>
+  </body>
 
-    <div>
-        <label for="varos">Település:</label>
-        <input id="varos" type="text" x-model="formData.varos">
-    </div>
-
-    <div>
-        <label for="irszam">Irányítószám:</label>
-        <input id="irszam" type="text" maxlength="4" x-model="formData.irszam">
-    </div>
-
-    <div>
-        <label for="jogcimSelect">Jogcím:</label>
-        <select id="jogcimSelect" x-ref="jogcimSelect" x-model="formData.jogcim" multiple="multiple">
-        </select>
-    </div>
-
-    <div>
-        <label for="alapSelect">Alap:</label>
-        <select id="alapSelect" x-ref="alapSelect" x-model="formData.alap" multiple="multiple">
-        </select>
-    </div>
-
-    <div>
-        <label for="forrasSelect">Forrás:</label>
-        <select id="forrasSelect" x-ref="forrasSelect" x-model="formData.forras" multiple="multiple">
-        </select>
-    </div>
-
-    <div>
-        <label for="cegcsoportSelect">Cégcsoport:</label>
-        <select id="cegcsoportSelect" x-ref="cegcsoportSelect" x-model="formData.cegcsoport" multiple="multiple">
-        </select>
-    </div>
-
-    <div>
-        <label for="tamogatottSelect">Támogatott entitás:</label>
-        <select id="tamogatottSelect" x-ref="tamogatottSelect" x-model="formData.tamogatott">
-        </select>
-    </div>
-
-    <div>
-        <label for="tamosszegtol">Támogatás összege (ezer Ft):</label>
-        <div id="tamosszegSlider" x-ref="tamosszegSlider"></div>
-        <input id="tamosszegtol" type="number" step="any" x-model="formData.tamosszegtol">
-        <input id="tamosszegig" type="number" step="any" x-model="formData.tamosszegig">
-        1000 Ft
-    </div>
-
-    <div>
-        <label for="evestamosszeg">Éves támogatás összege:</label>
-        <input id="evestamosszeg" type="number" step="any" x-model="formData.evestamosszegtol">
-        <input type="number" step="any" x-model="formData.evestamosszegig">
-    </div>
-
-    <button type="submit" x-text="submitText" :disabled="submitting"></button>
-</form>
-</body>
-<script>
+  <script>
     function searchForm() {
-        return {
-            formData: {
-                nev: null,
-                isfirm: "",
-                gender: null,
-                irszam: null,
-                varos: null,
-                ev: [],
-                megye: null,
-                jogcim: [],
-                alap: [],
-                forras: [],
-                cegcsoport: [],
-                tamogatott: null,
-                tamosszegtol: 0,
-                tamosszegig: 0,
-                evestamosszegtol: 0,
-                evestamosszegig: 0,
-
-            },
-            lists: {
-                evek: null,
-                megyek: null,
-                jogcimek: null,
-                alapok: null,
-                forrasok: null,
-                cegcsoportok: null,
-                tamogatottak: null,
-                tamogatasosszeg: null
-            },
-            submitText: 'Keresés',
-            submitting: false,
-            getLists() {
-                fetch(API_URL + '/api/evs')
-                    .then(response => response.json())
-                    .then(data => this.lists.evek = data.data)
-                    .then(() => {
-                        this.$nextTick(() => {
-                            let choices = new Choices(this.$refs.evSelect,
-                                {
-                                    silent: false,
-                                    allowHTML: false,
-                                    removeItemButton: true,
-                                    searchFloor: 4,
-                                }
-                            );
-                            let refreshChoices = () => {
-                                choices.clearStore();
-                                choices.setChoices(this.lists.evek.map(
-                                    ({ev}) => ({value: ev, label: ev.toString(), selected: this.formData.ev.includes(ev),})));
-                            };
-                            refreshChoices();
-                            this.$refs.evSelect.addEventListener('change', () => {
-                                this.formData.ev = choices.getValue(true);
-                            });
-                            this.$watch('formData.ev', () => refreshChoices());
-                            this.$watch('lists.evek', () => refreshChoices());
-                        });
-                    });
-                fetch(API_URL + '/api/megyes')
-                    .then(response => response.json())
-                    .then(data => this.lists.megyek = data.data);
-                fetch(API_URL + '/api/jogcims')
-                    .then(response => response.json())
-                    .then(data => this.lists.jogcimek = data.data)
-                    .then(() => {
-                        this.$nextTick(() => {
-                            let choices = new Choices(this.$refs.jogcimSelect,
-                                {
-                                    silent: false,
-                                    allowHTML: false,
-                                    removeItemButton: true,
-                                    searchFloor: 4,
-                                    searchResultLimit: 100,
-                                    searchFields: ['label'],
-                                    fuseOptions: {
-                                        treshold: 0.0,
-                                        minMatchCharLength: 4,
-                                        ignoreLocation: true
-                                    }
-                                }
-                            );
-                            let refreshChoices = () => {
-                                choices.clearStore();
-                                choices.setChoices(this.lists.jogcimek.map(
-                                    ({id, name}) => ({value: id, label: name, selected: this.formData.jogcim.includes(id),})));
-                            };
-                            refreshChoices();
-                            this.$refs.jogcimSelect.addEventListener('showDropdown', () => {
-                                if ('parentIFrame' in window) {
-                                    parentIFrame.size();
-                                }
-                            });
-                            this.$refs.jogcimSelect.addEventListener('change', () => {
-                                this.formData.jogcim = choices.getValue(true);
-                            });
-                            this.$watch('formData.jogcim', () => refreshChoices());
-                            this.$watch('lists.jogcimek', () => refreshChoices());
-                        });
-                    });
-                fetch(API_URL + '/api/alaps')
-                    .then(response => response.json())
-                    .then(data => this.lists.alapok = data.data)
-                    .then(() => {
-                        this.$nextTick(() => {
-                            let choices = new Choices(this.$refs.alapSelect,
-                                {
-                                    silent: false,
-                                    allowHTML: false,
-                                    removeItemButton: true,
-                                    searchFloor: 4,
-                                    searchResultLimit: 100,
-                                    searchFields: ['label'],
-                                    fuseOptions: {
-                                        treshold: 0.0,
-                                        minMatchCharLength: 4,
-                                        ignoreLocation: true
-                                    }
-                                }
-                            );
-                            let refreshChoices = () => {
-                                choices.clearStore();
-                                choices.setChoices(this.lists.alapok.map(
-                                    ({id, name}) => ({value: id, label: name, selected: this.formData.alap.includes(id),})));
-                            };
-                            refreshChoices();
-                            this.$refs.alapSelect.addEventListener('change', () => {
-                                this.formData.alap = choices.getValue(true);
-                            });
-                            this.$watch('formData.alap', () => refreshChoices());
-                            this.$watch('lists.alapok', () => refreshChoices());
-                        });
-                    });
-                fetch(API_URL + '/api/forras')
-                    .then(response => response.json())
-                    .then(data => this.lists.forrasok = data.data)
-                    .then(() => {
-                        this.$nextTick(() => {
-                            let choices = new Choices(this.$refs.forrasSelect,
-                                {
-                                    silent: false,
-                                    allowHTML: false,
-                                    removeItemButton: true,
-                                    searchFloor: 4,
-                                    searchResultLimit: 100,
-                                    searchFields: ['label'],
-                                    fuseOptions: {
-                                        treshold: 0.0,
-                                        minMatchCharLength: 4,
-                                        ignoreLocation: true
-                                    }
-                                }
-                            );
-                            let refreshChoices = () => {
-                                choices.clearStore();
-                                choices.setChoices(this.lists.forrasok.map(
-                                    ({id, name}) => ({value: id, label: name, selected: this.formData.forras.includes(id),})));
-                            };
-                            refreshChoices();
-                            this.$refs.forrasSelect.addEventListener('change', () => {
-                                this.formData.forras = choices.getValue(true);
-                            });
-                            this.$watch('formData.forras', () => refreshChoices());
-                            this.$watch('lists.forrasok', () => refreshChoices());
-                        });
-                    });
-                fetch(API_URL + '/api/cegcsoports')
-                    .then(response => response.json())
-                    .then(data => this.lists.cegcsoportok = data.data)
-                    .then(() => {
-                        this.$nextTick(() => {
-                            let choices = new Choices(this.$refs.cegcsoportSelect,
-                                {
-                                    silent: false,
-                                    allowHTML: false,
-                                    removeItemButton: true,
-                                    searchFloor: 4,
-                                    searchResultLimit: 100,
-                                    searchFields: ['label'],
-                                    fuseOptions: {
-                                        treshold: 0.0,
-                                        minMatchCharLength: 4,
-                                        ignoreLocation: true
-                                    }
-                                }
-                            );
-                            let refreshChoices = () => {
-                                choices.clearStore();
-                                choices.setChoices(this.lists.cegcsoportok.map(
-                                    ({id, name}) => ({value: id, label: name, selected: this.formData.cegcsoport.includes(id),})));
-                            };
-                            refreshChoices();
-                            this.$refs.cegcsoportSelect.addEventListener('change', () => {
-                                this.formData.cegcsoport = choices.getValue(true);
-                            });
-                            this.$watch('formData.cegcsoport', () => refreshChoices());
-                            this.$watch('lists.cegcsoportok', () => refreshChoices());
-                        });
-                    });
-                fetch(API_URL + '/api/tamogatotts')
-                    .then(response => response.json())
-                    .then(data => this.lists.tamogatottak = data.data)
-                    .then(() => {
-                        this.$nextTick(() => {
-                            let choices = new Choices(this.$refs.tamogatottSelect,
-                                {
-                                    silent: false,
-                                    allowHTML: false,
-                                    searchFloor: 4,
-                                    searchResultLimit: 100,
-                                    searchFields: ['label'],
-                                    fuseOptions: {
-                                        treshold: 0.0,
-                                        minMatchCharLength: 4,
-                                        ignoreLocation: true
-                                    }
-                                }
-                            );
-                            let refreshChoices = () => {
-                                choices.clearStore();
-                                choices.setChoices(this.lists.tamogatottak.map(
-                                    ({id, name, cim}) => ({
-                                        value: id,
-                                        label: name + (cim ? ' (' + cim + ')' : ''),
-                                        selected: this.formData.tamogatott === id,
-                                    })));
-                            };
-                            refreshChoices();
-                            this.$refs.tamogatottSelect.addEventListener('showDropdown', () => {
-                                if ('parentIFrame' in window) {
-                                    parentIFrame.size();
-                                }
-                            });
-                            this.$refs.tamogatottSelect.addEventListener('change', () => {
-                                this.formData.tamogatott = choices.getValue(true);
-                            });
-                            this.$watch('formData.tamogatott', () => refreshChoices());
-                            this.$watch('lists.tamogatottak', () => refreshChoices());
-                        });
-                    });
-                fetch(API_URL + '/api/tamogatasosszeg')
-                    .then(response => response.json())
-                    .then(data => this.lists.tamogatasosszeg = data.data)
-                    .then(() => {
-                        this.$nextTick(() => {
-                            noUiSlider.create(this.$refs.tamosszegSlider,
-                                {
-                                    start: [this.lists.tamogatasosszeg.min, this.lists.tamogatasosszeg.max],
-                                    range: {
-                                        'min': this.lists.tamogatasosszeg.min,
-                                        'max': this.lists.tamogatasosszeg.max
-                                    }
-                                });
-
-                            this.formData.tamosszegtol = this.lists.tamogatasosszeg.min;
-                            this.formData.tamosszegig = this.lists.tamogatasosszeg.max;
-
-                            this.$refs.tamosszegSlider.noUiSlider.on('change', (values) => {
-                                this.formData.tamosszegtol = values[0];
-                                this.formData.tamosszegig = values[1];
-                            });
-                            this.$watch('formData.tamosszegtol', () => {
-                                this.$refs.tamosszegSlider.noUiSlider.set([this.formData.tamosszegtol, null]);
-                            });
-                            this.$watch('formData.tamosszegig', () => {
-                                this.$refs.tamosszegSlider.noUiSlider.set([null, this.formData.tamosszegig]);
-                            });
-                        });
-                    });
-            },
-            disableSubmitBtn() {
-                this.submitText = '...';
-                this.submitting = true;
-            },
-            resetSubmitBtn() {
-                this.submitText = 'Keresés';
-                this.submitting = false;
-            },
-            submit() {
-                this.disableSubmitBtn();
-                let ures = true;
-                Object.keys(this.formData).forEach((key) => {
-                    if ((Array.isArray(this.formData[key]) && this.formData[key].length) || (!Array.isArray(this.formData[key]) && this.formData[key])) {
-                        ures = false;
-                    }
+      return {
+        formData: {
+          nev: null,
+          isfirm: "",
+          gender: "",
+          irszam: null,
+          varos: null,
+          ev: [],
+          megye: null,
+          jogcim: [],
+          alap: [],
+          forras: [],
+          cegcsoport: [],
+          tamogatott: null,
+          tamosszegtol: 0,
+          tamosszegig: 0,
+          evestamosszegtol: 0,
+          evestamosszegig: 0,
+        },
+        lists: {
+          evek: null,
+          megyek: null,
+          jogcimek: null,
+          alapok: null,
+          forrasok: null,
+          cegcsoportok: null,
+          tamogatottak: null,
+          tamogatasosszeg: null,
+        },
+        submitText: "Keresés",
+        submitting: false,
+        detailedSearchOpened: false,
+        getLists() {
+          fetch(API_URL + "/api/evs")
+            .then((response) => response.json())
+            .then((data) => (this.lists.evek = data.data))
+            .then(() => {
+              this.$nextTick(() => {
+                let choices = new Choices(this.$refs.evSelect, {
+                  silent: false,
+                  allowHTML: false,
+                  removeItemButton: true,
+                  searchFloor: 4,
+                  itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
                 });
-                if (ures) {
-                    alert('Adjál meg szűrőket, ez így hosszú lesz');
-                    this.resetSubmitBtn();
-                } else {
-                    fetch(API_URL + '/api/count', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(this.formData)
-                    })
-                        .then(response => response.json())
-                        .then(respdata => {
-                            if (respdata.data.count >= MAX_RESULT_COUNT) {
-                                alert('Túl sok az eredmény: ' + respdata.data.count);
-                                this.resetSubmitBtn();
-                                return false;
-                            }
-                            alert('Az eredmény: ' + respdata.data.count);
-                            /*
+                let refreshChoices = () => {
+                  choices.clearStore();
+                  choices.setChoices(
+                    this.lists.evek.map(({ ev }) => ({
+                      value: ev,
+                      label: ev.toString(),
+                      selected: this.formData.ev.includes(ev),
+                    }))
+                  );
+                };
+                refreshChoices();
+                this.$refs.evSelect.addEventListener("change", () => {
+                  this.formData.ev = choices.getValue(true);
+                });
+                this.$watch("formData.ev", () => refreshChoices());
+                this.$watch("lists.evek", () => refreshChoices());
+              });
+            });
+          fetch(API_URL + "/api/megyes")
+            .then((response) => response.json())
+            .then((data) => (this.lists.megyek = data.data));
+          fetch(API_URL + "/api/jogcims")
+            .then((response) => response.json())
+            .then((data) => (this.lists.jogcimek = data.data))
+            .then(() => {
+              this.$nextTick(() => {
+                let choices = new Choices(this.$refs.jogcimSelect, {
+                  silent: false,
+                  allowHTML: false,
+                  removeItemButton: true,
+                  searchFloor: 4,
+                  searchResultLimit: 100,
+                  searchFields: ["label"],
+                  itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
+                  fuseOptions: {
+                    treshold: 0.0,
+                    minMatchCharLength: 4,
+                    ignoreLocation: true,
+                  },
+                });
+                let refreshChoices = () => {
+                  choices.clearStore();
+                  choices.setChoices(
+                    this.lists.jogcimek.map(({ id, name }) => ({
+                      value: id,
+                      label: name,
+                      selected: this.formData.jogcim.includes(id),
+                    }))
+                  );
+                };
+                refreshChoices();
+                this.$refs.jogcimSelect.addEventListener("showDropdown", () => {
+                  if ("parentIFrame" in window) {
+                    parentIFrame.size();
+                  }
+                });
+                this.$refs.jogcimSelect.addEventListener("change", () => {
+                  this.formData.jogcim = choices.getValue(true);
+                });
+                this.$watch("formData.jogcim", () => refreshChoices());
+                this.$watch("lists.jogcimek", () => refreshChoices());
+              });
+            });
+          fetch(API_URL + "/api/alaps")
+            .then((response) => response.json())
+            .then((data) => (this.lists.alapok = data.data))
+            .then(() => {
+              this.$nextTick(() => {
+                let choices = new Choices(this.$refs.alapSelect, {
+                  silent: false,
+                  allowHTML: false,
+                  removeItemButton: true,
+                  searchFloor: 4,
+                  searchResultLimit: 100,
+                  searchFields: ["label"],
+                  itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
+                  fuseOptions: {
+                    treshold: 0.0,
+                    minMatchCharLength: 4,
+                    ignoreLocation: true,
+                  },
+                });
+                let refreshChoices = () => {
+                  choices.clearStore();
+                  choices.setChoices(
+                    this.lists.alapok.map(({ id, name }) => ({
+                      value: id,
+                      label: name,
+                      selected: this.formData.alap.includes(id),
+                    }))
+                  );
+                };
+                refreshChoices();
+                this.$refs.alapSelect.addEventListener("change", () => {
+                  this.formData.alap = choices.getValue(true);
+                });
+                this.$watch("formData.alap", () => refreshChoices());
+                this.$watch("lists.alapok", () => refreshChoices());
+              });
+            });
+          fetch(API_URL + "/api/forras")
+            .then((response) => response.json())
+            .then((data) => (this.lists.forrasok = data.data))
+            .then(() => {
+              this.$nextTick(() => {
+                let choices = new Choices(this.$refs.forrasSelect, {
+                  silent: false,
+                  allowHTML: false,
+                  removeItemButton: true,
+                  searchFloor: 4,
+                  searchResultLimit: 100,
+                  searchFields: ["label"],
+                  itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
+                  fuseOptions: {
+                    treshold: 0.0,
+                    minMatchCharLength: 4,
+                    ignoreLocation: true,
+                  },
+                });
+                let refreshChoices = () => {
+                  choices.clearStore();
+                  choices.setChoices(
+                    this.lists.forrasok.map(({ id, name }) => ({
+                      value: id,
+                      label: name,
+                      selected: this.formData.forras.includes(id),
+                    }))
+                  );
+                };
+                refreshChoices();
+                this.$refs.forrasSelect.addEventListener("change", () => {
+                  this.formData.forras = choices.getValue(true);
+                });
+                this.$watch("formData.forras", () => refreshChoices());
+                this.$watch("lists.forrasok", () => refreshChoices());
+              });
+            });
+          fetch(API_URL + "/api/cegcsoports")
+            .then((response) => response.json())
+            .then((data) => (this.lists.cegcsoportok = data.data))
+            .then(() => {
+              this.$nextTick(() => {
+                let choices = new Choices(this.$refs.cegcsoportSelect, {
+                  silent: false,
+                  allowHTML: false,
+                  removeItemButton: true,
+                  searchFloor: 4,
+                  searchResultLimit: 100,
+                  searchFields: ["label"],
+                  itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
+                  fuseOptions: {
+                    treshold: 0.0,
+                    minMatchCharLength: 4,
+                    ignoreLocation: true,
+                  },
+                });
+                let refreshChoices = () => {
+                  choices.clearStore();
+                  choices.setChoices(
+                    this.lists.cegcsoportok.map(({ id, name }) => ({
+                      value: id,
+                      label: name,
+                      selected: this.formData.cegcsoport.includes(id),
+                    }))
+                  );
+                };
+                refreshChoices();
+                this.$refs.cegcsoportSelect.addEventListener("change", () => {
+                  this.formData.cegcsoport = choices.getValue(true);
+                });
+                this.$watch("formData.cegcsoport", () => refreshChoices());
+                this.$watch("lists.cegcsoportok", () => refreshChoices());
+              });
+            });
+          fetch(API_URL + "/api/tamogatotts")
+            .then((response) => response.json())
+            .then((data) => (this.lists.tamogatottak = data.data))
+            .then(() => {
+              this.$nextTick(() => {
+                let choices = new Choices(this.$refs.tamogatottSelect, {
+                  silent: false,
+                  allowHTML: false,
+                  searchFloor: 4,
+                  searchResultLimit: 100,
+                  searchFields: ["label"],
+                  itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
+                  fuseOptions: {
+                    treshold: 0.0,
+                    minMatchCharLength: 4,
+                    ignoreLocation: true,
+                  },
+                });
+                let refreshChoices = () => {
+                  choices.clearStore();
+                  choices.setChoices(
+                    this.lists.tamogatottak.map(({ id, name, cim }) => ({
+                      value: id,
+                      label: name + (cim ? " (" + cim + ")" : ""),
+                      selected: this.formData.tamogatott === id,
+                    }))
+                  );
+                };
+                refreshChoices();
+                this.$refs.tamogatottSelect.addEventListener(
+                  "showDropdown",
+                  () => {
+                    if ("parentIFrame" in window) {
+                      parentIFrame.size();
+                    }
+                  }
+                );
+                this.$refs.tamogatottSelect.addEventListener("change", () => {
+                  this.formData.tamogatott = choices.getValue(true);
+                });
+                this.$watch("formData.tamogatott", () => refreshChoices());
+                this.$watch("lists.tamogatottak", () => refreshChoices());
+              });
+            });
+          fetch(API_URL + "/api/tamogatasosszeg")
+            .then((response) => response.json())
+            .then((data) => (this.lists.tamogatasosszeg = data.data))
+            .then(() => {
+              this.$nextTick(() => {
+                noUiSlider.create(this.$refs.tamosszegSlider, {
+                  start: [
+                    this.lists.tamogatasosszeg.min,
+                    this.lists.tamogatasosszeg.max,
+                  ],
+                  range: {
+                    min: this.lists.tamogatasosszeg.min,
+                    max: this.lists.tamogatasosszeg.max,
+                  },
+                });
+
+                this.formData.tamosszegtol = this.lists.tamogatasosszeg.min;
+                this.formData.tamosszegig = this.lists.tamogatasosszeg.max;
+
+                this.$refs.tamosszegSlider.noUiSlider.on("change", (values) => {
+                  this.formData.tamosszegtol = values[0];
+                  this.formData.tamosszegig = values[1];
+                });
+                this.$watch("formData.tamosszegtol", () => {
+                  this.$refs.tamosszegSlider.noUiSlider.set([
+                    this.formData.tamosszegtol,
+                    null,
+                  ]);
+                });
+                this.$watch("formData.tamosszegig", () => {
+                  this.$refs.tamosszegSlider.noUiSlider.set([
+                    null,
+                    this.formData.tamosszegig,
+                  ]);
+                });
+              });
+            });
+        },
+        disableSubmitBtn() {
+          this.submitText = "...";
+          this.submitting = true;
+        },
+        resetSubmitBtn() {
+          this.submitText = "Keresés";
+          this.submitting = false;
+        },
+        submit() {
+          this.disableSubmitBtn();
+          let ures = true;
+          Object.keys(this.formData).forEach((key) => {
+            if (
+              (Array.isArray(this.formData[key]) &&
+                this.formData[key].length) ||
+              (!Array.isArray(this.formData[key]) && this.formData[key])
+            ) {
+              ures = false;
+            }
+          });
+          if (ures) {
+            alert("Adjál meg szűrőket, ez így hosszú lesz");
+            this.resetSubmitBtn();
+          } else {
+            fetch(API_URL + "/api/count", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(this.formData),
+            })
+              .then((response) => response.json())
+              .then((respdata) => {
+                if (respdata.data.count >= MAX_RESULT_COUNT) {
+                  alert("Túl sok az eredmény: " + respdata.data.count);
+                  this.resetSubmitBtn();
+                  return false;
+                }
+                alert("Az eredmény: " + respdata.data.count);
+                /*
                             return fetch(API_URL + '/api/search', {
                                 method: 'POST',
                                 headers: {
@@ -430,16 +735,16 @@
                                 body: JSON.stringify(this.formData)
                             });
                              */
-                        })
-                        .catch(() => {
-                            alert('Something went wrong');
-                        })
-                        .finally(() => {
-                            this.resetSubmitBtn()
-                        });
-                }
-            }
-        }
+              })
+              .catch(() => {
+                alert("Something went wrong");
+              })
+              .finally(() => {
+                this.resetSubmitBtn();
+              });
+          }
+        },
+      };
     }
-</script>
+  </script>
 </html>
