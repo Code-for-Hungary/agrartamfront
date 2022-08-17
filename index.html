@@ -18,14 +18,14 @@
       rel="stylesheet"
       href="/css/nouislider.min.css"
     />
-    <link
-      media="print"
-      onload="this.media='all'"
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
-    />
 
-    <script src="config.js"></script>
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net/" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net/" crossorigin />
+
+    <script defer src="config.js"></script>
 
     <script
       defer
@@ -339,13 +339,25 @@
             <template x-if="!detailedSearchOpened">
               <span class="ags-toggle-text">
                 Részletes keresés
-                <img src="/assets/plus.svg" class="ags-icon" alt="" />
+                <img
+                  src="/assets/plus.svg"
+                  class="ags-icon"
+                  alt=""
+                  width="20"
+                  height="21"
+                />
               </span>
             </template>
             <template x-if="detailedSearchOpened">
               <span class="ags-toggle-text">
                 Egyszerű keresés
-                <img src="/assets/minus.svg" class="ags-icon" alt="" />
+                <img
+                  src="/assets/minus.svg"
+                  class="ags-icon"
+                  alt=""
+                  width="20"
+                  height="21"
+                />
               </span>
             </template>
           </button>
