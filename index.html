@@ -212,26 +212,28 @@
 
         <div
           class="ags-col-container ags-col-container-wrap"
-          style="z-index: 2"
+          style="z-index: 3"
         >
           <div class="ags-form-row ags-col-2-mobile-3-desktop">
-            <label for="alap" class="ags-label">Alap:</label>
-            <select id="alap" x-model="formData.alap" class="ags-textbox">
-              <option value="">válasszon</option>
-              <template x-for="item in lists.alapok">
-                <option x-text="item.name" :value="item.id"></option>
-              </template>
-            </select>
+            <label for="alapSelect" class="ags-label">Alap:</label>
+            <select
+              id="alapSelect"
+              x-ref="alapSelect"
+              x-model="formData.alap"
+              multiple="multiple"
+            ></select>
+            <span class="ags-hint">Többet is megadhat</span>
           </div>
           <div class="ags-form-row ags-col-2-mobile-3-desktop">
             <div class="ags-padd-x-middle">
-              <label for="forras" class="ags-label">Forrás:</label>
-              <select id="forras" x-model="formData.forras" class="ags-textbox">
-                <option value="">válasszon</option>
-                <template x-for="item in lists.forrasok">
-                  <option x-text="item.name" :value="item.id"></option>
-                </template>
-              </select>
+              <label for="forrasSelect" class="ags-label">Forrás:</label>
+              <select
+                id="forrasSelect"
+                x-ref="forrasSelect"
+                x-model="formData.forras"
+                multiple="multiple"
+              ></select>
+              <span class="ags-hint">Többet is megadhat</span>
             </div>
           </div>
           <div class="ags-form-row ags-col-1-mobile-3-desktop">
@@ -247,21 +249,15 @@
           </div>
         </div>
 
-        <div class="ags-form-row">
-          <label for="tamogatott" class="ags-label">Támogatott entitás:</label>
-          <select
-            id="tamogatott"
-            x-model="formData.tamogatott"
-            class="ags-textbox"
+        <div class="ags-form-row" style="z-index: 2">
+          <label for="tamogatottSelect" class="ags-label"
+            >Támogatott entitás:</label
           >
-            <option value="">válasszon</option>
-            <template x-for="item in lists.tamogatottak">
-              <option
-                x-text="item.name + ' (' + item.cim + ')'"
-                :value="item.id"
-              ></option>
-            </template>
-          </select>
+          <select
+            id="tamogatottSelect"
+            x-ref="tamogatottSelect"
+            x-model="formData.tamogatott"
+          ></select>
         </div>
 
         <div class="ags-form-row">
@@ -404,6 +400,9 @@
                   removeItemButton: true,
                   searchFloor: 4,
                   itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
                 });
                 let refreshChoices = () => {
                   choices.clearStore();
@@ -439,6 +438,9 @@
                   searchResultLimit: 100,
                   searchFields: ["label"],
                   itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
                   fuseOptions: {
                     treshold: 0.0,
                     minMatchCharLength: 4,
@@ -481,6 +483,9 @@
                   searchResultLimit: 100,
                   searchFields: ["label"],
                   itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
                   fuseOptions: {
                     treshold: 0.0,
                     minMatchCharLength: 4,
@@ -518,6 +523,9 @@
                   searchResultLimit: 100,
                   searchFields: ["label"],
                   itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
                   fuseOptions: {
                     treshold: 0.0,
                     minMatchCharLength: 4,
@@ -555,6 +563,9 @@
                   searchResultLimit: 100,
                   searchFields: ["label"],
                   itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
                   fuseOptions: {
                     treshold: 0.0,
                     minMatchCharLength: 4,
@@ -591,6 +602,9 @@
                   searchResultLimit: 100,
                   searchFields: ["label"],
                   itemSelectText: "",
+                  loadingText: "Betöltés...",
+                  noResultsText: "Nincs találat",
+                  noChoicesText: "Nincs már mit kiválasztani",
                   fuseOptions: {
                     treshold: 0.0,
                     minMatchCharLength: 4,
