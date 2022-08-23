@@ -112,6 +112,7 @@
     </div>
 
     <button type="submit" x-text="submitText" :disabled="submitting"></button>
+    <button type="button" @click="exportforedit">Export</button>
 </form>
 </body>
 <script>
@@ -438,6 +439,23 @@
                             this.resetSubmitBtn()
                         });
                 }
+            },
+            exportforedit() {
+                fetch(API_URL + '/api/exportforedit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.formData)
+                })
+                    .then(response => response.json())
+                    .then(respdata => {
+                        console.log(respdata.data);
+                        window.location = respdata.data;
+                    })
+                    .catch(() => {
+                        alert('Something went wrong');
+                    });
             }
         }
     }
