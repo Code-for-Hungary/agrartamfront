@@ -292,7 +292,6 @@
             <div style="padding-left: 8px">1000 Ft</div>
           </div>
         </div>
-
         <div class="ags-form-row">
           <label for="evestamosszeg" class="ags-label">
             Éves támogatás összege:
@@ -329,6 +328,14 @@
             x-cloak
             :disabled="submitting"
           ></button>
+        </div>
+        <div>
+            <button
+                    type="button"
+                    class="ags-button"
+                    @click="exportforedit">
+                Export
+            </button>
         </div>
         <div class="ags-toggle-container">
           <button
@@ -372,7 +379,7 @@
         formData: {
           nev: null,
           isfirm: "",
-          gender: "",
+          gender: null,
           irszam: null,
           varos: null,
           ev: [],
@@ -735,16 +742,33 @@
                                 body: JSON.stringify(this.formData)
                             });
                              */
-              })
-              .catch(() => {
-                alert("Something went wrong");
-              })
-              .finally(() => {
-                this.resetSubmitBtn();
-              });
-          }
-        },
-      };
+                        })
+                        .catch(() => {
+                            alert('Something went wrong');
+                        })
+                        .finally(() => {
+                            this.resetSubmitBtn();
+                        });
+                }
+            },
+            exportforedit() {
+                fetch(API_URL + '/api/exportforedit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.formData)
+                })
+                    .then(response => response.json())
+                    .then(respdata => {
+                        console.log(respdata.data);
+                        window.location = respdata.data;
+                    })
+                    .catch(() => {
+                        alert('Something went wrong');
+                    });
+            }
+        }
     }
   </script>
 </html>
