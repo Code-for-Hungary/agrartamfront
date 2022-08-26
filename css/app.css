@@ -288,6 +288,10 @@ body {
   margin-bottom: 16px;
 }
 
+.ags-opened-choice-container {
+  z-index: 10;
+}
+
 /* Overwrite Choices.js's styles */
 .choices {
   margin-bottom: 0;
