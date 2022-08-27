@@ -377,13 +377,24 @@ document.addEventListener("alpine:init", () => {
             this.submitText = "Keresés";
             this.submitting = false;
         },
+        getSubmitableData() {
+            let tosubmit = JSON.parse(JSON.stringify(this.formData));
+            if (tosubmit.tamosszegtol === this.lists.tamogatasosszeg.min) {
+                tosubmit.tamosszegtol = null;
+            }
+            if (tosubmit.tamosszegig === this.lists.tamogatasosszeg.max) {
+                tosubmit.tamosszegig = null;
+            }
+            return tosubmit;
+        },
         submit() {
             this.disableSubmitBtn();
-            let ures = true;
-            Object.keys(this.formData).forEach((key) => {
+            let ures = true,
+                tosubmit = this.getSubmitableData();
+            Object.keys(tosubmit).forEach((key) => {
                 if (
-                    (Array.isArray(this.formData[key]) && this.formData[key].length) ||
-                    (!Array.isArray(this.formData[key]) && this.formData[key])
+                    (Array.isArray(tosubmit[key]) && tosubmit[key].length) ||
+                    (!Array.isArray(tosubmit[key]) && tosubmit[key])
                 ) {
                     ures = false;
                 }
@@ -397,7 +408,7 @@ document.addEventListener("alpine:init", () => {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(this.formData),
+                    body: JSON.stringify(tosubmit),
                 })
                     .then((response) => response.json())
                     .then((respdata) => {
@@ -431,7 +442,7 @@ document.addEventListener("alpine:init", () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(this.formData),
+                body: JSON.stringify(this.getSubmitableData()),
             })
                 .then((response) => response.json())
                 .then((respdata) => {
