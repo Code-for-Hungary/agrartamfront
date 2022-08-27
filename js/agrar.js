@@ -346,6 +346,18 @@ document.addEventListener("alpine:init", () => {
                                 min: this.lists.tamogatasosszeg.min,
                                 max: this.lists.tamogatasosszeg.max,
                             },
+                            format: {
+                                to: function (value) {
+                                    let x = value.toLocaleString('hu-HU', {
+                                        minimumFractionDigits: 3,
+                                        maximumFractionDigits: 3
+                                    });
+                                    return x.replaceAll(/\s/g, '').replace(/\,/, '.');
+                                },
+                                from: function (value) {
+                                    return Number(value.replaceAll(/\s/g, '').replace(/\,/, '.'));
+                                }
+                            }
                         });
 
                         this.formData.tamosszegtol = this.lists.tamogatasosszeg.min;
@@ -383,6 +395,18 @@ document.addEventListener("alpine:init", () => {
                                 min: this.lists.evestamogatasosszeg.min,
                                 max: this.lists.evestamogatasosszeg.max,
                             },
+                            format: {
+                                to: function (value) {
+                                    let x = value.toLocaleString('hu-HU', {
+                                        minimumFractionDigits: 3,
+                                        maximumFractionDigits: 3
+                                    });
+                                    return x.replaceAll(/\s/g, '').replace(/\,/, '.');
+                                },
+                                from: function (value) {
+                                    return Number(value.replaceAll(/\s/g, '').replace(/\,/, '.'));
+                                }
+                            }
                         });
 
                         this.formData.evestamosszegtol = this.lists.evestamogatasosszeg.min;
