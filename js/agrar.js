@@ -42,6 +42,7 @@ document.addEventListener("alpine:init", () => {
             cegcsoportok: null,
             tamogatottak: null,
             tamogatasosszeg: null,
+            evestamogatasosszeg: null,
         },
         submitText: "Keresés",
         submitting: false,
@@ -368,6 +369,43 @@ document.addEventListener("alpine:init", () => {
                         });
                     });
                 });
+            fetch(API_URL + "/api/evestamogatasosszeg")
+                .then((response) => response.json())
+                .then((data) => (this.lists.evestamogatasosszeg = data.data))
+                .then(() => {
+                    this.$nextTick(() => {
+                        noUiSlider.create(this.$refs.evestamosszegSlider, {
+                            start: [
+                                this.lists.evestamogatasosszeg.min,
+                                this.lists.evestamogatasosszeg.max,
+                            ],
+                            range: {
+                                min: this.lists.evestamogatasosszeg.min,
+                                max: this.lists.evestamogatasosszeg.max,
+                            },
+                        });
+
+                        this.formData.evestamosszegtol = this.lists.evestamogatasosszeg.min;
+                        this.formData.evestamosszegig = this.lists.evestamogatasosszeg.max;
+
+                        this.$refs.evestamosszegSlider.noUiSlider.on("change", (values) => {
+                            this.formData.evestamosszegtol = values[0];
+                            this.formData.evestamosszegig = values[1];
+                        });
+                        this.$watch("formData.evestamosszegtol", () => {
+                            this.$refs.evestamosszegSlider.noUiSlider.set([
+                                this.formData.evestamosszegtol,
+                                null,
+                            ]);
+                        });
+                        this.$watch("formData.evestamosszegig", () => {
+                            this.$refs.evestamosszegSlider.noUiSlider.set([
+                                null,
+                                this.formData.evestamosszegig,
+                            ]);
+                        });
+                    });
+                });
         },
         disableSubmitBtn() {
             this.submitText = "...";
@@ -384,6 +422,12 @@ document.addEventListener("alpine:init", () => {
             }
             if (tosubmit.tamosszegig === this.lists.tamogatasosszeg.max) {
                 tosubmit.tamosszegig = null;
+            }
+            if (tosubmit.evestamosszegtol === this.lists.evestamogatasosszeg.min) {
+                tosubmit.evestamosszegtol = null;
+            }
+            if (tosubmit.evestamosszegig === this.lists.evestamogatasosszeg.max) {
+                tosubmit.evestamosszegig = null;
             }
             return tosubmit;
         },
