@@ -295,14 +295,17 @@
         </div>
         <div class="ags-form-row">
           <label for="evestamosszeg" class="ags-label">
-            Éves támogatás összege:
+            Éves támogatás összege (ezer Ft):
           </label>
-          <div class="ags-min-max-container">
+          <div class="ags-slider-container">
+            <div id="evestamosszegSlider" x-ref="evestamosszegSlider"></div>
+          </div>
+          <div style="display: flex; flex-wrap: nowrap; align-items: center">
+          <div class="ags-min-max-container" style="flex: 1">
             <div class="ags-min-max-input-box">
               <input
                 id="evestamosszeg"
                 type="number"
-                min="0"
                 step="any"
                 class="ags-textbox"
                 x-model="formData.evestamosszegtol"
@@ -317,6 +320,8 @@
                 x-model="formData.evestamosszegig"
               />
             </div>
+          </div>
+              <div style="padding-left: 8px">ezer Ft</div>
           </div>
         </div>
       </div>
