@@ -28,10 +28,10 @@ document.addEventListener("alpine:init", () => {
             forras: [],
             cegcsoport: [],
             tamogatott: null,
-            tamosszegtol: 0,
-            tamosszegig: 0,
-            evestamosszegtol: 0,
-            evestamosszegig: 0,
+            tamosszegtol: null,
+            tamosszegig: null,
+            evestamosszegtol: null,
+            evestamosszegig: null,
         },
         lists: {
             evek: null,
@@ -49,6 +49,16 @@ document.addEventListener("alpine:init", () => {
         exportText: "Export",
         exporting: false,
         detailedSearchOpened: false,
+        isEmpty(val) {
+        return (Array.isArray(val) && val.length === 0) ||
+            (!Array.isArray(val) &&
+                (
+                    (val === null) ||
+                    (val === undefined) ||
+                    (val === "")
+                )
+            )
+        },
         getLists() {
             this.$watch('detailedSearchOpened', (value) => {
                 if (!value) {
@@ -457,21 +467,18 @@ document.addEventListener("alpine:init", () => {
             if (tosubmit.evestamosszegig === this.lists.evestamogatasosszeg.max) {
                 tosubmit.evestamosszegig = null;
             }
+            Object.keys(tosubmit).forEach((key) => {
+                if (this.isEmpty(tosubmit[key])) {
+                    delete tosubmit[key];
+                }
+            });
             return tosubmit;
         },
         submit() {
             this.disableSubmitBtn();
-            let ures = true,
-                tosubmit = this.getSubmitableData();
-            Object.keys(tosubmit).forEach((key) => {
-                if (
-                    (Array.isArray(tosubmit[key]) && tosubmit[key].length) ||
-                    (!Array.isArray(tosubmit[key]) && tosubmit[key])
-                ) {
-                    ures = false;
-                }
-            });
-            if (ures) {
+            let tosubmit = this.getSubmitableData();
+
+            if (Object.keys(tosubmit).length === 0) {
                 alert("Adjál meg szűrőket, ez így hosszú lesz");
                 this.resetSubmitBtn();
             } else {
@@ -510,17 +517,9 @@ document.addEventListener("alpine:init", () => {
         },
         exportforedit() {
             this.disableExportBtn();
-            let ures = true,
-                toexport = this.getSubmitableData();
-            Object.keys(toexport).forEach((key) => {
-                if (
-                    (Array.isArray(toexport[key]) && toexport[key].length) ||
-                    (!Array.isArray(toexport[key]) && toexport[key])
-                ) {
-                    ures = false;
-                }
-            });
-            if (ures) {
+            let toexport = this.getSubmitableData();
+
+            if (Object.keys(toexport).length === 0) {
                 alert("Adjál meg szűrőket, ez így hosszú lesz");
                 this.resetExportBtn();
             } else {
