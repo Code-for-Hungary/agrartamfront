@@ -46,6 +46,8 @@ document.addEventListener("alpine:init", () => {
         },
         submitText: "Keresés",
         submitting: false,
+        exportText: "Export",
+        exporting: false,
         detailedSearchOpened: false,
         getLists() {
             fetch(API_URL + "/api/evs")
@@ -416,6 +418,14 @@ document.addEventListener("alpine:init", () => {
             this.submitText = "Keresés";
             this.submitting = false;
         },
+        disableExportBtn() {
+            this.exportText = "...";
+            this.exporting = true;
+        },
+        resetExportBtn() {
+            this.exportText = "Export";
+            this.exporting = false;
+        },
         getSubmitableData() {
             let tosubmit = JSON.parse(JSON.stringify(this.formData));
             if (tosubmit.tamosszegtol === this.lists.tamogatasosszeg.min) {
@@ -482,6 +492,7 @@ document.addEventListener("alpine:init", () => {
             }
         },
         exportforedit() {
+            this.disableExportBtn();
             fetch(API_URL + "/api/exportforedit", {
                 method: "POST",
                 headers: {
@@ -491,11 +502,13 @@ document.addEventListener("alpine:init", () => {
             })
                 .then((response) => response.json())
                 .then((respdata) => {
-                    console.log(respdata.data);
                     window.location = respdata.data;
                 })
                 .catch(() => {
                     alert("Something went wrong");
+                })
+                .finally(() => {
+                    this.resetExportBtn();
                 });
         },
     }));

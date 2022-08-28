@@ -336,9 +336,14 @@
           ></button>
         </div>
         <div>
-          <button type="button" class="ags-button" @click="exportforedit">
-            Export
-          </button>
+          <button
+              type="button"
+              class="ags-button"
+              x-text="exportText"
+              x-cloak
+              :disabled="exporting"
+              @click="exportforedit"
+          ></button>
         </div>
         <div class="ags-toggle-container">
           <button
