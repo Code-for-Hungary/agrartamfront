@@ -528,6 +528,7 @@ document.addEventListener("alpine:init", () => {
                 alert("Adjál meg szűrőket, ez így hosszú lesz");
                 this.resetExportBtn();
             } else {
+                let msg = 'Valami baj történt';
                 fetch(API_URL + "/api/count", {
                     method: "POST",
                     headers: {
@@ -538,31 +539,28 @@ document.addEventListener("alpine:init", () => {
                     .then((response) => response.json())
                     .then((respdata) => {
                         if (respdata.data.count >= MAX_RESULT_COUNT) {
-                            alert("Túl sok az eredmény: " + respdata.data.count);
-                            this.resetExportBtn();
+                            msg = "Túl sok az eredmény: " + respdata.data.count;
                             return false;
                         }
-                        fetch(API_URL + "/api/exportforedit", {
+                        if (respdata.data.count === 0) {
+                            msg = 'Nincs a keresésnek megfelelő adat';
+                            return false;
+                        }
+                        return fetch(API_URL + "/api/exportforedit", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
                             },
                             body: JSON.stringify(toexport),
-                        })
-                            .then((response) => response.json())
-                            .then((respdata) => {
-                                this.resetExportBtn();
-                                window.location = respdata.data;
-                            })
-                            .catch(() => {
-                                alert("Something went wrong");
-                            })
-                            .finally(() => {
-                                this.resetExportBtn();
-                            });
+                        });
+                    })
+                    .then((response) => response.json())
+                    .then((respdata) => {
+                        this.resetExportBtn();
+                        window.location = respdata.data;
                     })
                     .catch(() => {
-                        alert("Something went wrong");
+                        alert(msg);
                     })
                     .finally(() => {
                         this.resetExportBtn();
