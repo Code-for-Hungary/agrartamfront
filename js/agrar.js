@@ -510,23 +510,60 @@ document.addEventListener("alpine:init", () => {
         },
         exportforedit() {
             this.disableExportBtn();
-            fetch(API_URL + "/api/exportforedit", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(this.getSubmitableData()),
-            })
-                .then((response) => response.json())
-                .then((respdata) => {
-                    window.location = respdata.data;
+            let ures = true,
+                toexport = this.getSubmitableData();
+            Object.keys(toexport).forEach((key) => {
+                if (
+                    (Array.isArray(toexport[key]) && toexport[key].length) ||
+                    (!Array.isArray(toexport[key]) && toexport[key])
+                ) {
+                    ures = false;
+                }
+            });
+            if (ures) {
+                alert("Adjál meg szűrőket, ez így hosszú lesz");
+                this.resetExportBtn();
+            } else {
+                fetch(API_URL + "/api/count", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(toexport),
                 })
-                .catch(() => {
-                    alert("Something went wrong");
-                })
-                .finally(() => {
-                    this.resetExportBtn();
-                });
+                    .then((response) => response.json())
+                    .then((respdata) => {
+                        if (respdata.data.count >= MAX_RESULT_COUNT) {
+                            alert("Túl sok az eredmény: " + respdata.data.count);
+                            this.resetExportBtn();
+                            return false;
+                        }
+                        fetch(API_URL + "/api/exportforedit", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(toexport),
+                        })
+                            .then((response) => response.json())
+                            .then((respdata) => {
+                                this.resetExportBtn();
+                                window.location = respdata.data;
+                            })
+                            .catch(() => {
+                                alert("Something went wrong");
+                            })
+                            .finally(() => {
+                                this.resetExportBtn();
+                            });
+                    })
+                    .catch(() => {
+                        alert("Something went wrong");
+                    })
+                    .finally(() => {
+                        this.resetExportBtn();
+                    });
+            }
         },
     }));
 });
