@@ -482,6 +482,7 @@ document.addEventListener("alpine:init", () => {
                 alert("Adjál meg szűrőket, ez így hosszú lesz");
                 this.resetSubmitBtn();
             } else {
+                let msg = 'Valami baj történt';
                 fetch(API_URL + "/api/count", {
                     method: "POST",
                     headers: {
@@ -492,23 +493,27 @@ document.addEventListener("alpine:init", () => {
                     .then((response) => response.json())
                     .then((respdata) => {
                         if (respdata.data.count >= MAX_RESULT_COUNT) {
-                            alert("Túl sok az eredmény: " + respdata.data.count);
-                            this.resetSubmitBtn();
+                            msg = "Túl sok az eredmény: " + respdata.data.count;
                             return false;
                         }
-                        alert("Az eredmény: " + respdata.data.count);
-                        /*
-                                                return fetch(API_URL + '/api/search', {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/json'
-                                                    },
-                                                    body: JSON.stringify(this.formData)
-                                                });
-                                                 */
+                        if (respdata.data.count === 0) {
+                            msg = 'Nincs a keresésnek megfelelő adat';
+                            return false;
+                        }
+                        return fetch(API_URL + '/api/search', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(tosubmit)
+                        });
+                    })
+                    .then((response) => response.json())
+                    .then((respdata) => {
+                        console.log(respdata);
                     })
                     .catch(() => {
-                        alert("Something went wrong");
+                        alert(msg);
                     })
                     .finally(() => {
                         this.resetSubmitBtn();
