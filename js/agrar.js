@@ -289,6 +289,7 @@ document.addEventListener("alpine:init", () => {
                             searchFloor: 4,
                             searchResultLimit: 100,
                             searchFields: ["label"],
+                            removeItemButton: true,
                             itemSelectText: "",
                             loadingText: "Betöltés...",
                             noResultsText: "Nincs találat",
