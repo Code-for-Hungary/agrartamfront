@@ -50,6 +50,23 @@ document.addEventListener("alpine:init", () => {
         exporting: false,
         detailedSearchOpened: false,
         getLists() {
+            this.$watch('detailedSearchOpened', (value) => {
+                if (!value) {
+                    this.formData.irszam = null;
+                    this.formData.varos = null;
+                    this.formData.ev = [];
+                    this.formData.megye = null;
+                    this.formData.jogcim = [];
+                    this.formData.alap = [];
+                    this.formData.forras = [];
+                    this.formData.cegcsoport = [];
+                    this.formData.tamogatott = null;
+                    this.formData.tamosszegtol = this.lists.tamogatasosszeg.min;
+                    this.formData.tamosszegig = this.lists.tamogatasosszeg.max;
+                    this.formData.evestamosszegtol = this.lists.evestamogatasosszeg.min;
+                    this.formData.evestamosszegig = this.lists.evestamogatasosszeg.max;
+                }
+            });
             fetch(API_URL + "/api/evs")
                 .then((response) => response.json())
                 .then((data) => (this.lists.evek = data.data))
