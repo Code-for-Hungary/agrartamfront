@@ -49,6 +49,9 @@ document.addEventListener("alpine:init", () => {
         exportText: "Export",
         exporting: false,
         detailedSearchOpened: false,
+        resultData: [],
+        resultMeta: null,
+        resultLoaded: false,
         isEmpty(val) {
         return (Array.isArray(val) && val.length === 0) ||
             (!Array.isArray(val) &&
@@ -476,6 +479,7 @@ document.addEventListener("alpine:init", () => {
         },
         submit() {
             this.disableSubmitBtn();
+            this.resultLoaded = false;
             let tosubmit = this.getSubmitableData();
 
             if (Object.keys(tosubmit).length === 0) {
@@ -511,6 +515,9 @@ document.addEventListener("alpine:init", () => {
                     .then((response) => response.json())
                     .then((respdata) => {
                         console.log(respdata);
+                        this.resultData = respdata.data;
+                        this.resultMeta = respdata.meta;
+                        this.resultLoaded = true;
                     })
                     .catch(() => {
                         alert(msg);
