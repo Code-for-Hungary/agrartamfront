@@ -39,7 +39,7 @@
       defer
       src="https://cdn.jsdelivr.net/npm/element-closest@3.0.2/browser.min.js"
     ></script>
-    <script src="/js/agrar.js?v=1.7"></script>
+    <script src="/js/agrar.js?v=1.8"></script>
 
     <script
       defer
@@ -58,10 +58,11 @@
     />
     <link media="all" href="/css/app.css" rel="stylesheet" />
   </head>
-  <body>
-    <form
+  <body
       x-data="searchForm"
       x-init="getLists"
+  >
+    <form
       @submit.prevent="submit"
       class="ags-form"
     >
@@ -379,5 +380,57 @@
         </div>
       </div>
     </form>
+
+    <template x-if="resultLoaded">
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th>Év</th>
+                    <th>Gender</th>
+                    <th>Név</th>
+                    <th>Cím</th>
+                    <th>Csoport</th>
+                    <th></th>
+                    <th>Összeg</th>
+                </tr>
+                </thead>
+                <tbody>
+                <template x-for="row in resultData" :key="row.id">
+                    <tr>
+                        <td x-text="row.ev"></td>
+                        <td>
+                            <template x-if="row.is_firm">
+                                <div>Jogi személy</div>
+                            </template>
+                            <template x-if="!row.is_firm">
+                                <div>Természetes személy: <span x-text="row.gender === 'male' ? 'férfi' : 'nő'"></span></div>
+                            </template>
+                        </td>
+                        <td x-text="row.name"></td>
+                        <td>
+                            <div x-text="row.irszam + ' ' + row.varos + ', ' + row.utca"></div>
+                            <div x-text="row.megye.name"></div>
+                        </td>
+                        <td>
+                            <div x-show="row.tamogatott">Támogatott entitás: <span x-text="row.tamogatott ? row.tamogatott.name : ''"></span></div>
+                            <div x-show="row.cegcsoport">Cégcsoport: <span x-text="row.cegcsoport ? row.cegcsoport.name : ''"></span></div>
+                        </td>
+                        <td>
+                            <div x-show="row.alap">Alap: <span x-text="row.alap ? row.alap.name : ''"></span></div>
+                            <div x-show="row.forras">Forrás: <span x-text="row.forras ? row.forras.name : ''"></span></div>
+                            <div x-show="row.jogcim">Jogcím: <span x-text="row.jogcim ? row.jogcim.name : ''"></span></div>
+                        </td>
+                        <td x-text="row.osszeg"></td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
+            <div>
+                <div>Találatok száma <span x-text="resultMeta.total"></span></div>
+                <div><span x-text="resultMeta.last_page"></span> oldal</div>
+            </div>
+        </div>
+    </template>
   </body>
 </html>
