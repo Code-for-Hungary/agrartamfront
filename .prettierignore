@@ -1,0 +1,5 @@
+/css/vendor/**
+/js/vendor/**
+*.svg
+package-lock.json
+config.js

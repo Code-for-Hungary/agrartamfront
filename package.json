@@ -1,0 +1,13 @@
+{
+    "name": "agrartamfront",
+    "version": "1.0.0",
+    "prettier": {
+        "editorconfig": true
+    },
+    "scripts": {
+        "format": "prettier --write ."
+    },
+    "devDependencies": {
+        "prettier": "^2.7.1"
+    }
+}
