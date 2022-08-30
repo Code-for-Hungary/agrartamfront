@@ -53,17 +53,14 @@ document.addEventListener("alpine:init", () => {
         resultMeta: null,
         resultLoaded: false,
         isEmpty(val) {
-        return (Array.isArray(val) && val.length === 0) ||
-            (!Array.isArray(val) &&
-                (
-                    (val === null) ||
-                    (val === undefined) ||
-                    (val === "")
-                )
-            )
+            return (
+                (Array.isArray(val) && val.length === 0) ||
+                (!Array.isArray(val) &&
+                    (val === null || val === undefined || val === ""))
+            );
         },
         getLists() {
-            this.$watch('detailedSearchOpened', (value) => {
+            this.$watch("detailedSearchOpened", (value) => {
                 if (!value) {
                     this.formData.irszam = null;
                     this.formData.varos = null;
@@ -76,8 +73,10 @@ document.addEventListener("alpine:init", () => {
                     this.formData.tamogatott = null;
                     this.formData.tamosszegtol = this.lists.tamogatasosszeg.min;
                     this.formData.tamosszegig = this.lists.tamogatasosszeg.max;
-                    this.formData.evestamosszegtol = this.lists.evestamogatasosszeg.min;
-                    this.formData.evestamosszegig = this.lists.evestamogatasosszeg.max;
+                    this.formData.evestamosszegtol =
+                        this.lists.evestamogatasosszeg.min;
+                    this.formData.evestamosszegig =
+                        this.lists.evestamogatasosszeg.max;
                 }
             });
             fetch(API_URL + "/api/evs")
@@ -99,7 +98,7 @@ document.addEventListener("alpine:init", () => {
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
-                                this.lists.evek.map(({ev}) => ({
+                                this.lists.evek.map(({ ev }) => ({
                                     value: ev,
                                     label: ev.toString(),
                                     selected: this.formData.ev.includes(ev),
@@ -142,7 +141,7 @@ document.addEventListener("alpine:init", () => {
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
-                                this.lists.jogcimek.map(({id, name}) => ({
+                                this.lists.jogcimek.map(({ id, name }) => ({
                                     value: id,
                                     label: name,
                                     selected: this.formData.jogcim.includes(id),
@@ -150,18 +149,27 @@ document.addEventListener("alpine:init", () => {
                             );
                         };
                         refreshChoices();
-                        this.$refs.jogcimSelect.addEventListener("showDropdown", (e) => {
-                            if ("parentIFrame" in window) {
-                                parentIFrame.size();
+                        this.$refs.jogcimSelect.addEventListener(
+                            "showDropdown",
+                            (e) => {
+                                if ("parentIFrame" in window) {
+                                    parentIFrame.size();
+                                }
+                                addZIndexToChoiceParent(e.target);
                             }
-                            addZIndexToChoiceParent(e.target);
-                        });
-                        this.$refs.jogcimSelect.addEventListener("hideDropdown", (e) => {
-                            removeZIndexFromChoiceParent(e.target);
-                        });
-                        this.$refs.jogcimSelect.addEventListener("change", () => {
-                            this.formData.jogcim = choices.getValue(true);
-                        });
+                        );
+                        this.$refs.jogcimSelect.addEventListener(
+                            "hideDropdown",
+                            (e) => {
+                                removeZIndexFromChoiceParent(e.target);
+                            }
+                        );
+                        this.$refs.jogcimSelect.addEventListener(
+                            "change",
+                            () => {
+                                this.formData.jogcim = choices.getValue(true);
+                            }
+                        );
                         this.$watch("formData.jogcim", () => refreshChoices());
                         this.$watch("lists.jogcimek", () => refreshChoices());
                     });
@@ -191,7 +199,7 @@ document.addEventListener("alpine:init", () => {
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
-                                this.lists.alapok.map(({id, name}) => ({
+                                this.lists.alapok.map(({ id, name }) => ({
                                     value: id,
                                     label: name,
                                     selected: this.formData.alap.includes(id),
@@ -202,12 +210,18 @@ document.addEventListener("alpine:init", () => {
                         this.$refs.alapSelect.addEventListener("change", () => {
                             this.formData.alap = choices.getValue(true);
                         });
-                        this.$refs.alapSelect.addEventListener("showDropdown", (e) => {
-                            addZIndexToChoiceParent(e.target);
-                        });
-                        this.$refs.alapSelect.addEventListener("hideDropdown", (e) => {
-                            removeZIndexFromChoiceParent(e.target);
-                        });
+                        this.$refs.alapSelect.addEventListener(
+                            "showDropdown",
+                            (e) => {
+                                addZIndexToChoiceParent(e.target);
+                            }
+                        );
+                        this.$refs.alapSelect.addEventListener(
+                            "hideDropdown",
+                            (e) => {
+                                removeZIndexFromChoiceParent(e.target);
+                            }
+                        );
                         this.$watch("formData.alap", () => refreshChoices());
                         this.$watch("lists.alapok", () => refreshChoices());
                     });
@@ -237,7 +251,7 @@ document.addEventListener("alpine:init", () => {
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
-                                this.lists.forrasok.map(({id, name}) => ({
+                                this.lists.forrasok.map(({ id, name }) => ({
                                     value: id,
                                     label: name,
                                     selected: this.formData.forras.includes(id),
@@ -245,15 +259,24 @@ document.addEventListener("alpine:init", () => {
                             );
                         };
                         refreshChoices();
-                        this.$refs.forrasSelect.addEventListener("change", () => {
-                            this.formData.forras = choices.getValue(true);
-                        });
-                        this.$refs.forrasSelect.addEventListener("showDropdown", (e) => {
-                            addZIndexToChoiceParent(e.target);
-                        });
-                        this.$refs.forrasSelect.addEventListener("hideDropdown", (e) => {
-                            removeZIndexFromChoiceParent(e.target);
-                        });
+                        this.$refs.forrasSelect.addEventListener(
+                            "change",
+                            () => {
+                                this.formData.forras = choices.getValue(true);
+                            }
+                        );
+                        this.$refs.forrasSelect.addEventListener(
+                            "showDropdown",
+                            (e) => {
+                                addZIndexToChoiceParent(e.target);
+                            }
+                        );
+                        this.$refs.forrasSelect.addEventListener(
+                            "hideDropdown",
+                            (e) => {
+                                removeZIndexFromChoiceParent(e.target);
+                            }
+                        );
                         this.$watch("formData.forras", () => refreshChoices());
                         this.$watch("lists.forrasok", () => refreshChoices());
                     });
@@ -283,17 +306,22 @@ document.addEventListener("alpine:init", () => {
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
-                                this.lists.cegcsoportok.map(({id, name}) => ({
+                                this.lists.cegcsoportok.map(({ id, name }) => ({
                                     value: id,
                                     label: name,
-                                    selected: this.formData.cegcsoport.includes(id),
+                                    selected:
+                                        this.formData.cegcsoport.includes(id),
                                 }))
                             );
                         };
                         refreshChoices();
-                        this.$refs.cegcsoportSelect.addEventListener("change", () => {
-                            this.formData.cegcsoport = choices.getValue(true);
-                        });
+                        this.$refs.cegcsoportSelect.addEventListener(
+                            "change",
+                            () => {
+                                this.formData.cegcsoport =
+                                    choices.getValue(true);
+                            }
+                        );
                         this.$refs.cegcsoportSelect.addEventListener(
                             "showDropdown",
                             (e) => {
@@ -306,8 +334,12 @@ document.addEventListener("alpine:init", () => {
                                 removeZIndexFromChoiceParent(e.target);
                             }
                         );
-                        this.$watch("formData.cegcsoport", () => refreshChoices());
-                        this.$watch("lists.cegcsoportok", () => refreshChoices());
+                        this.$watch("formData.cegcsoport", () =>
+                            refreshChoices()
+                        );
+                        this.$watch("lists.cegcsoportok", () =>
+                            refreshChoices()
+                        );
                     });
                 });
             fetch(API_URL + "/api/tamogatotts")
@@ -335,11 +367,16 @@ document.addEventListener("alpine:init", () => {
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
-                                this.lists.tamogatottak.map(({id, name, cim}) => ({
-                                    value: id,
-                                    label: name + (cim ? " (" + cim + ")" : ""),
-                                    selected: this.formData.tamogatott === id,
-                                }))
+                                this.lists.tamogatottak.map(
+                                    ({ id, name, cim }) => ({
+                                        value: id,
+                                        label:
+                                            name +
+                                            (cim ? " (" + cim + ")" : ""),
+                                        selected:
+                                            this.formData.tamogatott === id,
+                                    })
+                                )
                             );
                         };
                         refreshChoices();
@@ -358,11 +395,19 @@ document.addEventListener("alpine:init", () => {
                                 removeZIndexFromChoiceParent(e.target);
                             }
                         );
-                        this.$refs.tamogatottSelect.addEventListener("change", () => {
-                            this.formData.tamogatott = choices.getValue(true);
-                        });
-                        this.$watch("formData.tamogatott", () => refreshChoices());
-                        this.$watch("lists.tamogatottak", () => refreshChoices());
+                        this.$refs.tamogatottSelect.addEventListener(
+                            "change",
+                            () => {
+                                this.formData.tamogatott =
+                                    choices.getValue(true);
+                            }
+                        );
+                        this.$watch("formData.tamogatott", () =>
+                            refreshChoices()
+                        );
+                        this.$watch("lists.tamogatottak", () =>
+                            refreshChoices()
+                        );
                     });
                 });
             fetch(API_URL + "/api/tamogatasosszeg")
@@ -381,13 +426,18 @@ document.addEventListener("alpine:init", () => {
                             },
                         });
 
-                        this.formData.tamosszegtol = this.lists.tamogatasosszeg.min;
-                        this.formData.tamosszegig = this.lists.tamogatasosszeg.max;
+                        this.formData.tamosszegtol =
+                            this.lists.tamogatasosszeg.min;
+                        this.formData.tamosszegig =
+                            this.lists.tamogatasosszeg.max;
 
-                        this.$refs.tamosszegSlider.noUiSlider.on("change", (values) => {
-                            this.formData.tamosszegtol = values[0];
-                            this.formData.tamosszegig = values[1];
-                        });
+                        this.$refs.tamosszegSlider.noUiSlider.on(
+                            "change",
+                            (values) => {
+                                this.formData.tamosszegtol = values[0];
+                                this.formData.tamosszegig = values[1];
+                            }
+                        );
                         this.$watch("formData.tamosszegtol", () => {
                             this.$refs.tamosszegSlider.noUiSlider.set([
                                 this.formData.tamosszegtol,
@@ -418,13 +468,18 @@ document.addEventListener("alpine:init", () => {
                             },
                         });
 
-                        this.formData.evestamosszegtol = this.lists.evestamogatasosszeg.min;
-                        this.formData.evestamosszegig = this.lists.evestamogatasosszeg.max;
+                        this.formData.evestamosszegtol =
+                            this.lists.evestamogatasosszeg.min;
+                        this.formData.evestamosszegig =
+                            this.lists.evestamogatasosszeg.max;
 
-                        this.$refs.evestamosszegSlider.noUiSlider.on("change", (values) => {
-                            this.formData.evestamosszegtol = values[0];
-                            this.formData.evestamosszegig = values[1];
-                        });
+                        this.$refs.evestamosszegSlider.noUiSlider.on(
+                            "change",
+                            (values) => {
+                                this.formData.evestamosszegtol = values[0];
+                                this.formData.evestamosszegig = values[1];
+                            }
+                        );
                         this.$watch("formData.evestamosszegtol", () => {
                             this.$refs.evestamosszegSlider.noUiSlider.set([
                                 this.formData.evestamosszegtol,
@@ -464,10 +519,14 @@ document.addEventListener("alpine:init", () => {
             if (tosubmit.tamosszegig === this.lists.tamogatasosszeg.max) {
                 tosubmit.tamosszegig = null;
             }
-            if (tosubmit.evestamosszegtol === this.lists.evestamogatasosszeg.min) {
+            if (
+                tosubmit.evestamosszegtol === this.lists.evestamogatasosszeg.min
+            ) {
                 tosubmit.evestamosszegtol = null;
             }
-            if (tosubmit.evestamosszegig === this.lists.evestamogatasosszeg.max) {
+            if (
+                tosubmit.evestamosszegig === this.lists.evestamogatasosszeg.max
+            ) {
                 tosubmit.evestamosszegig = null;
             }
             Object.keys(tosubmit).forEach((key) => {
@@ -486,7 +545,7 @@ document.addEventListener("alpine:init", () => {
                 alert("Adjál meg szűrőket, ez így hosszú lesz");
                 this.resetSubmitBtn();
             } else {
-                let msg = 'Valami baj történt';
+                let msg = "Valami baj történt";
                 fetch(API_URL + "/api/count", {
                     method: "POST",
                     headers: {
@@ -501,15 +560,15 @@ document.addEventListener("alpine:init", () => {
                             return false;
                         }
                         if (respdata.data.count === 0) {
-                            msg = 'Nincs a keresésnek megfelelő adat';
+                            msg = "Nincs a keresésnek megfelelő adat";
                             return false;
                         }
-                        return fetch(API_URL + '/api/search', {
-                            method: 'POST',
+                        return fetch(API_URL + "/api/search", {
+                            method: "POST",
                             headers: {
-                                'Content-Type': 'application/json'
+                                "Content-Type": "application/json",
                             },
-                            body: JSON.stringify(tosubmit)
+                            body: JSON.stringify(tosubmit),
                         });
                     })
                     .then((response) => response.json())
@@ -535,7 +594,7 @@ document.addEventListener("alpine:init", () => {
                 alert("Adjál meg szűrőket, ez így hosszú lesz");
                 this.resetExportBtn();
             } else {
-                let msg = 'Valami baj történt';
+                let msg = "Valami baj történt";
                 fetch(API_URL + "/api/count", {
                     method: "POST",
                     headers: {
@@ -550,7 +609,7 @@ document.addEventListener("alpine:init", () => {
                             return false;
                         }
                         if (respdata.data.count === 0) {
-                            msg = 'Nincs a keresésnek megfelelő adat';
+                            msg = "Nincs a keresésnek megfelelő adat";
                             return false;
                         }
                         return fetch(API_URL + "/api/exportforedit", {
