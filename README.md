@@ -58,12 +58,14 @@ sudo chmod +x setup.sh
 
 A konzisztens stílusról a projektben lévő [`.editorconfig`](https://editorconfig.org/) file gondoskodik. Bizonyosodj meg róla, hogy a kódszerkesztőd támogatja-e az `.editorconfig`-ot. A legtöbb kódszerkesztő automatikusan átveszi a beállításokat, de van pár amelyeknél fel kell installálnod egy plugint. A támogatott editorok listáját [itt találod](https://editorconfig.org/#pre-installed).
 
-Az `.editorconfig` mellett használjuk a [Prettier](https://prettier.io/) csomagot is, mely kiegészíti a default konfigurációját az `.editorconfig`-al (lásd a [dokumentációt(https://prettier.io/docs/en/configuration.html#editorconfig)]).
+Az `.editorconfig` mellett használjuk a [Prettier](https://prettier.io/) csomagot is, mely kiegészíti a default konfigurációját az `.editorconfig`-al (lásd a [dokumentációt](https://prettier.io/docs/en/configuration.html#editorconfig)).
 
 A Prettierhez további opcióikat `package.json`-ban található `"prettier"` objektum kulcsaival tudsz hozzáadni, a beállításokról [itt olvashatsz bővebben](https://prettier.io/docs/en/options.html).
 
 Ha ignorálni akarunk file-okat a formázás alól, akkor azt megtehetjük a `.prettierignore` file segítségével. Bővebben erről [itt olvashatsz](https://prettier.io/docs/en/ignore.html).
 
-A Prettiernek köszönhetően van egy parancsunk, amivel a projekt összes file-t automatikusan formázhatjuk (kihagyva az ignorált file-okat és a figyelembe véve a konfigurációt).
+A Prettiernek köszönhetően van egy parancsunk, amivel a projekt összes file-t automatikusan formázhatjuk (kihagyva az ignorált file-okat és figyelembe véve a konfigurációt).
 
 Futasd az `npm run format` parancsot a projekt könyvtárban (ehhez természetesen [Node.js](http://nodejs.org/)-re lesz szükséged).
+
+Ez a parancs megformáza az összes forrásfile-t.
