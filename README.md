@@ -17,7 +17,7 @@ a weboldal wordpress sablonja [itt](https://github.com/Code-for-Hungary/agrar-mi
 
 ## Fejlesztés helyi gépen
 
-Ahhoz, hogy az AJAX kérések működjenek helyi gépen, valamilyen szerverről kell kiszolgálnod a file-okat. A legegyszerűbb ha fel van installálva a gépeden a [Node.js](https://nodejs.org/en/) és az [NPX](https://www.npmjs.com/package/npx) csomag. Ezzel lefutatthatod a serve parancsot a projekt mappában, ami létrehoz egy egyszerű HTTP szervert. Mindez így néz ki:
+Ahhoz, hogy az AJAX kérések működjenek helyi gépen, valamilyen szerverről kell kiszolgálnod a file-okat. A legegyszerűbb ha fel van installálva a gépeden a [Node.js](https://nodejs.org/en/) és az [NPX](https://www.npmjs.com/package/npx) csomag. Ezzel lefutatthatod a `serve` parancsot a projekt mappában, ami létrehoz egy egyszerű HTTP szervert. Mindez így néz ki:
 
 ```bash
 npx serve
@@ -33,7 +33,7 @@ Ok to proceed? (y)
 
 Ezután a program ki fogja írni milyen címen érheted el az alkalmazást (alapból az a `http://localhost:3000` lesz majd). Bővebben a `serve` csomagról itt [olvashatsz](https://www.npmjs.com/package/serve).
 
-Jelenleg a projektben nincs se JS pipeline, se bundling. A kereső üzleti logikáját az `index.html`-ben találod egy inline `<script>` tagben. A UI data-bindingot, [Alpine.js](https://alpinejs.dev/)-el oldjuk meg. Mind a külső függőségeket, mind a saját szkriptjeinket külön `<script>` tagekkel húzzuk be a HTML kódban.
+Jelenleg a projektben nincs se JS pipeline, se bundling. A kereső üzleti logikáját a `js/agrar.js` file-ben találod. A UI data-bindingot, [Alpine.js](https://alpinejs.dev/)-el oldjuk meg. Mind a külső függőségeket, mind a saját szkriptjeinket külön `<script>` tagekkel húzzuk be a HTML kódban.
 
 A multiple selecteket [Choices.js](https://github.com/Choices-js/Choices) segítségével valósítjuk meg.
 
