@@ -32,6 +32,7 @@ document.addEventListener("alpine:init", () => {
             tamosszegig: null,
             evestamosszegtol: null,
             evestamosszegig: null,
+            per_page: 15,
         },
         lists: {
             evek: null,
@@ -51,6 +52,7 @@ document.addEventListener("alpine:init", () => {
         detailedSearchOpened: false,
         resultData: [],
         resultMeta: null,
+        resultLinks: null,
         resultLoaded: false,
         isEmpty(val) {
             return (
@@ -78,6 +80,9 @@ document.addEventListener("alpine:init", () => {
                     this.formData.evestamosszegig =
                         this.lists.evestamogatasosszeg.max;
                 }
+            });
+            this.$watch("formData.per_page", () => {
+                this.search(API_URL + "/api/search");
             });
             fetch(API_URL + "/api/evs")
                 .then((response) => response.json())
@@ -537,6 +542,9 @@ document.addEventListener("alpine:init", () => {
             return tosubmit;
         },
         submit() {
+            this.search(API_URL + "/api/search");
+        },
+        search(url) {
             this.disableSubmitBtn();
             this.resultLoaded = false;
             let tosubmit = this.getSubmitableData();
@@ -563,7 +571,7 @@ document.addEventListener("alpine:init", () => {
                             msg = "Nincs a keresésnek megfelelő adat";
                             return false;
                         }
-                        return fetch(API_URL + "/api/search", {
+                        return fetch(url, {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -573,9 +581,11 @@ document.addEventListener("alpine:init", () => {
                     })
                     .then((response) => response.json())
                     .then((respdata) => {
-                        console.log(respdata);
                         this.resultData = respdata.data;
                         this.resultMeta = respdata.meta;
+                        this.resultLinks = respdata.links;
+                        this.resultMeta.links.shift();
+                        this.resultMeta.links.pop();
                         this.resultLoaded = true;
                     })
                     .catch(() => {
