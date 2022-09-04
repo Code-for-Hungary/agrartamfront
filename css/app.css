@@ -292,6 +292,16 @@ body {
     z-index: 10;
 }
 
+.ags-disabled-link {
+    pointer-events: none;
+    cursor: auto;
+    color: var(--light-gray-color);
+}
+
+.ags-active-paging-link {
+    color: var(--brand-color);
+}
+
 /* Overwrite Choices.js's styles */
 .choices {
     margin-bottom: 0;

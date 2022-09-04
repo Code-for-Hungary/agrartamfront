@@ -492,11 +492,51 @@
                         </template>
                     </tbody>
                 </table>
-                <div>
+                <div class="ags-button-row">
+                    <button
+                        @click.prevent="search(resultLinks.first)"
+                        class="ags-button"
+                        :class="{'ags-disabled-link': !resultLinks.first}"
+                    >
+                        Első oldal
+                    </button>
+                    <button
+                        @click.prevent="search(resultLinks.prev)"
+                        class="ags-button"
+                        :class="{'ags-disabled-link': !resultLinks.prev}"
+                    >
+                        Előző oldal
+                    </button>
+                    <template x-for="item in resultMeta.links">
+                        <button
+                            href="#"
+                            @click.prevent="search(item.url)"
+                            x-text="item.label"
+                            class="ags-button"
+                            :class="{
+                                'ags-disabled-link': !item.url,
+                                'ags-active-paging-link': item.active
+                            }"
+                        ></button>
+                    </template>
+                    <button
+                        @click.prevent="search(resultLinks.next)"
+                        class="ags-button"
+                        :class="{'ags-disabled-link': !resultLinks.next}"
+                    >
+                        Következő oldal
+                    </button>
+                    <button
+                        href="#"
+                        @click.prevent="search(resultLinks.last)"
+                        class="ags-button"
+                        :class="{'ags-disabled-link': !resultLinks.last}"
+                    >
+                        Utolsó oldal
+                    </button>
                     <div>
                         Találatok száma <span x-text="resultMeta.total"></span>
                     </div>
-                    <div><span x-text="resultMeta.last_page"></span> oldal</div>
                 </div>
             </div>
         </template>
