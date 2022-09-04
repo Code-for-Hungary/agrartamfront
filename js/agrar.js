@@ -32,6 +32,7 @@ document.addEventListener("alpine:init", () => {
             tamosszegig: null,
             evestamosszegtol: null,
             evestamosszegig: null,
+            per_page: 15,
         },
         lists: {
             evek: null,
@@ -79,6 +80,9 @@ document.addEventListener("alpine:init", () => {
                     this.formData.evestamosszegig =
                         this.lists.evestamogatasosszeg.max;
                 }
+            });
+            this.$watch("formData.per_page", () => {
+                this.search(API_URL + "/api/search");
             });
             fetch(API_URL + "/api/evs")
                 .then((response) => response.json())
