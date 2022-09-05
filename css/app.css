@@ -148,6 +148,19 @@ body {
     padding: 0 var(--gutter);
 }
 
+.ags-col-2 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.ags-col-2:first-of-type {
+    padding-right: calc(var(--gutter) / 2);
+}
+
+.ags-col-2:last-of-type {
+    padding-left: calc(var(--gutter) / 2);
+}
+
 .ags-col-2-mobile-3-desktop {
     flex: 0 0 50%;
     max-width: 50%;

@@ -222,48 +222,50 @@
                         </div>
                     </div>
 
-                    <div class="ags-form-row">
-                        <label for="jogcimSelect" class="ags-label"
-                            >Jogcím:</label
-                        >
-                        <select
-                            id="jogcimSelect"
-                            x-ref="jogcimSelect"
-                            x-model="formData.jogcim"
-                            multiple="multiple"
-                            class="ags-textbox"
-                        ></select>
-                        <span class="ags-hint">Többet is megadhat</span>
-                    </div>
-
                     <div class="ags-col-container ags-col-container-wrap">
                         <div class="ags-form-row ags-col-2-mobile-3-desktop">
-                            <label for="alapSelect" class="ags-label"
-                                >Alap:</label
+                            <label for="jogcimSelect" class="ags-label"
+                                >Jogcím:</label
                             >
                             <select
-                                id="alapSelect"
-                                x-ref="alapSelect"
-                                x-model="formData.alap"
+                                id="jogcimSelect"
+                                x-ref="jogcimSelect"
+                                x-model="formData.jogcim"
                                 multiple="multiple"
+                                class="ags-textbox"
                             ></select>
                             <span class="ags-hint">Többet is megadhat</span>
                         </div>
                         <div class="ags-form-row ags-col-2-mobile-3-desktop">
                             <div class="ags-padd-x-middle">
-                                <label for="forrasSelect" class="ags-label"
-                                    >Forrás:</label
+                                <label for="alapSelect" class="ags-label"
+                                    >Alap:</label
                                 >
                                 <select
-                                    id="forrasSelect"
-                                    x-ref="forrasSelect"
-                                    x-model="formData.forras"
+                                    id="alapSelect"
+                                    x-ref="alapSelect"
+                                    x-model="formData.alap"
                                     multiple="multiple"
                                 ></select>
                                 <span class="ags-hint">Többet is megadhat</span>
                             </div>
                         </div>
                         <div class="ags-form-row ags-col-1-mobile-3-desktop">
+                            <label for="forrasSelect" class="ags-label"
+                                >Forrás:</label
+                            >
+                            <select
+                                id="forrasSelect"
+                                x-ref="forrasSelect"
+                                x-model="formData.forras"
+                                multiple="multiple"
+                            ></select>
+                            <span class="ags-hint">Többet is megadhat</span>
+                        </div>
+                    </div>
+
+                    <div class="ags-col-container">
+                        <div class="ags-form-row ags-col-2">
                             <label for="cegcsoportSelect" class="ags-label"
                                 >Cégcsoport:</label
                             >
@@ -276,17 +278,16 @@
                             ></select>
                             <span class="ags-hint">Többet is megadhat</span>
                         </div>
-                    </div>
-
-                    <div class="ags-form-row">
-                        <label for="tamogatottSelect" class="ags-label"
-                            >Támogatott entitás:</label
-                        >
-                        <select
-                            id="tamogatottSelect"
-                            x-ref="tamogatottSelect"
-                            x-model="formData.tamogatott"
-                        ></select>
+                        <div class="ags-form-row ags-col-2">
+                            <label for="tamogatottSelect" class="ags-label"
+                                >Támogatott entitás:</label
+                            >
+                            <select
+                                id="tamogatottSelect"
+                                x-ref="tamogatottSelect"
+                                x-model="formData.tamogatott"
+                            ></select>
+                        </div>
                     </div>
 
                     <div class="ags-form-row">
@@ -562,6 +563,7 @@
 
             <div
                 class="ags-loading-layer"
+                x-cloak
                 x-show="submitting || exporting"
             ></div>
         </div>
