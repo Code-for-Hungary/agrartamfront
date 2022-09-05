@@ -361,25 +361,6 @@
                 </div>
             </div>
             <div class="ags-button-row">
-                <div class="ags-submit-container">
-                    <button
-                        type="submit"
-                        class="ags-button"
-                        x-text="submitText"
-                        x-cloak
-                        :disabled="submitting"
-                    ></button>
-                </div>
-                <div>
-                    <button
-                        type="button"
-                        class="ags-button"
-                        x-text="exportText"
-                        x-cloak
-                        :disabled="exporting"
-                        @click="exportforedit"
-                    ></button>
-                </div>
                 <div class="ags-toggle-container">
                     <button
                         type="button"
@@ -412,11 +393,20 @@
                         </template>
                     </button>
                 </div>
+                <div class="ags-submit-container">
+                    <button
+                        type="submit"
+                        class="ags-button"
+                        x-text="submitText"
+                        x-cloak
+                        :disabled="submitting"
+                    ></button>
+                </div>
             </div>
         </form>
 
         <template x-if="resultLoaded">
-            <div>
+            <div class="ags-results-container">
                 <table>
                     <thead>
                         <tr>
@@ -546,5 +536,16 @@
                 </div>
             </div>
         </template>
+
+        <div class="ags-bottom-row">
+            <button
+                type="button"
+                class="ags-button ags-button-secondary"
+                x-text="exportText"
+                x-cloak
+                :disabled="exporting"
+                @click="exportforedit"
+            ></button>
+        </div>
     </body>
 </html>
