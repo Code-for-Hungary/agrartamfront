@@ -12,7 +12,7 @@ on:
 jobs:
   normal_deploy:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: (github.event_name == 'push') || (github.event.pull_request.merged == true)
     steps:
       - name: frissit.sh
         uses: garygrossgarten/github-action-ssh@release
@@ -21,19 +21,5 @@ jobs:
             cd /var/www/code4.hu/agrartamfront
             ./frissit.sh
           host: ${{ secrets.HOST }}
-          username: ubuntu
+          username: ${{ secrets.SSHUSER }}
           privateKey: ${{ secrets.SSHKULCS }}
-
-  pr_deploy:
-      runs-on: ubuntu-latest
-      if: github.event.pull_request.merged == true
-      steps:
-          - name: frissit.sh
-            uses: garygrossgarten/github-action-ssh@release
-            with:
-                command: |
-                    cd /var/www/code4.hu/agrartamfront
-                    ./frissit.sh
-                host: ${{ secrets.HOST }}
-                username: ubuntu
-                privateKey: ${{ secrets.SSHKULCS }}
