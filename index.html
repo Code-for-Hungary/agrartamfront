@@ -6,6 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Agrártámogatások 2022</title>
 
+        <link rel="preconnect" href="https://unpkg.com" />
+        <link rel="preconnect" href="https://unpkg.com" crossorigin />
+
+        <link rel="preconnect" href="https://cdn.jsdelivr.net/" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net/" crossorigin />
+
         <link
             media="print"
             onload="this.media='all'"
@@ -18,12 +24,6 @@
             rel="stylesheet"
             href="/css/vendor/nouislider.min.css"
         />
-
-        <link rel="preconnect" href="https://unpkg.com" />
-        <link rel="preconnect" href="https://unpkg.com" crossorigin />
-
-        <link rel="preconnect" href="https://cdn.jsdelivr.net/" />
-        <link rel="preconnect" href="https://cdn.jsdelivr.net/" crossorigin />
 
         <script defer src="config.js"></script>
 
@@ -59,493 +59,511 @@
             href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500&display=swap"
             rel="stylesheet"
         />
-        <link media="all" href="/css/app.css" rel="stylesheet" />
+        <link rel="preload" href="/assets/loading.gif" as="image" />
+        <link media="all" href="/css/app.css?v=1.9" rel="stylesheet" />
     </head>
     <body x-data="searchForm" x-init="getLists">
-        <form @submit.prevent="submit" class="ags-form">
-            <div class="ags-form-row">
-                <label for="nev" class="ags-label">Nyertes neve:</label>
-                <div class="ags-icon-wrapper">
-                    <input
-                        id="nev"
-                        type="search"
-                        x-model="formData.nev"
-                        class="ags-textbox"
-                    />
-                    <img
-                        src="/assets/search.svg"
-                        alt=""
-                        width="15"
-                        height="15"
-                        class="ags-icon"
-                    />
-                </div>
-            </div>
-
-            <div class="ags-form-row">
-                <div class="ags-radio-row">
-                    <label class="ags-radio-button">
-                        <input
-                            type="radio"
-                            value="1"
-                            x-model="formData.isfirm"
-                            name="isfirm"
-                        />
-                        <span class="ags-radio-text">Jogi személy</span>
-                    </label>
-                    <label class="ags-radio-button">
-                        <input
-                            type="radio"
-                            value="0"
-                            x-model="formData.isfirm"
-                            name="isfirm"
-                        />
-                        <span class="ags-radio-text">Természetes személy</span>
-                    </label>
-                    <label class="ags-radio-button">
-                        <input
-                            checked
-                            type="radio"
-                            value=""
-                            x-model="formData.isfirm"
-                            name="isfirm"
-                        />
-                        <span class="ags-radio-text">Mindegy</span>
-                    </label>
-                </div>
-            </div>
-
-            <div
-                x-show="formData.isfirm === '0'"
-                x-transition
-                x-cloak
-                class="ags-form-row"
-            >
-                <div class="ags-radio-row">
-                    <label class="ags-radio-button">
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="female"
-                            x-model="formData.gender"
-                        />
-                        <span class="ags-radio-text">Nő</span>
-                    </label>
-                    <label class="ags-radio-button">
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="male"
-                            x-model="formData.gender"
-                        />
-                        <span class="ags-radio-text">Férfi</span>
-                    </label>
-                    <label class="ags-radio-button">
-                        <input
-                            type="radio"
-                            name="gender"
-                            checked
-                            value=""
-                            x-model="formData.gender"
-                        />
-                        <span class="ags-radio-text">Mindegy</span>
-                    </label>
-                </div>
-            </div>
-
-            <div
-                x-show="detailedSearchOpened"
-                x-transition.scale.origin.top
-                x-cloak
-            >
+        <div class="ags-app">
+            <form @submit.prevent="submit" class="ags-form">
                 <div class="ags-form-row">
-                    <label for="evSelect" class="ags-label">Év:</label>
-                    <select
-                        id="evSelect"
-                        x-ref="evSelect"
-                        x-model="formData.ev"
-                        multiple="multiple"
-                        class="ags-textbox"
-                    ></select>
-                    <span class="ags-hint">Többet is megadhat</span>
+                    <label for="nev" class="ags-label">Nyertes neve:</label>
+                    <div class="ags-icon-wrapper">
+                        <input
+                            id="nev"
+                            type="search"
+                            x-model="formData.nev"
+                            class="ags-textbox"
+                        />
+                        <img
+                            src="/assets/search.svg"
+                            alt=""
+                            width="15"
+                            height="15"
+                            class="ags-icon"
+                        />
+                    </div>
                 </div>
 
-                <div class="ags-col-container">
-                    <div class="ags-form-row" style="flex-basis: 50%">
-                        <label for="megye" class="ags-label">Megye:</label>
+                <div class="ags-form-row">
+                    <div class="ags-radio-row">
+                        <label class="ags-radio-button">
+                            <input
+                                type="radio"
+                                value="1"
+                                x-model="formData.isfirm"
+                                name="isfirm"
+                            />
+                            <span class="ags-radio-text">Jogi személy</span>
+                        </label>
+                        <label class="ags-radio-button">
+                            <input
+                                type="radio"
+                                value="0"
+                                x-model="formData.isfirm"
+                                name="isfirm"
+                            />
+                            <span class="ags-radio-text"
+                                >Természetes személy</span
+                            >
+                        </label>
+                        <label class="ags-radio-button">
+                            <input
+                                checked
+                                type="radio"
+                                value=""
+                                x-model="formData.isfirm"
+                                name="isfirm"
+                            />
+                            <span class="ags-radio-text">Mindegy</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div
+                    x-show="formData.isfirm === '0'"
+                    x-transition
+                    x-cloak
+                    class="ags-form-row"
+                >
+                    <div class="ags-radio-row">
+                        <label class="ags-radio-button">
+                            <input
+                                type="radio"
+                                name="gender"
+                                value="female"
+                                x-model="formData.gender"
+                            />
+                            <span class="ags-radio-text">Nő</span>
+                        </label>
+                        <label class="ags-radio-button">
+                            <input
+                                type="radio"
+                                name="gender"
+                                value="male"
+                                x-model="formData.gender"
+                            />
+                            <span class="ags-radio-text">Férfi</span>
+                        </label>
+                        <label class="ags-radio-button">
+                            <input
+                                type="radio"
+                                name="gender"
+                                checked
+                                value=""
+                                x-model="formData.gender"
+                            />
+                            <span class="ags-radio-text">Mindegy</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div
+                    x-show="detailedSearchOpened"
+                    x-transition.scale.origin.top
+                    x-cloak
+                >
+                    <div class="ags-form-row">
+                        <label for="evSelect" class="ags-label">Év:</label>
                         <select
-                            id="megye"
-                            x-model="formData.megye"
+                            id="evSelect"
+                            x-ref="evSelect"
+                            x-model="formData.ev"
+                            multiple="multiple"
                             class="ags-textbox"
-                        >
-                            <option value="">válasszon</option>
-                            <template x-for="item in lists.megyek">
-                                <option
-                                    x-text="item.name"
-                                    :value="item.id"
-                                ></option>
-                            </template>
-                        </select>
+                        ></select>
+                        <span class="ags-hint">Többet is megadhat</span>
                     </div>
 
-                    <div
-                        class="ags-form-row"
-                        style="flex-basis: calc(50% - 180px)"
-                    >
-                        <div class="ags-padded-x-col">
-                            <label for="varos" class="ags-label"
-                                >Település:</label
+                    <div class="ags-col-container">
+                        <div class="ags-form-row" style="flex-basis: 50%">
+                            <label for="megye" class="ags-label">Megye:</label>
+                            <select
+                                id="megye"
+                                x-model="formData.megye"
+                                class="ags-textbox"
+                            >
+                                <option value="">válasszon</option>
+                                <template x-for="item in lists.megyek">
+                                    <option
+                                        x-text="item.name"
+                                        :value="item.id"
+                                    ></option>
+                                </template>
+                            </select>
+                        </div>
+
+                        <div
+                            class="ags-form-row"
+                            style="flex-basis: calc(50% - 180px)"
+                        >
+                            <div class="ags-padded-x-col">
+                                <label for="varos" class="ags-label"
+                                    >Település:</label
+                                >
+                                <input
+                                    id="varos"
+                                    type="text"
+                                    x-model="formData.varos"
+                                    class="ags-textbox"
+                                />
+                            </div>
+                        </div>
+                        <div class="ags-form-row" style="flex-basis: 180px">
+                            <label for="irszam" class="ags-label"
+                                >Irányítószám:</label
                             >
                             <input
-                                id="varos"
-                                type="text"
-                                x-model="formData.varos"
+                                id="irszam"
+                                type="number"
+                                maxlength="4"
+                                x-model="formData.irszam"
                                 class="ags-textbox"
                             />
                         </div>
                     </div>
-                    <div class="ags-form-row" style="flex-basis: 180px">
-                        <label for="irszam" class="ags-label"
-                            >Irányítószám:</label
+
+                    <div class="ags-form-row">
+                        <label for="jogcimSelect" class="ags-label"
+                            >Jogcím:</label
                         >
-                        <input
-                            id="irszam"
-                            type="number"
-                            maxlength="4"
-                            x-model="formData.irszam"
-                            class="ags-textbox"
-                        />
-                    </div>
-                </div>
-
-                <div class="ags-form-row">
-                    <label for="jogcimSelect" class="ags-label">Jogcím:</label>
-                    <select
-                        id="jogcimSelect"
-                        x-ref="jogcimSelect"
-                        x-model="formData.jogcim"
-                        multiple="multiple"
-                        class="ags-textbox"
-                    ></select>
-                    <span class="ags-hint">Többet is megadhat</span>
-                </div>
-
-                <div class="ags-col-container ags-col-container-wrap">
-                    <div class="ags-form-row ags-col-2-mobile-3-desktop">
-                        <label for="alapSelect" class="ags-label">Alap:</label>
                         <select
-                            id="alapSelect"
-                            x-ref="alapSelect"
-                            x-model="formData.alap"
+                            id="jogcimSelect"
+                            x-ref="jogcimSelect"
+                            x-model="formData.jogcim"
                             multiple="multiple"
+                            class="ags-textbox"
                         ></select>
                         <span class="ags-hint">Többet is megadhat</span>
                     </div>
-                    <div class="ags-form-row ags-col-2-mobile-3-desktop">
-                        <div class="ags-padd-x-middle">
-                            <label for="forrasSelect" class="ags-label"
-                                >Forrás:</label
+
+                    <div class="ags-col-container ags-col-container-wrap">
+                        <div class="ags-form-row ags-col-2-mobile-3-desktop">
+                            <label for="alapSelect" class="ags-label"
+                                >Alap:</label
                             >
                             <select
-                                id="forrasSelect"
-                                x-ref="forrasSelect"
-                                x-model="formData.forras"
+                                id="alapSelect"
+                                x-ref="alapSelect"
+                                x-model="formData.alap"
+                                multiple="multiple"
+                            ></select>
+                            <span class="ags-hint">Többet is megadhat</span>
+                        </div>
+                        <div class="ags-form-row ags-col-2-mobile-3-desktop">
+                            <div class="ags-padd-x-middle">
+                                <label for="forrasSelect" class="ags-label"
+                                    >Forrás:</label
+                                >
+                                <select
+                                    id="forrasSelect"
+                                    x-ref="forrasSelect"
+                                    x-model="formData.forras"
+                                    multiple="multiple"
+                                ></select>
+                                <span class="ags-hint">Többet is megadhat</span>
+                            </div>
+                        </div>
+                        <div class="ags-form-row ags-col-1-mobile-3-desktop">
+                            <label for="cegcsoportSelect" class="ags-label"
+                                >Cégcsoport:</label
+                            >
+                            <select
+                                class="ags-textbox"
+                                id="cegcsoportSelect"
+                                x-ref="cegcsoportSelect"
+                                x-model="formData.cegcsoport"
                                 multiple="multiple"
                             ></select>
                             <span class="ags-hint">Többet is megadhat</span>
                         </div>
                     </div>
-                    <div class="ags-form-row ags-col-1-mobile-3-desktop">
-                        <label for="cegcsoportSelect" class="ags-label"
-                            >Cégcsoport:</label
+
+                    <div class="ags-form-row">
+                        <label for="tamogatottSelect" class="ags-label"
+                            >Támogatott entitás:</label
                         >
                         <select
-                            class="ags-textbox"
-                            id="cegcsoportSelect"
-                            x-ref="cegcsoportSelect"
-                            x-model="formData.cegcsoport"
-                            multiple="multiple"
+                            id="tamogatottSelect"
+                            x-ref="tamogatottSelect"
+                            x-model="formData.tamogatott"
                         ></select>
-                        <span class="ags-hint">Többet is megadhat</span>
                     </div>
-                </div>
 
-                <div class="ags-form-row">
-                    <label for="tamogatottSelect" class="ags-label"
-                        >Támogatott entitás:</label
-                    >
-                    <select
-                        id="tamogatottSelect"
-                        x-ref="tamogatottSelect"
-                        x-model="formData.tamogatott"
-                    ></select>
-                </div>
-
-                <div class="ags-form-row">
-                    <label for="tamosszegtol" class="ags-label">
-                        Támogatás összege (ezer Ft):
-                    </label>
-                    <div class="ags-slider-container">
-                        <div id="tamosszegSlider" x-ref="tamosszegSlider"></div>
-                    </div>
-                    <div
-                        style="
-                            display: flex;
-                            flex-wrap: nowrap;
-                            align-items: center;
-                        "
-                    >
-                        <div class="ags-min-max-container" style="flex: 1">
-                            <div class="ags-min-max-input-box">
-                                <input
-                                    id="tamosszegtol"
-                                    type="number"
-                                    step="any"
-                                    x-model="formData.tamosszegtol"
-                                    class="ags-textbox"
-                                />
-                            </div>
-                            <div class="ags-min-max-dash">—</div>
-                            <div class="ags-min-max-input-box">
-                                <input
-                                    id="tamosszegig"
-                                    class="ags-textbox"
-                                    type="number"
-                                    step="any"
-                                    x-model="formData.tamosszegig"
-                                />
-                            </div>
+                    <div class="ags-form-row">
+                        <label for="tamosszegtol" class="ags-label">
+                            Támogatás összege (ezer Ft):
+                        </label>
+                        <div class="ags-slider-container">
+                            <div
+                                id="tamosszegSlider"
+                                x-ref="tamosszegSlider"
+                            ></div>
                         </div>
-                        <div style="padding-left: 8px">ezer Ft</div>
-                    </div>
-                </div>
-                <div class="ags-form-row">
-                    <label for="evestamosszeg" class="ags-label">
-                        Éves támogatás összege (ezer Ft):
-                    </label>
-                    <div class="ags-slider-container">
                         <div
-                            id="evestamosszegSlider"
-                            x-ref="evestamosszegSlider"
-                        ></div>
-                    </div>
-                    <div
-                        style="
-                            display: flex;
-                            flex-wrap: nowrap;
-                            align-items: center;
-                        "
-                    >
-                        <div class="ags-min-max-container" style="flex: 1">
-                            <div class="ags-min-max-input-box">
-                                <input
-                                    id="evestamosszeg"
-                                    type="number"
-                                    step="any"
-                                    class="ags-textbox"
-                                    x-model="formData.evestamosszegtol"
-                                />
+                            style="
+                                display: flex;
+                                flex-wrap: nowrap;
+                                align-items: center;
+                            "
+                        >
+                            <div class="ags-min-max-container" style="flex: 1">
+                                <div class="ags-min-max-input-box">
+                                    <input
+                                        id="tamosszegtol"
+                                        type="number"
+                                        step="any"
+                                        x-model="formData.tamosszegtol"
+                                        class="ags-textbox"
+                                    />
+                                </div>
+                                <div class="ags-min-max-dash">—</div>
+                                <div class="ags-min-max-input-box">
+                                    <input
+                                        id="tamosszegig"
+                                        class="ags-textbox"
+                                        type="number"
+                                        step="any"
+                                        x-model="formData.tamosszegig"
+                                    />
+                                </div>
                             </div>
-                            <div class="ags-min-max-dash">—</div>
-                            <div class="ags-min-max-input-box">
-                                <input
-                                    type="number"
-                                    step="any"
-                                    class="ags-textbox"
-                                    x-model="formData.evestamosszegig"
-                                />
-                            </div>
+                            <div style="padding-left: 8px">ezer Ft</div>
                         </div>
-                        <div style="padding-left: 8px">ezer Ft</div>
+                    </div>
+                    <div class="ags-form-row">
+                        <label for="evestamosszeg" class="ags-label">
+                            Éves támogatás összege (ezer Ft):
+                        </label>
+                        <div class="ags-slider-container">
+                            <div
+                                id="evestamosszegSlider"
+                                x-ref="evestamosszegSlider"
+                            ></div>
+                        </div>
+                        <div
+                            style="
+                                display: flex;
+                                flex-wrap: nowrap;
+                                align-items: center;
+                            "
+                        >
+                            <div class="ags-min-max-container" style="flex: 1">
+                                <div class="ags-min-max-input-box">
+                                    <input
+                                        id="evestamosszeg"
+                                        type="number"
+                                        step="any"
+                                        class="ags-textbox"
+                                        x-model="formData.evestamosszegtol"
+                                    />
+                                </div>
+                                <div class="ags-min-max-dash">—</div>
+                                <div class="ags-min-max-input-box">
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        class="ags-textbox"
+                                        x-model="formData.evestamosszegig"
+                                    />
+                                </div>
+                            </div>
+                            <div style="padding-left: 8px">ezer Ft</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="ags-button-row">
-                <div class="ags-toggle-container">
-                    <button
-                        type="button"
-                        class="ags-toggle"
-                        x-on:click="detailedSearchOpened = !detailedSearchOpened"
-                    >
-                        <template x-if="!detailedSearchOpened">
-                            <span class="ags-toggle-text">
-                                Részletes keresés
-                                <img
-                                    src="/assets/plus.svg"
-                                    class="ags-icon"
-                                    alt=""
-                                    width="20"
-                                    height="21"
-                                />
-                            </span>
-                        </template>
-                        <template x-if="detailedSearchOpened">
-                            <span class="ags-toggle-text">
-                                Egyszerű keresés
-                                <img
-                                    src="/assets/minus.svg"
-                                    class="ags-icon"
-                                    alt=""
-                                    width="20"
-                                    height="21"
-                                />
-                            </span>
-                        </template>
-                    </button>
+                <div class="ags-button-row">
+                    <div class="ags-toggle-container">
+                        <button
+                            type="button"
+                            class="ags-toggle"
+                            x-on:click="detailedSearchOpened = !detailedSearchOpened"
+                        >
+                            <template x-if="!detailedSearchOpened">
+                                <span class="ags-toggle-text">
+                                    Részletes keresés
+                                    <img
+                                        src="/assets/plus.svg"
+                                        class="ags-icon"
+                                        alt=""
+                                        width="20"
+                                        height="21"
+                                    />
+                                </span>
+                            </template>
+                            <template x-if="detailedSearchOpened">
+                                <span class="ags-toggle-text">
+                                    Egyszerű keresés
+                                    <img
+                                        src="/assets/minus.svg"
+                                        class="ags-icon"
+                                        alt=""
+                                        width="20"
+                                        height="21"
+                                    />
+                                </span>
+                            </template>
+                        </button>
+                    </div>
+                    <div class="ags-submit-container">
+                        <button
+                            type="submit"
+                            class="ags-button"
+                            x-text="submitText"
+                            x-cloak
+                            :disabled="submitting"
+                        ></button>
+                    </div>
                 </div>
-                <div class="ags-submit-container">
-                    <button
-                        type="submit"
-                        class="ags-button"
-                        x-text="submitText"
-                        x-cloak
-                        :disabled="submitting"
-                    ></button>
-                </div>
-            </div>
-        </form>
+            </form>
 
-        <template x-if="resultLoaded">
-            <div class="ags-results-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Év</th>
-                            <th>Gender</th>
-                            <th>Név</th>
-                            <th>Cím</th>
-                            <th>Csoport</th>
-                            <th></th>
-                            <th>Összeg</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template x-for="row in resultData" :key="row.id">
+            <template x-if="resultLoaded">
+                <div class="ags-results-container">
+                    <table>
+                        <thead>
                             <tr>
-                                <td x-text="row.ev"></td>
-                                <td>
-                                    <template x-if="row.is_firm">
-                                        <div>Jogi személy</div>
-                                    </template>
-                                    <template x-if="!row.is_firm">
-                                        <div>
-                                            Természetes személy:
+                                <th>Év</th>
+                                <th>Gender</th>
+                                <th>Név</th>
+                                <th>Cím</th>
+                                <th>Csoport</th>
+                                <th></th>
+                                <th>Összeg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="row in resultData" :key="row.id">
+                                <tr>
+                                    <td x-text="row.ev"></td>
+                                    <td>
+                                        <template x-if="row.is_firm">
+                                            <div>Jogi személy</div>
+                                        </template>
+                                        <template x-if="!row.is_firm">
+                                            <div>
+                                                Természetes személy:
+                                                <span
+                                                    x-text="row.gender === 'male' ? 'férfi' : 'nő'"
+                                                ></span>
+                                            </div>
+                                        </template>
+                                    </td>
+                                    <td x-text="row.name"></td>
+                                    <td>
+                                        <div
+                                            x-text="row.irszam + ' ' + row.varos + ', ' + row.utca"
+                                        ></div>
+                                        <div x-text="row.megye.name"></div>
+                                    </td>
+                                    <td>
+                                        <div x-show="row.tamogatott">
+                                            Támogatott entitás:
                                             <span
-                                                x-text="row.gender === 'male' ? 'férfi' : 'nő'"
+                                                x-text="row.tamogatott ? row.tamogatott.name : ''"
                                             ></span>
                                         </div>
-                                    </template>
-                                </td>
-                                <td x-text="row.name"></td>
-                                <td>
-                                    <div
-                                        x-text="row.irszam + ' ' + row.varos + ', ' + row.utca"
-                                    ></div>
-                                    <div x-text="row.megye.name"></div>
-                                </td>
-                                <td>
-                                    <div x-show="row.tamogatott">
-                                        Támogatott entitás:
-                                        <span
-                                            x-text="row.tamogatott ? row.tamogatott.name : ''"
-                                        ></span>
-                                    </div>
-                                    <div x-show="row.cegcsoport">
-                                        Cégcsoport:
-                                        <span
-                                            x-text="row.cegcsoport ? row.cegcsoport.name : ''"
-                                        ></span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div x-show="row.alap">
-                                        Alap:
-                                        <span
-                                            x-text="row.alap ? row.alap.name : ''"
-                                        ></span>
-                                    </div>
-                                    <div x-show="row.forras">
-                                        Forrás:
-                                        <span
-                                            x-text="row.forras ? row.forras.name : ''"
-                                        ></span>
-                                    </div>
-                                    <div x-show="row.jogcim">
-                                        Jogcím:
-                                        <span
-                                            x-text="row.jogcim ? row.jogcim.name : ''"
-                                        ></span>
-                                    </div>
-                                </td>
-                                <td x-text="row.osszeg"></td>
-                            </tr>
+                                        <div x-show="row.cegcsoport">
+                                            Cégcsoport:
+                                            <span
+                                                x-text="row.cegcsoport ? row.cegcsoport.name : ''"
+                                            ></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div x-show="row.alap">
+                                            Alap:
+                                            <span
+                                                x-text="row.alap ? row.alap.name : ''"
+                                            ></span>
+                                        </div>
+                                        <div x-show="row.forras">
+                                            Forrás:
+                                            <span
+                                                x-text="row.forras ? row.forras.name : ''"
+                                            ></span>
+                                        </div>
+                                        <div x-show="row.jogcim">
+                                            Jogcím:
+                                            <span
+                                                x-text="row.jogcim ? row.jogcim.name : ''"
+                                            ></span>
+                                        </div>
+                                    </td>
+                                    <td x-text="row.osszeg"></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                    <div class="ags-button-row">
+                        <button
+                            @click.prevent="search(resultLinks.first)"
+                            class="ags-button"
+                            :class="{'ags-disabled-link': !resultLinks.first}"
+                        >
+                            Első oldal
+                        </button>
+                        <button
+                            @click.prevent="search(resultLinks.prev)"
+                            class="ags-button"
+                            :class="{'ags-disabled-link': !resultLinks.prev}"
+                        >
+                            Előző oldal
+                        </button>
+                        <template x-for="item in resultMeta.links">
+                            <button
+                                href="#"
+                                @click.prevent="search(item.url)"
+                                x-text="item.label"
+                                class="ags-button"
+                                :class="{
+                                    'ags-disabled-link': !item.url,
+                                    'ags-active-paging-link': item.active
+                                }"
+                            ></button>
                         </template>
-                    </tbody>
-                </table>
-                <div class="ags-button-row">
-                    <button
-                        @click.prevent="search(resultLinks.first)"
-                        class="ags-button"
-                        :class="{'ags-disabled-link': !resultLinks.first}"
-                    >
-                        Első oldal
-                    </button>
-                    <button
-                        @click.prevent="search(resultLinks.prev)"
-                        class="ags-button"
-                        :class="{'ags-disabled-link': !resultLinks.prev}"
-                    >
-                        Előző oldal
-                    </button>
-                    <template x-for="item in resultMeta.links">
+                        <button
+                            @click.prevent="search(resultLinks.next)"
+                            class="ags-button"
+                            :class="{'ags-disabled-link': !resultLinks.next}"
+                        >
+                            Következő oldal
+                        </button>
                         <button
                             href="#"
-                            @click.prevent="search(item.url)"
-                            x-text="item.label"
+                            @click.prevent="search(resultLinks.last)"
                             class="ags-button"
-                            :class="{
-                                'ags-disabled-link': !item.url,
-                                'ags-active-paging-link': item.active
-                            }"
-                        ></button>
-                    </template>
-                    <button
-                        @click.prevent="search(resultLinks.next)"
-                        class="ags-button"
-                        :class="{'ags-disabled-link': !resultLinks.next}"
-                    >
-                        Következő oldal
-                    </button>
-                    <button
-                        href="#"
-                        @click.prevent="search(resultLinks.last)"
-                        class="ags-button"
-                        :class="{'ags-disabled-link': !resultLinks.last}"
-                    >
-                        Utolsó oldal
-                    </button>
-                    <select x-model="formData.per_page">
-                        <option value="15">15</option>
-                        <option value="30">30</option>
-                        <option value="45">45</option>
-                        <option value="60">60</option>
-                    </select>
-                    <div>
-                        Találatok száma <span x-text="resultMeta.total"></span>
+                            :class="{'ags-disabled-link': !resultLinks.last}"
+                        >
+                            Utolsó oldal
+                        </button>
+                        <select x-model="formData.per_page">
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="45">45</option>
+                            <option value="60">60</option>
+                        </select>
+                        <div>
+                            Találatok száma
+                            <span x-text="resultMeta.total"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </template>
+            </template>
 
-        <div class="ags-bottom-row">
-            <button
-                type="button"
-                class="ags-button ags-button-secondary"
-                x-text="exportText"
-                x-cloak
-                :disabled="exporting"
-                @click="exportforedit"
-            ></button>
+            <div class="ags-bottom-row">
+                <button
+                    type="button"
+                    class="ags-button ags-button-secondary"
+                    x-text="exportText"
+                    x-cloak
+                    :disabled="exporting"
+                    @click="exportforedit"
+                ></button>
+            </div>
+
+            <div
+                class="ags-loading-layer"
+                x-show="submitting || exporting"
+            ></div>
         </div>
     </body>
 </html>
