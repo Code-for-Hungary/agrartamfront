@@ -46,6 +46,21 @@ body {
     background: white;
 }
 
+.ags-app {
+    position: relative;
+}
+
+.ags-loading-layer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.8) url(../assets/loading.gif) no-repeat
+        center center;
+    cursor: not-allowed;
+}
+
 .ags-form {
     margin: 0;
     padding: var(--gutter);
@@ -95,9 +110,13 @@ body {
     cursor: pointer;
 }
 
-.ags-button:hover,
-.ags-button:focus,
-.ags-button:active {
+.ags-button:disabled {
+    opacity: 0.7 !important;
+}
+
+.ags-button:not(:disabled):hover,
+.ags-button:not(:disabled):focus,
+.ags-button:not(:disabled):active {
     background: var(--purple-color);
 }
 
@@ -108,9 +127,9 @@ body {
     color: var(--brand-color);
 }
 
-.ags-button-secondary:hover,
-.ags-button-secondary:focus,
-.ags-button-secondary:active {
+.ags-button-secondary:not(:disabled):hover,
+.ags-button-secondary:not(:disabled):focus,
+.ags-button-secondary:not(:disabled):active {
     outline-color: var(--purple-color);
     color: var(--purple-color);
 }
