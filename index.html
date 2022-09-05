@@ -494,57 +494,85 @@
                             </template>
                         </tbody>
                     </table>
-                    <div class="ags-button-row">
-                        <button
-                            @click.prevent="search(resultLinks.first)"
-                            class="ags-button"
-                            :class="{'ags-disabled-link': !resultLinks.first}"
-                        >
-                            Első oldal
-                        </button>
-                        <button
-                            @click.prevent="search(resultLinks.prev)"
-                            class="ags-button"
-                            :class="{'ags-disabled-link': !resultLinks.prev}"
-                        >
-                            Előző oldal
-                        </button>
-                        <template x-for="item in resultMeta.links">
+                    <div style="display: flex; justify-content: center">
+                        <nav class="ags-pager">
                             <button
-                                href="#"
-                                @click.prevent="search(item.url)"
-                                x-text="item.label"
-                                class="ags-button"
-                                :class="{
-                                    'ags-disabled-link': !item.url,
-                                    'ags-active-paging-link': item.active
-                                }"
-                            ></button>
-                        </template>
-                        <button
-                            @click.prevent="search(resultLinks.next)"
-                            class="ags-button"
-                            :class="{'ags-disabled-link': !resultLinks.next}"
-                        >
-                            Következő oldal
-                        </button>
-                        <button
-                            href="#"
-                            @click.prevent="search(resultLinks.last)"
-                            class="ags-button"
-                            :class="{'ags-disabled-link': !resultLinks.last}"
-                        >
-                            Utolsó oldal
-                        </button>
-                        <select x-model="formData.per_page">
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                            <option value="60">60</option>
-                        </select>
-                        <div>
+                                @click.prevent="search(resultLinks.first)"
+                                class="ags-button ags-button-secondary"
+                                type="button"
+                                :disabled="!resultLinks.first"
+                                title="Első oldal"
+                            >
+                                «
+                            </button>
+                            <button
+                                @click.prevent="search(resultLinks.prev)"
+                                class="ags-button ags-button-secondary"
+                                title="Előző oldal"
+                                type="button"
+                                :disabled="!resultLinks.prev"
+                            >
+                                ‹
+                            </button>
+                            <template x-for="item in resultMeta.links">
+                                <button
+                                    type="button"
+                                    @click.prevent="search(item.url)"
+                                    x-text="item.label"
+                                    class="ags-button"
+                                    :disabled="!item.url"
+                                    :class="{
+                                        'ags-button-secondary': !item.active
+                                    }"
+                                ></button>
+                            </template>
+                            <button
+                                @click.prevent="search(resultLinks.next)"
+                                class="ags-button ags-button-secondary"
+                                title="Következő oldal"
+                                :disabled="!resultLinks.next"
+                            >
+                                ›
+                            </button>
+                            <button
+                                type="button"
+                                @click.prevent="search(resultLinks.last)"
+                                class="ags-button ags-button-secondary"
+                                title="Utolsó oldal"
+                                :disabled="!resultLinks.last"
+                            >
+                                »
+                            </button>
+                        </nav>
+                    </div>
+
+                    <div class="ags-pager-settings">
+                        <div style="display: flex; align-items: center">
+                            <label
+                                for="itemsPerPage"
+                                style="
+                                    white-space: nowrap;
+                                    display: inline-block;
+                                    margin-right: 4px;
+                                "
+                            >
+                                sor / oldal
+                            </label>
+                            <select
+                                x-model="formData.per_page"
+                                id="itemsPerPage"
+                                class="ags-textbox ags-textbox-has-border"
+                            >
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                                <option value="60">60</option>
+                            </select>
+                        </div>
+
+                        <div style="white-space: nowrap">
                             Találatok száma
-                            <span x-text="resultMeta.total"></span>
+                            <strong x-text="resultMeta.total"></strong>
                         </div>
                     </div>
                 </div>
