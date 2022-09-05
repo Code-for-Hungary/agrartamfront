@@ -101,6 +101,20 @@ body {
     background: var(--purple-color);
 }
 
+.ags-button-secondary {
+    outline: 1px solid var(--brand-color);
+    outline-offset: -1px;
+    background: none !important;
+    color: var(--brand-color);
+}
+
+.ags-button-secondary:hover,
+.ags-button-secondary:focus,
+.ags-button-secondary:active {
+    outline-color: var(--purple-color);
+    color: var(--purple-color);
+}
+
 .ags-col-container {
     display: flex;
     flex-direction: row;
@@ -300,6 +314,17 @@ body {
 
 .ags-active-paging-link {
     color: var(--brand-color);
+}
+
+.ags-results-container {
+    margin-top: 20px;
+}
+
+.ags-bottom-row {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 30px;
+    padding: 0 var(--gutter);
 }
 
 /* Overwrite Choices.js's styles */
