@@ -3,16 +3,13 @@ name: agrartamfront CD
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    types:
-        - closed
 
   workflow_dispatch:
 
 jobs:
   normal_deploy:
     runs-on: ubuntu-latest
-    if: (github.event_name == 'push') || (github.event.pull_request.merged == true) || (github.event_name == 'workflow_dispatch')
+    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     steps:
       - name: frissit.sh
         uses: garygrossgarten/github-action-ssh@release
