@@ -84,6 +84,11 @@ document.addEventListener("alpine:init", () => {
             this.$watch("per_page", () => {
                 this.search(API_URL + "/api/search");
             });
+            this.$watch("formData.isfirm", (value) => {
+                if (value === "" || value === "1") {
+                    this.formData.gender = "";
+                }
+            });
             fetch(API_URL + "/api/evs")
                 .then((response) => response.json())
                 .then((data) => (this.lists.evek = data.data))
