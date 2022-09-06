@@ -32,7 +32,6 @@ document.addEventListener("alpine:init", () => {
             tamosszegig: null,
             evestamosszegtol: null,
             evestamosszegig: null,
-            per_page: 15,
         },
         lists: {
             evek: null,
@@ -45,6 +44,7 @@ document.addEventListener("alpine:init", () => {
             tamogatasosszeg: null,
             evestamogatasosszeg: null,
         },
+        per_page: 15,
         submitText: "Keresés",
         submitting: false,
         exportText: "Export",
@@ -81,7 +81,7 @@ document.addEventListener("alpine:init", () => {
                         this.lists.evestamogatasosszeg.max;
                 }
             });
-            this.$watch("formData.per_page", () => {
+            this.$watch("per_page", () => {
                 this.search(API_URL + "/api/search");
             });
             fetch(API_URL + "/api/evs")
@@ -553,6 +553,7 @@ document.addEventListener("alpine:init", () => {
                 alert("Adjál meg szűrőket, ez így hosszú lesz");
                 this.resetSubmitBtn();
             } else {
+                tosubmit.per_page = this.per_page;
                 let msg = "Valami baj történt";
                 fetch(API_URL + "/api/count", {
                     method: "POST",
@@ -604,6 +605,7 @@ document.addEventListener("alpine:init", () => {
                 alert("Adjál meg szűrőket, ez így hosszú lesz");
                 this.resetExportBtn();
             } else {
+                toexport.per_page = this.per_page;
                 let msg = "Valami baj történt";
                 fetch(API_URL + "/api/count", {
                     method: "POST",
