@@ -18,8 +18,7 @@ jobs:
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: |
-            cd /var/www/code4.hu/agrartamfront
-            ./frissit.sh
+            ./agrarfrontfrissit.sh
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSHUSER }}
           privateKey: ${{ secrets.SSHKULCS }}
