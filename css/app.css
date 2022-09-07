@@ -186,6 +186,10 @@ body {
     padding-left: var(--gutter);
 }
 
+.ags-padd-x-middle-desktop {
+    padding-right: var(--gutter);
+}
+
 @media screen and (min-width: 992px) {
     .ags-col-1-mobile-3-desktop,
     .ags-col-2-mobile-3-desktop {
@@ -193,6 +197,7 @@ body {
         max-width: 33.3333%;
     }
 
+    .ags-padd-x-middle-desktop,
     .ags-padd-x-middle {
         padding: 0 var(--gutter);
     }

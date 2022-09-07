@@ -49,7 +49,7 @@ document.addEventListener("alpine:init", () => {
         submitting: false,
         exportText: "Export",
         exporting: false,
-        detailedSearchOpened: false,
+        detailedSearchOpened: true, // TODO: set back to false
         resultData: [],
         resultMeta: null,
         resultLinks: null,
