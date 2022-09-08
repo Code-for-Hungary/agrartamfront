@@ -321,9 +321,9 @@
                                 <div class="ags-min-max-input-box">
                                     <input
                                         id="tamosszegtol"
-                                        type="number"
-                                        step="any"
-                                        x-model="formData.tamosszegtol"
+                                        type="text"
+                                        x-model="displayValues.tamosszegtol"
+                                        x-ref="tamosszegtolInput"
                                         class="ags-textbox"
                                     />
                                 </div>
@@ -332,9 +332,9 @@
                                     <input
                                         id="tamosszegig"
                                         class="ags-textbox"
-                                        type="number"
-                                        step="any"
-                                        x-model="formData.tamosszegig"
+                                        type="text"
+                                        x-model="displayValues.tamosszegig"
+                                        x-ref="tamosszegigInput"
                                     />
                                 </div>
                             </div>
@@ -362,19 +362,19 @@
                                 <div class="ags-min-max-input-box">
                                     <input
                                         id="evestamosszeg"
-                                        type="number"
-                                        step="any"
+                                        type="text"
                                         class="ags-textbox"
-                                        x-model="formData.evestamosszegtol"
+                                        x-ref="evestamosszegtolInput"
+                                        x-model="displayValues.evestamosszegtol"
                                     />
                                 </div>
                                 <div class="ags-min-max-dash">—</div>
                                 <div class="ags-min-max-input-box">
                                     <input
-                                        type="number"
-                                        step="any"
+                                        type="text"
                                         class="ags-textbox"
-                                        x-model="formData.evestamosszegig"
+                                        x-model="displayValues.evestamosszegig"
+                                        x-ref="evestamosszegigInput"
                                     />
                                 </div>
                             </div>
