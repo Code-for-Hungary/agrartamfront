@@ -39,6 +39,16 @@ textarea {
     position: relative;
 }
 
+strong,
+b {
+    font-weight: bold;
+}
+
+em,
+i {
+    font-style: italic;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -364,10 +374,6 @@ body {
     color: var(--brand-color);
 }
 
-.ags-results-container {
-    margin-top: 20px;
-}
-
 .ags-bottom-row {
     display: flex;
     justify-content: flex-start;
@@ -390,6 +396,88 @@ body {
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
+}
+
+.ags-results-container {
+    margin-top: calc(var(--gutter) * 2);
+}
+
+.ags-results-container table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.ags-results-container table th,
+.ags-results-container table td {
+    padding: 8px;
+}
+
+.ags-no-wrap {
+    white-space: nowrap;
+}
+
+@media screen and (min-width: 992px) {
+    .ags-results-container table thead {
+        position: sticky;
+        z-index: 10;
+        top: 0;
+    }
+
+    .ags-results-container table tbody tr:nth-child(odd) {
+        background-color: var(--form-bg);
+    }
+
+    .ags-hide-desktop {
+        display: none !important;
+    }
+
+    .ags-text-right-desktop {
+        text-align: right;
+    }
+}
+
+.ags-results-container table th {
+    font-weight: bold;
+    text-align: left;
+    background-color: #adacae;
+}
+
+.ags-results-container table tbody tr td {
+    vertical-align: top;
+}
+
+@media screen and (max-width: 991px) {
+    .ags-results-container table thead {
+        display: none;
+    }
+
+    .ags-results-container table,
+    .ags-results-container table tbody,
+    .ags-results-container table tbody tr,
+    .ags-results-container table tbody tr td {
+        display: block;
+    }
+
+    .ags-results-container table tbody tr {
+        border: 1px solid var(--form-bg);
+        border-radius: var(--default-radius);
+        margin: 0 var(--gutter) var(--gutter) var(--gutter);
+        padding: 4px;
+        box-shadow: 0 1px 4px rgb(0 0 0 / 15%);
+    }
+
+    .ags-results-container table tbody tr td {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .ags-results-container table tbody tr td:last-of-type {
+        border-bottom: none;
+    }
+
+    .ags-results-container table tbody tr td.ags-result-cell-empty {
+        padding: 0;
+        border: none;
+    }
 }
 
 /* Overwrite Choices.js's styles */
