@@ -68,8 +68,7 @@
             href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500&display=swap"
             rel="stylesheet"
         />
-        <link rel="preload" href="/assets/loading.gif" as="image" />
-        <link media="all" href="/css/app.css?v=1.9" rel="stylesheet" />
+        <link media="all" href="/css/app.css?v=2.0" rel="stylesheet" />
     </head>
     <body x-data="searchForm" x-init="getLists">
         <div class="ags-app">
@@ -302,7 +301,7 @@
 
                     <div class="ags-form-row">
                         <label for="tamosszegtol" class="ags-label">
-                            Támogatás összege (ezer Ft):
+                            Támogatás összege <em>(ezer Ft)</em>:
                         </label>
                         <div class="ags-slider-container">
                             <div
@@ -338,12 +337,14 @@
                                     />
                                 </div>
                             </div>
-                            <div style="padding-left: 8px">ezer Ft</div>
+                            <div style="padding-left: 8px">
+                                <em>ezer Ft</em>
+                            </div>
                         </div>
                     </div>
                     <div class="ags-form-row">
                         <label for="evestamosszeg" class="ags-label">
-                            Éves támogatás összege (ezer Ft):
+                            Éves támogatás összege <em>(ezer Ft)</em>:
                         </label>
                         <div class="ags-slider-container">
                             <div
@@ -378,7 +379,9 @@
                                     />
                                 </div>
                             </div>
-                            <div style="padding-left: 8px">ezer Ft</div>
+                            <div style="padding-left: 8px">
+                                <em>ezer Ft</em>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -438,13 +441,22 @@
                                 <th>Cím</th>
                                 <th>Csoport</th>
                                 <th></th>
-                                <th>Összeg</th>
+                                <th>
+                                    <span class="ags-no-wrap">
+                                        Összeg <em>(ezer Ft)</em>
+                                    </span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <template x-for="row in resultData" :key="row.id">
                                 <tr>
-                                    <td x-text="row.ev"></td>
+                                    <td>
+                                        <strong class="ags-hide-desktop">
+                                            Év:&nbsp;
+                                        </strong>
+                                        <span x-text="row.ev"></span>
+                                    </td>
                                     <td>
                                         <template x-if="row.is_firm">
                                             <div>Jogi személy</div>
@@ -458,22 +470,35 @@
                                             </div>
                                         </template>
                                     </td>
-                                    <td x-text="row.name"></td>
                                     <td>
+                                        <strong class="ags-hide-desktop">
+                                            Név:&nbsp;
+                                        </strong>
+                                        <span x-text="row.name"></span>
+                                    </td>
+                                    <td>
+                                        <strong class="ags-hide-desktop">
+                                            Cím:
+                                        </strong>
+                                        <br class="ags-hide-desktop" />
                                         <div
                                             x-text="row.irszam + ' ' + row.varos + ', ' + row.utca"
                                         ></div>
                                         <div x-text="row.megye.name"></div>
                                     </td>
-                                    <td>
+                                    <td
+                                        :class="!row.tamogatott && !row.cegcsoport ? 'ags-result-cell-empty' : ''"
+                                    >
                                         <div x-show="row.tamogatott">
-                                            Támogatott entitás:
+                                            <strong>
+                                                Támogatott entitás:&nbsp;
+                                            </strong>
                                             <span
                                                 x-text="row.tamogatott ? row.tamogatott.name : ''"
                                             ></span>
                                         </div>
                                         <div x-show="row.cegcsoport">
-                                            Cégcsoport:
+                                            <strong>Cégcsoport:&nbsp;</strong>
                                             <span
                                                 x-text="row.cegcsoport ? row.cegcsoport.name : ''"
                                             ></span>
@@ -481,25 +506,36 @@
                                     </td>
                                     <td>
                                         <div x-show="row.alap">
-                                            Alap:
+                                            <strong>Alap:&nbsp;</strong>
                                             <span
                                                 x-text="row.alap ? row.alap.name : ''"
                                             ></span>
                                         </div>
                                         <div x-show="row.forras">
-                                            Forrás:
+                                            <strong>Forrás:&nbsp;</strong>
                                             <span
                                                 x-text="row.forras ? row.forras.name : ''"
                                             ></span>
                                         </div>
                                         <div x-show="row.jogcim">
-                                            Jogcím:
+                                            <strong>Jogcím:&nbsp;</strong>
                                             <span
                                                 x-text="row.jogcim ? row.jogcim.name : ''"
                                             ></span>
                                         </div>
                                     </td>
-                                    <td x-text="row.osszeg"></td>
+                                    <td class="ags-text-right-desktop">
+                                        <strong class="ags-hide-desktop"
+                                            >Összeg:&nbsp;</strong
+                                        >
+                                        <span
+                                            x-text="formatNum(row.osszeg)"
+                                            class="ags-no-wrap"
+                                        ></span
+                                        >&nbsp;<em class="ags-hide-desktop"
+                                            >ezer Ft</em
+                                        >
+                                    </td>
                                 </tr>
                             </template>
                         </tbody>

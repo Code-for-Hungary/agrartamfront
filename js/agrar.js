@@ -13,7 +13,7 @@ function removeZIndexFromChoiceParent(choiceEl) {
         .classList.remove(zIndexClassName);
 }
 
-function numberWithCommas(x) {
+function numberWithSpaces(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ");
 }
 
@@ -36,7 +36,7 @@ function dotToComma(num) {
 }
 
 function formatNum(num) {
-    return dotToComma(numberWithCommas(num));
+    return dotToComma(numberWithSpaces(num));
 }
 
 function reformatNum(str) {
