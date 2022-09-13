@@ -179,7 +179,7 @@
                             multiple="multiple"
                             class="ags-textbox"
                         ></select>
-                        <span class="ags-hint">Többet is megadhat</span>
+                        <span class="ags-hint">Több is kiválasztható</span>
                     </div>
 
                     <div class="ags-col-container">
@@ -190,7 +190,7 @@
                                 x-model="formData.megye"
                                 class="ags-textbox"
                             >
-                                <option value="">válasszon</option>
+                                <option value="">Minden megye</option>
                                 <template x-for="item in lists.megyek">
                                     <option
                                         x-text="item.name"
@@ -243,7 +243,7 @@
                                 multiple="multiple"
                                 class="ags-textbox"
                             ></select>
-                            <span class="ags-hint">Többet is megadhat</span>
+                            <span class="ags-hint">Több is kiválasztható</span>
                         </div>
                         <div class="ags-form-row ags-col-2-mobile-3-desktop">
                             <div class="ags-padd-x-middle-desktop">
@@ -256,7 +256,7 @@
                                     x-model="formData.alap"
                                     multiple="multiple"
                                 ></select>
-                                <span class="ags-hint">Többet is megadhat</span>
+                                <span class="ags-hint">Több is kiválasztható</span>
                             </div>
                         </div>
                         <div class="ags-form-row ags-col-2-mobile-3-desktop">
@@ -269,7 +269,7 @@
                                 x-model="formData.forras"
                                 multiple="multiple"
                             ></select>
-                            <span class="ags-hint">Többet is megadhat</span>
+                            <span class="ags-hint">Több is kiválasztható</span>
                         </div>
                     </div>
 
@@ -285,11 +285,11 @@
                                 x-model="formData.cegcsoport"
                                 multiple="multiple"
                             ></select>
-                            <span class="ags-hint">Többet is megadhat</span>
+                            <span class="ags-hint">Több is kiválasztható</span>
                         </div>
                         <div class="ags-form-row ags-col-2">
                             <label for="tamogatottSelect" class="ags-label"
-                                >Támogatott entitás:</label
+                                >Cégcsoporthoz tartozó nyertes:</label
                             >
                             <select
                                 id="tamogatottSelect"
@@ -344,7 +344,7 @@
                     </div>
                     <div class="ags-form-row">
                         <label for="evestamosszeg" class="ags-label">
-                            Éves támogatás összege <em>(ezer Ft)</em>:
+                            Össz támogatás egy adott évre <em>(ezer Ft)</em>:
                         </label>
                         <div class="ags-slider-container">
                             <div
@@ -491,7 +491,7 @@
                                     >
                                         <div x-show="row.tamogatott">
                                             <strong>
-                                                Támogatott entitás:&nbsp;
+                                                Cégcsoporthoz tartozó nyertes:&nbsp;
                                             </strong>
                                             <span
                                                 x-text="row.tamogatott ? row.tamogatott.name : ''"
