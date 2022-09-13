@@ -44,10 +44,6 @@ document.addEventListener("alpine:init", () => {
             tamogatasosszeg: null,
             evestamogatasosszeg: null,
         },
-        displayValues: {
-            evestamosszegtol: null,
-            evestamosszegig: null,
-        },
         per_page: 15,
         submitText: "Keresés",
         submitting: false,
@@ -58,6 +54,23 @@ document.addEventListener("alpine:init", () => {
         resultMeta: null,
         resultLinks: null,
         resultLoaded: false,
+        choicesOptions: {
+            silent: false,
+            allowHTML: false,
+            removeItemButton: true,
+            searchFloor: 4,
+            searchResultLimit: 100,
+            searchFields: ["label"],
+            itemSelectText: "",
+            loadingText: "Betöltés...",
+            noResultsText: "Nincs találat",
+            noChoicesText: "Nincs már mit kiválasztani",
+            fuseOptions: {
+                treshold: 0.0,
+                minMatchCharLength: 4,
+                ignoreLocation: true,
+            },
+        },
         reformatInputValue(e) {
             if (e.target.value !== "" && e.target.value !== "-") {
                 e.target._x_model.set(
@@ -183,23 +196,10 @@ document.addEventListener("alpine:init", () => {
                 .then((data) => (this.lists.jogcimek = data.data))
                 .then(() => {
                     this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.jogcimSelect, {
-                            silent: false,
-                            allowHTML: false,
-                            removeItemButton: true,
-                            searchFloor: 4,
-                            searchResultLimit: 100,
-                            searchFields: ["label"],
-                            itemSelectText: "",
-                            loadingText: "Betöltés...",
-                            noResultsText: "Nincs találat",
-                            noChoicesText: "Nincs már mit kiválasztani",
-                            fuseOptions: {
-                                treshold: 0.0,
-                                minMatchCharLength: 4,
-                                ignoreLocation: true,
-                            },
-                        });
+                        let choices = new Choices(
+                            this.$refs.jogcimSelect,
+                            this.choicesOptions
+                        );
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
@@ -241,23 +241,10 @@ document.addEventListener("alpine:init", () => {
                 .then((data) => (this.lists.alapok = data.data))
                 .then(() => {
                     this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.alapSelect, {
-                            silent: false,
-                            allowHTML: false,
-                            removeItemButton: true,
-                            searchFloor: 4,
-                            searchResultLimit: 100,
-                            searchFields: ["label"],
-                            itemSelectText: "",
-                            loadingText: "Betöltés...",
-                            noResultsText: "Nincs találat",
-                            noChoicesText: "Nincs már mit kiválasztani",
-                            fuseOptions: {
-                                treshold: 0.0,
-                                minMatchCharLength: 4,
-                                ignoreLocation: true,
-                            },
-                        });
+                        let choices = new Choices(
+                            this.$refs.alapSelect,
+                            this.choicesOptions
+                        );
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
@@ -293,23 +280,10 @@ document.addEventListener("alpine:init", () => {
                 .then((data) => (this.lists.forrasok = data.data))
                 .then(() => {
                     this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.forrasSelect, {
-                            silent: false,
-                            allowHTML: false,
-                            removeItemButton: true,
-                            searchFloor: 4,
-                            searchResultLimit: 100,
-                            searchFields: ["label"],
-                            itemSelectText: "",
-                            loadingText: "Betöltés...",
-                            noResultsText: "Nincs találat",
-                            noChoicesText: "Nincs már mit kiválasztani",
-                            fuseOptions: {
-                                treshold: 0.0,
-                                minMatchCharLength: 4,
-                                ignoreLocation: true,
-                            },
-                        });
+                        let choices = new Choices(
+                            this.$refs.forrasSelect,
+                            this.choicesOptions
+                        );
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
@@ -348,23 +322,10 @@ document.addEventListener("alpine:init", () => {
                 .then((data) => (this.lists.cegcsoportok = data.data))
                 .then(() => {
                     this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.cegcsoportSelect, {
-                            silent: false,
-                            allowHTML: false,
-                            removeItemButton: true,
-                            searchFloor: 4,
-                            searchResultLimit: 100,
-                            searchFields: ["label"],
-                            itemSelectText: "",
-                            loadingText: "Betöltés...",
-                            noResultsText: "Nincs találat",
-                            noChoicesText: "Nincs már mit kiválasztani",
-                            fuseOptions: {
-                                treshold: 0.0,
-                                minMatchCharLength: 4,
-                                ignoreLocation: true,
-                            },
-                        });
+                        let choices = new Choices(
+                            this.$refs.cegcsoportSelect,
+                            this.choicesOptions
+                        );
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
@@ -409,23 +370,10 @@ document.addEventListener("alpine:init", () => {
                 .then((data) => (this.lists.tamogatottak = data.data))
                 .then(() => {
                     this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.tamogatottSelect, {
-                            silent: false,
-                            allowHTML: false,
-                            searchFloor: 4,
-                            searchResultLimit: 100,
-                            searchFields: ["label"],
-                            removeItemButton: true,
-                            itemSelectText: "",
-                            loadingText: "Betöltés...",
-                            noResultsText: "Nincs találat",
-                            noChoicesText: "Nincs már mit kiválasztani",
-                            fuseOptions: {
-                                treshold: 0.0,
-                                minMatchCharLength: 4,
-                                ignoreLocation: true,
-                            },
-                        });
+                        let choices = new Choices(
+                            this.$refs.tamogatottSelect,
+                            this.choicesOptions
+                        );
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
@@ -583,34 +531,35 @@ document.addEventListener("alpine:init", () => {
             this.exportText = "Export";
             this.exporting = false;
         },
+        resetSubmitOsszeg(osszeg, hatar) {
+            osszeg = this.strToNum(osszeg);
+            if (osszeg === hatar) {
+                osszeg = null;
+            }
+            return osszeg;
+        },
         getSubmitableData() {
             let tosubmit = JSON.parse(JSON.stringify(this.formData));
 
-            tosubmit.tamosszegtol = this.strToNum(tosubmit.tamosszegtol);
-            if (tosubmit.tamosszegtol === this.lists.tamogatasosszeg.min) {
-                tosubmit.tamosszegtol = null;
-            }
-
-            tosubmit.tamosszegig = this.strToNum(tosubmit.tamosszegig);
-            if (tosubmit.tamosszegig === this.lists.tamogatasosszeg.max) {
-                tosubmit.tamosszegig = null;
-            }
-
-            tosubmit.evestamosszegtol = this.strToNum(
-                tosubmit.evestamosszegtol
+            tosubmit.tamosszegtol = this.resetSubmitOsszeg(
+                tosubmit.tamosszegtol,
+                this.lists.tamogatasosszeg.min
             );
-            if (
-                tosubmit.evestamosszegtol === this.lists.evestamogatasosszeg.min
-            ) {
-                tosubmit.evestamosszegtol = null;
-            }
 
-            tosubmit.evestamosszegig = this.strToNum(tosubmit.evestamosszegig);
-            if (
-                tosubmit.evestamosszegig === this.lists.evestamogatasosszeg.max
-            ) {
-                tosubmit.evestamosszegig = null;
-            }
+            tosubmit.tamosszegig = this.resetSubmitOsszeg(
+                tosubmit.tamosszegig,
+                this.lists.tamogatasosszeg.max
+            );
+
+            tosubmit.evestamosszegtol = this.resetSubmitOsszeg(
+                tosubmit.evestamosszegtol,
+                this.lists.evestamogatasosszeg.min
+            );
+
+            tosubmit.evestamosszegig = this.resetSubmitOsszeg(
+                tosubmit.evestamosszegig,
+                this.lists.evestamogatasosszeg.max
+            );
 
             Object.keys(tosubmit).forEach((key) => {
                 if (this.isEmpty(tosubmit[key])) {
