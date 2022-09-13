@@ -322,18 +322,19 @@
                                         id="tamosszegtol"
                                         type="text"
                                         x-model="formData.tamosszegtol"
-                                        x-ref="tamosszegtolInput"
                                         class="ags-textbox"
+                                        @keydown="restrictToNumbers"
+                                        @keyup="reformatInputValue"
                                     />
                                 </div>
                                 <div class="ags-min-max-dash">—</div>
                                 <div class="ags-min-max-input-box">
                                     <input
-                                        id="tamosszegig"
                                         class="ags-textbox"
                                         type="text"
                                         x-model="formData.tamosszegig"
-                                        x-ref="tamosszegigInput"
+                                        @keydown="restrictToNumbers"
+                                        @keyup="reformatInputValue"
                                     />
                                 </div>
                             </div>
@@ -365,8 +366,9 @@
                                         id="evestamosszeg"
                                         type="text"
                                         class="ags-textbox"
-                                        x-ref="evestamosszegtolInput"
                                         x-model="formData.evestamosszegtol"
+                                        @keydown="restrictToNumbers"
+                                        @keyup="reformatInputValue"
                                     />
                                 </div>
                                 <div class="ags-min-max-dash">—</div>
@@ -375,7 +377,8 @@
                                         type="text"
                                         class="ags-textbox"
                                         x-model="formData.evestamosszegig"
-                                        x-ref="evestamosszegigInput"
+                                        @keydown="restrictToNumbers"
+                                        @keyup="reformatInputValue"
                                     />
                                 </div>
                             </div>

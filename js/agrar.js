@@ -58,35 +58,41 @@ document.addEventListener("alpine:init", () => {
         resultMeta: null,
         resultLinks: null,
         resultLoaded: false,
+        reformatInputValue(e) {
+            if (e.target.value !== "" && e.target.value !== "-") {
+                e.target._x_model.set(
+                    this.numToStr(this.strToNum(e.target.value))
+                );
+            }
+        },
         restrictToNumbers(e) {
-            if (!e.key.toString().match(/^\d+$/)) {
+            if (
+                !e.key.toString().match(/^\d+$/) &&
+                !e.key
+                    .toString()
+                    .match(
+                        /ArrowLeft|Delete|ArrowRight|Backspace|Home|End|Enter|Tab|-|F5|F1/
+                    )
+            ) {
                 e.preventDefault();
             }
         },
-        numberWithSpaces(x) {
-            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ");
-        },
-        dotToComma(num) {
-            if (num.toString().indexOf(".") < 0) {
-                return num;
-            } else {
-                return num.toString().replace(".", ",");
+        numToStr(num) {
+            if (num !== null) {
+                return num
+                    .toString()
+                    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ")
+                    .replace(".", ",");
             }
+            return "";
         },
-        formatNum(num) {
-            return this.dotToComma(this.numberWithSpaces(num));
-        },
-        reformatNum(str) {
-            let convertedToFloat;
-            if (str.indexOf(",") === -1) {
-                convertedToFloat = str;
-            } else {
-                convertedToFloat = str.replace(",", ".");
+        strToNum(str) {
+            let sanitized = str.replace(",", ".").split(" ").join(""),
+                retval = parseFloat(sanitized);
+            if (isNaN(retval)) {
+                return null;
             }
-
-            const withoutSpaces = convertedToFloat.split(" ").join("");
-
-            return parseFloat(withoutSpaces);
+            return retval;
         },
         isEmpty(val) {
             return (
@@ -96,18 +102,18 @@ document.addEventListener("alpine:init", () => {
             );
         },
         setTamosszegDefaults() {
-            this.formData.tamosszegtol = this.formatNum(
+            this.formData.tamosszegtol = this.numToStr(
                 this.lists.tamogatasosszeg.min
             );
-            this.formData.tamosszegig = this.formatNum(
+            this.formData.tamosszegig = this.numToStr(
                 this.lists.tamogatasosszeg.max
             );
         },
         setEvestamosszegDefaults() {
-            this.formData.evestamosszegtol = this.formatNum(
+            this.formData.evestamosszegtol = this.numToStr(
                 this.lists.evestamogatasosszeg.min
             );
-            this.formData.evestamosszegig = this.formatNum(
+            this.formData.evestamosszegig = this.numToStr(
                 this.lists.evestamogatasosszeg.max
             );
         },
@@ -482,10 +488,10 @@ document.addEventListener("alpine:init", () => {
                             },
                             format: {
                                 to: (value) => {
-                                    return this.formatNum(value.toFixed(0));
+                                    return this.numToStr(value.toFixed(0));
                                 },
                                 from: (value) => {
-                                    return this.reformatNum(value);
+                                    return this.strToNum(value);
                                 },
                             },
                         });
@@ -499,10 +505,6 @@ document.addEventListener("alpine:init", () => {
                                 this.formData.tamosszegig = values[1];
                             }
                         );
-                        this.$refs.tamosszegtolInput.addEventListener(
-                            "keydown",
-                            this.restrictToNumbers
-                        );
                         this.$watch("formData.tamosszegtol", () => {
                             this.$refs.tamosszegSlider.noUiSlider.set([
                                 this.formData.tamosszegtol,
@@ -515,10 +517,6 @@ document.addEventListener("alpine:init", () => {
                                 this.formData.tamosszegig,
                             ]);
                         });
-                        this.$refs.tamosszegigInput.addEventListener(
-                            "keydown",
-                            this.restrictToNumbers
-                        );
                     });
                 });
             fetch(API_URL + "/api/evestamogatasosszeg")
@@ -537,10 +535,10 @@ document.addEventListener("alpine:init", () => {
                             },
                             format: {
                                 to: (value) => {
-                                    return this.formatNum(value.toFixed(0));
+                                    return this.numToStr(value.toFixed(0));
                                 },
                                 from: (value) => {
-                                    return this.reformatNum(value);
+                                    return this.strToNum(value);
                                 },
                             },
                         });
@@ -560,20 +558,12 @@ document.addEventListener("alpine:init", () => {
                                 null,
                             ]);
                         });
-                        this.$refs.evestamosszegtolInput.addEventListener(
-                            "keydown",
-                            this.restrictToNumbers
-                        );
                         this.$watch("formData.evestamosszegig", () => {
                             this.$refs.evestamosszegSlider.noUiSlider.set([
                                 null,
                                 this.formData.evestamosszegig,
                             ]);
                         });
-                        this.$refs.evestamosszegigInput.addEventListener(
-                            "keydown",
-                            this.restrictToNumbers
-                        );
                     });
                 });
         },
@@ -596,17 +586,17 @@ document.addEventListener("alpine:init", () => {
         getSubmitableData() {
             let tosubmit = JSON.parse(JSON.stringify(this.formData));
 
-            tosubmit.tamosszegtol = this.reformatNum(tosubmit.tamosszegtol);
+            tosubmit.tamosszegtol = this.strToNum(tosubmit.tamosszegtol);
             if (tosubmit.tamosszegtol === this.lists.tamogatasosszeg.min) {
                 tosubmit.tamosszegtol = null;
             }
 
-            tosubmit.tamosszegig = this.reformatNum(tosubmit.tamosszegig);
+            tosubmit.tamosszegig = this.strToNum(tosubmit.tamosszegig);
             if (tosubmit.tamosszegig === this.lists.tamogatasosszeg.max) {
                 tosubmit.tamosszegig = null;
             }
 
-            tosubmit.evestamosszegtol = this.reformatNum(
+            tosubmit.evestamosszegtol = this.strToNum(
                 tosubmit.evestamosszegtol
             );
             if (
@@ -615,9 +605,7 @@ document.addEventListener("alpine:init", () => {
                 tosubmit.evestamosszegtol = null;
             }
 
-            tosubmit.evestamosszegig = this.reformatNum(
-                tosubmit.evestamosszegig
-            );
+            tosubmit.evestamosszegig = this.strToNum(tosubmit.evestamosszegig);
             if (
                 tosubmit.evestamosszegig === this.lists.evestamogatasosszeg.max
             ) {
