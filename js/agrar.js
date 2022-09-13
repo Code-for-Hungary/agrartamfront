@@ -13,45 +13,6 @@ function removeZIndexFromChoiceParent(choiceEl) {
         .classList.remove(zIndexClassName);
 }
 
-function numberWithSpaces(x) {
-    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ");
-}
-
-function isNumber(input) {
-    return input.toString().match(/^\d+$/);
-}
-
-function restrictToNumbers(e) {
-    if (!isNumber(e.key)) {
-        e.preventDefault();
-    }
-}
-
-function dotToComma(num) {
-    if (num.toString().indexOf(".") < 0) {
-        return num;
-    } else {
-        return num.toString().replace(".", ",");
-    }
-}
-
-function formatNum(num) {
-    return dotToComma(numberWithSpaces(num));
-}
-
-function reformatNum(str) {
-    let convertedToFloat;
-    if (str.indexOf(",") === -1) {
-        convertedToFloat = str;
-    } else {
-        convertedToFloat = str.replace(",", ".");
-    }
-
-    const withoutSpaces = convertedToFloat.split(" ").join("");
-
-    return parseFloat(withoutSpaces);
-}
-
 document.addEventListener("alpine:init", () => {
     Alpine.data("searchForm", () => ({
         formData: {
@@ -84,8 +45,6 @@ document.addEventListener("alpine:init", () => {
             evestamogatasosszeg: null,
         },
         displayValues: {
-            tamosszegtol: null,
-            tamosszegig: null,
             evestamosszegtol: null,
             evestamosszegig: null,
         },
@@ -99,11 +58,57 @@ document.addEventListener("alpine:init", () => {
         resultMeta: null,
         resultLinks: null,
         resultLoaded: false,
+        restrictToNumbers(e) {
+            if (!e.key.toString().match(/^\d+$/)) {
+                e.preventDefault();
+            }
+        },
+        numberWithSpaces(x) {
+            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ");
+        },
+        dotToComma(num) {
+            if (num.toString().indexOf(".") < 0) {
+                return num;
+            } else {
+                return num.toString().replace(".", ",");
+            }
+        },
+        formatNum(num) {
+            return this.dotToComma(this.numberWithSpaces(num));
+        },
+        reformatNum(str) {
+            let convertedToFloat;
+            if (str.indexOf(",") === -1) {
+                convertedToFloat = str;
+            } else {
+                convertedToFloat = str.replace(",", ".");
+            }
+
+            const withoutSpaces = convertedToFloat.split(" ").join("");
+
+            return parseFloat(withoutSpaces);
+        },
         isEmpty(val) {
             return (
                 (Array.isArray(val) && val.length === 0) ||
                 (!Array.isArray(val) &&
                     (val === null || val === undefined || val === ""))
+            );
+        },
+        setTamosszegDefaults() {
+            this.formData.tamosszegtol = this.formatNum(
+                this.lists.tamogatasosszeg.min
+            );
+            this.formData.tamosszegig = this.formatNum(
+                this.lists.tamogatasosszeg.max
+            );
+        },
+        setEvestamosszegDefaults() {
+            this.formData.evestamosszegtol = this.formatNum(
+                this.lists.evestamogatasosszeg.min
+            );
+            this.formData.evestamosszegig = this.formatNum(
+                this.lists.evestamogatasosszeg.max
             );
         },
         getLists() {
@@ -118,26 +123,8 @@ document.addEventListener("alpine:init", () => {
                     this.formData.forras = [];
                     this.formData.cegcsoport = [];
                     this.formData.tamogatott = null;
-                    this.formData.tamosszegtol =
-                        this.lists.tamogatasosszeg.min.toFixed(2);
-                    this.displayValues.tamosszegtol = formatNum(
-                        this.lists.tamogatasosszeg.min.toFixed(2)
-                    );
-                    this.formData.tamosszegig =
-                        this.lists.tamogatasosszeg.max.toFixed(2);
-                    this.displayValues.tamosszegig = formatNum(
-                        this.lists.tamogatasosszeg.max.toFixed(2)
-                    );
-                    this.formData.evestamosszegtol =
-                        this.lists.evestamogatasosszeg.min.toFixed(2);
-                    this.displayValues.evestamosszegtol = formatNum(
-                        this.lists.evestamogatasosszeg.min.toFixed(2)
-                    );
-                    this.formData.evestamosszegig =
-                        this.lists.evestamogatasosszeg.max.toFixed(2);
-                    this.displayValues.evestamosszegig = formatNum(
-                        this.lists.evestamogatasosszeg.max.toFixed(2)
-                    );
+                    this.setTamosszegDefaults();
+                    this.setEvestamosszegDefaults();
                 }
             });
             this.$watch("per_page", () => {
@@ -493,12 +480,17 @@ document.addEventListener("alpine:init", () => {
                                 min: this.lists.tamogatasosszeg.min,
                                 max: this.lists.tamogatasosszeg.max,
                             },
+                            format: {
+                                to: (value) => {
+                                    return this.formatNum(value.toFixed(0));
+                                },
+                                from: (value) => {
+                                    return this.reformatNum(value);
+                                },
+                            },
                         });
 
-                        this.formData.tamosszegtol =
-                            this.lists.tamogatasosszeg.min;
-                        this.formData.tamosszegig =
-                            this.lists.tamogatasosszeg.max;
+                        this.setTamosszegDefaults();
 
                         this.$refs.tamosszegSlider.noUiSlider.on(
                             "change",
@@ -508,46 +500,24 @@ document.addEventListener("alpine:init", () => {
                             }
                         );
                         this.$refs.tamosszegtolInput.addEventListener(
-                            "change",
-                            (e) => {
-                                this.formData.tamosszegtol = reformatNum(
-                                    e.target.value
-                                );
-                            }
-                        );
-                        this.$refs.tamosszegtolInput.addEventListener(
                             "keydown",
-                            restrictToNumbers
+                            this.restrictToNumbers
                         );
                         this.$watch("formData.tamosszegtol", () => {
                             this.$refs.tamosszegSlider.noUiSlider.set([
                                 this.formData.tamosszegtol,
                                 null,
                             ]);
-                            this.displayValues.tamosszegtol = formatNum(
-                                this.formData.tamosszegtol
-                            );
                         });
                         this.$watch("formData.tamosszegig", () => {
                             this.$refs.tamosszegSlider.noUiSlider.set([
                                 null,
                                 this.formData.tamosszegig,
                             ]);
-                            this.displayValues.tamosszegig = formatNum(
-                                this.formData.tamosszegig
-                            );
                         });
                         this.$refs.tamosszegigInput.addEventListener(
-                            "change",
-                            (e) => {
-                                this.formData.tamosszegig = reformatNum(
-                                    e.target.value
-                                );
-                            }
-                        );
-                        this.$refs.tamosszegigInput.addEventListener(
                             "keydown",
-                            restrictToNumbers
+                            this.restrictToNumbers
                         );
                     });
                 });
@@ -565,12 +535,17 @@ document.addEventListener("alpine:init", () => {
                                 min: this.lists.evestamogatasosszeg.min,
                                 max: this.lists.evestamogatasosszeg.max,
                             },
+                            format: {
+                                to: (value) => {
+                                    return this.formatNum(value.toFixed(0));
+                                },
+                                from: (value) => {
+                                    return this.reformatNum(value);
+                                },
+                            },
                         });
 
-                        this.formData.evestamosszegtol =
-                            this.lists.evestamogatasosszeg.min;
-                        this.formData.evestamosszegig =
-                            this.lists.evestamogatasosszeg.max;
+                        this.setEvestamosszegDefaults();
 
                         this.$refs.evestamosszegSlider.noUiSlider.on(
                             "change",
@@ -584,42 +559,20 @@ document.addEventListener("alpine:init", () => {
                                 this.formData.evestamosszegtol,
                                 null,
                             ]);
-                            this.displayValues.evestamosszegtol = formatNum(
-                                this.formData.evestamosszegtol
-                            );
                         });
                         this.$refs.evestamosszegtolInput.addEventListener(
-                            "change",
-                            (e) => {
-                                this.formData.evestamosszegtol = reformatNum(
-                                    e.target.value
-                                );
-                            }
-                        );
-                        this.$refs.evestamosszegtolInput.addEventListener(
                             "keydown",
-                            restrictToNumbers
+                            this.restrictToNumbers
                         );
                         this.$watch("formData.evestamosszegig", () => {
                             this.$refs.evestamosszegSlider.noUiSlider.set([
                                 null,
                                 this.formData.evestamosszegig,
                             ]);
-                            this.displayValues.evestamosszegig = formatNum(
-                                this.formData.evestamosszegig
-                            );
                         });
                         this.$refs.evestamosszegigInput.addEventListener(
-                            "change",
-                            (e) => {
-                                this.formData.evestamosszegig = reformatNum(
-                                    e.target.value
-                                );
-                            }
-                        );
-                        this.$refs.evestamosszegigInput.addEventListener(
                             "keydown",
-                            restrictToNumbers
+                            this.restrictToNumbers
                         );
                     });
                 });
@@ -642,22 +595,35 @@ document.addEventListener("alpine:init", () => {
         },
         getSubmitableData() {
             let tosubmit = JSON.parse(JSON.stringify(this.formData));
+
+            tosubmit.tamosszegtol = this.reformatNum(tosubmit.tamosszegtol);
             if (tosubmit.tamosszegtol === this.lists.tamogatasosszeg.min) {
                 tosubmit.tamosszegtol = null;
             }
+
+            tosubmit.tamosszegig = this.reformatNum(tosubmit.tamosszegig);
             if (tosubmit.tamosszegig === this.lists.tamogatasosszeg.max) {
                 tosubmit.tamosszegig = null;
             }
+
+            tosubmit.evestamosszegtol = this.reformatNum(
+                tosubmit.evestamosszegtol
+            );
             if (
                 tosubmit.evestamosszegtol === this.lists.evestamogatasosszeg.min
             ) {
                 tosubmit.evestamosszegtol = null;
             }
+
+            tosubmit.evestamosszegig = this.reformatNum(
+                tosubmit.evestamosszegig
+            );
             if (
                 tosubmit.evestamosszegig === this.lists.evestamogatasosszeg.max
             ) {
                 tosubmit.evestamosszegig = null;
             }
+
             Object.keys(tosubmit).forEach((key) => {
                 if (this.isEmpty(tosubmit[key])) {
                     delete tosubmit[key];
