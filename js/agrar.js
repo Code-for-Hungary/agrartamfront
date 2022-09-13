@@ -108,7 +108,7 @@ document.addEventListener("alpine:init", () => {
         },
         getLists() {
             this.$watch("detailedSearchOpened", (value) => {
-                if (value) {
+                if (!value) {
                     this.formData.irszam = null;
                     this.formData.varos = null;
                     this.formData.ev = [];
