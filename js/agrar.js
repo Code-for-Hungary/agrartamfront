@@ -1,18 +1,3 @@
-var zIndexClassName = "ags-opened-choice-container";
-var choiceParentClassName = "ags-form-row";
-
-function addZIndexToChoiceParent(choiceEl) {
-    choiceEl.parentNode
-        .closest(`.${choiceParentClassName}`)
-        .classList.add(zIndexClassName);
-}
-
-function removeZIndexFromChoiceParent(choiceEl) {
-    choiceEl.parentNode
-        .closest(`.${choiceParentClassName}`)
-        .classList.remove(zIndexClassName);
-}
-
 document.addEventListener("alpine:init", () => {
     Alpine.data("searchForm", () => ({
         formData: {
@@ -130,6 +115,21 @@ document.addEventListener("alpine:init", () => {
                 this.lists.evestamogatasosszeg.max
             );
         },
+        zIndexClassName: "ags-opened-choice-container",
+        choiceParentClassName: "ags-form-row",
+        onChoicesShowDropdown(e) {
+            if ("parentIFrame" in window) {
+                parentIFrame.size();
+            }
+            e.target.parentNode
+                .closest(`.${this.choiceParentClassName}`)
+                .classList.add(this.zIndexClassName);
+        },
+        onChoicesHideDropdown(e) {
+            e.target.parentNode
+                .closest(`.${this.choiceParentClassName}`)
+                .classList.remove(this.zIndexClassName);
+        },
         getLists() {
             this.$watch("detailedSearchOpened", (value) => {
                 if (!value) {
@@ -212,21 +212,6 @@ document.addEventListener("alpine:init", () => {
                         };
                         refreshChoices();
                         this.$refs.jogcimSelect.addEventListener(
-                            "showDropdown",
-                            (e) => {
-                                if ("parentIFrame" in window) {
-                                    parentIFrame.size();
-                                }
-                                addZIndexToChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.jogcimSelect.addEventListener(
-                            "hideDropdown",
-                            (e) => {
-                                removeZIndexFromChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.jogcimSelect.addEventListener(
                             "change",
                             () => {
                                 this.formData.jogcim = choices.getValue(true);
@@ -259,18 +244,6 @@ document.addEventListener("alpine:init", () => {
                         this.$refs.alapSelect.addEventListener("change", () => {
                             this.formData.alap = choices.getValue(true);
                         });
-                        this.$refs.alapSelect.addEventListener(
-                            "showDropdown",
-                            (e) => {
-                                addZIndexToChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.alapSelect.addEventListener(
-                            "hideDropdown",
-                            (e) => {
-                                removeZIndexFromChoiceParent(e.target);
-                            }
-                        );
                         this.$watch("formData.alap", () => refreshChoices());
                         this.$watch("lists.alapok", () => refreshChoices());
                     });
@@ -299,18 +272,6 @@ document.addEventListener("alpine:init", () => {
                             "change",
                             () => {
                                 this.formData.forras = choices.getValue(true);
-                            }
-                        );
-                        this.$refs.forrasSelect.addEventListener(
-                            "showDropdown",
-                            (e) => {
-                                addZIndexToChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.forrasSelect.addEventListener(
-                            "hideDropdown",
-                            (e) => {
-                                removeZIndexFromChoiceParent(e.target);
                             }
                         );
                         this.$watch("formData.forras", () => refreshChoices());
@@ -343,18 +304,6 @@ document.addEventListener("alpine:init", () => {
                             () => {
                                 this.formData.cegcsoport =
                                     choices.getValue(true);
-                            }
-                        );
-                        this.$refs.cegcsoportSelect.addEventListener(
-                            "showDropdown",
-                            (e) => {
-                                addZIndexToChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.cegcsoportSelect.addEventListener(
-                            "hideDropdown",
-                            (e) => {
-                                removeZIndexFromChoiceParent(e.target);
                             }
                         );
                         this.$watch("formData.cegcsoport", () =>
@@ -390,21 +339,6 @@ document.addEventListener("alpine:init", () => {
                             );
                         };
                         refreshChoices();
-                        this.$refs.tamogatottSelect.addEventListener(
-                            "showDropdown",
-                            (e) => {
-                                if ("parentIFrame" in window) {
-                                    parentIFrame.size();
-                                }
-                                addZIndexToChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.tamogatottSelect.addEventListener(
-                            "hideDropdown",
-                            (e) => {
-                                removeZIndexFromChoiceParent(e.target);
-                            }
-                        );
                         this.$refs.tamogatottSelect.addEventListener(
                             "change",
                             () => {

@@ -242,6 +242,8 @@
                                 x-model="formData.jogcim"
                                 multiple="multiple"
                                 class="ags-textbox"
+                                @show-dropdown.camel="onChoicesShowDropdown"
+                                @hide-dropdown.camel="onChoicesHideDropdown"
                             ></select>
                             <span class="ags-hint">Több is kiválasztható</span>
                         </div>
@@ -255,6 +257,8 @@
                                     x-ref="alapSelect"
                                     x-model="formData.alap"
                                     multiple="multiple"
+                                    @show-dropdown.camel="onChoicesShowDropdown"
+                                    @hide-dropdown.camel="onChoicesHideDropdown"
                                 ></select>
                                 <span class="ags-hint">Több is kiválasztható</span>
                             </div>
@@ -268,6 +272,8 @@
                                 x-ref="forrasSelect"
                                 x-model="formData.forras"
                                 multiple="multiple"
+                                @show-dropdown.camel="onChoicesShowDropdown"
+                                @hide-dropdown.camel="onChoicesHideDropdown"
                             ></select>
                             <span class="ags-hint">Több is kiválasztható</span>
                         </div>
@@ -284,6 +290,8 @@
                                 x-ref="cegcsoportSelect"
                                 x-model="formData.cegcsoport"
                                 multiple="multiple"
+                                @show-dropdown.camel="onChoicesShowDropdown"
+                                @hide-dropdown.camel="onChoicesHideDropdown"
                             ></select>
                             <span class="ags-hint">Több is kiválasztható</span>
                         </div>
@@ -295,6 +303,8 @@
                                 id="tamogatottSelect"
                                 x-ref="tamogatottSelect"
                                 x-model="formData.tamogatott"
+                                @show-dropdown.camel="onChoicesShowDropdown"
+                                @hide-dropdown.camel="onChoicesHideDropdown"
                             ></select>
                         </div>
                     </div>
