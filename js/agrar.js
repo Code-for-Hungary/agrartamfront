@@ -4,7 +4,6 @@ document.addEventListener("alpine:init", () => {
             nev: null,
             isfirm: "",
             gender: null,
-            irszam: null,
             varos: null,
             ev: [],
             megye: null,
@@ -133,7 +132,6 @@ document.addEventListener("alpine:init", () => {
         getLists() {
             this.$watch("detailedSearchOpened", (value) => {
                 if (!value) {
-                    this.formData.irszam = null;
                     this.formData.varos = null;
                     this.formData.ev = [];
                     this.formData.megye = null;

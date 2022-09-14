@@ -183,7 +183,7 @@
                     </div>
 
                     <div class="ags-col-container">
-                        <div class="ags-form-row" style="flex-basis: 50%">
+                        <div class="ags-form-row ags-col-2">
                             <label for="megye" class="ags-label">Megye:</label>
                             <select
                                 id="megye"
@@ -200,32 +200,12 @@
                             </select>
                         </div>
 
-                        <div
-                            class="ags-form-row"
-                            style="flex-basis: calc(50% - 180px)"
-                        >
-                            <div class="ags-padded-x-col">
-                                <label for="varos" class="ags-label"
-                                    >Település:</label
-                                >
-                                <input
-                                    id="varos"
-                                    type="text"
-                                    x-model="formData.varos"
-                                    class="ags-textbox"
-                                />
-                            </div>
-                        </div>
-                        <div class="ags-form-row" style="flex-basis: 180px">
-                            <label for="irszam" class="ags-label"
-                                >Irányítószám:</label
-                            >
+                        <div class="ags-form-row ags-col-2">
+                            <label for="varos" class="ags-label">Település:</label>
                             <input
-                                id="irszam"
-                                type="number"
-                                min="0"
-                                maxlength="4"
-                                x-model="formData.irszam"
+                                id="varos"
+                                type="text"
+                                x-model="formData.varos"
                                 class="ags-textbox"
                             />
                         </div>
@@ -233,9 +213,7 @@
 
                     <div class="ags-col-container ags-col-container-wrap">
                         <div class="ags-form-row ags-col-1-mobile-3-desktop">
-                            <label for="jogcimSelect" class="ags-label"
-                                >Jogcím:</label
-                            >
+                            <label for="jogcimSelect" class="ags-label">Jogcím:</label>
                             <select
                                 id="jogcimSelect"
                                 x-ref="jogcimSelect"
@@ -250,8 +228,7 @@
                         <div class="ags-form-row ags-col-2-mobile-3-desktop">
                             <div class="ags-padd-x-middle-desktop">
                                 <label for="alapSelect" class="ags-label"
-                                    >Alap:</label
-                                >
+                                    >Alap:</label>
                                 <select
                                     id="alapSelect"
                                     x-ref="alapSelect"
@@ -264,9 +241,7 @@
                             </div>
                         </div>
                         <div class="ags-form-row ags-col-2-mobile-3-desktop">
-                            <label for="forrasSelect" class="ags-label"
-                                >Forrás:</label
-                            >
+                            <label for="forrasSelect" class="ags-label">Forrás:</label>
                             <select
                                 id="forrasSelect"
                                 x-ref="forrasSelect"
@@ -281,9 +256,7 @@
 
                     <div class="ags-col-container">
                         <div class="ags-form-row ags-col-2">
-                            <label for="cegcsoportSelect" class="ags-label"
-                                >Cégcsoport:</label
-                            >
+                            <label for="cegcsoportSelect" class="ags-label">Cégcsoport:</label>
                             <select
                                 class="ags-textbox"
                                 id="cegcsoportSelect"
@@ -296,9 +269,7 @@
                             <span class="ags-hint">Több is kiválasztható</span>
                         </div>
                         <div class="ags-form-row ags-col-2">
-                            <label for="tamogatottSelect" class="ags-label"
-                                >Cégcsoporthoz tartozó nyertes:</label
-                            >
+                            <label for="tamogatottSelect" class="ags-label">Cégcsoporthoz tartozó nyertes:</label>
                             <select
                                 id="tamogatottSelect"
                                 x-ref="tamogatottSelect"
