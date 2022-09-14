@@ -46,7 +46,7 @@
             crossorigin="anonymous"
             src="https://cdn.jsdelivr.net/npm/element-closest@3.0.2/browser.min.js"
         ></script>
-        <script src="/js/agrar.js?v=1.11"></script>
+        <script src="/js/agrar.js?v=1.12"></script>
 
         <script
             defer
@@ -242,6 +242,8 @@
                                 x-model="formData.jogcim"
                                 multiple="multiple"
                                 class="ags-textbox"
+                                @show-dropdown.camel="onChoicesShowDropdown"
+                                @hide-dropdown.camel="onChoicesHideDropdown"
                             ></select>
                             <span class="ags-hint">Több is kiválasztható</span>
                         </div>
@@ -255,6 +257,8 @@
                                     x-ref="alapSelect"
                                     x-model="formData.alap"
                                     multiple="multiple"
+                                    @show-dropdown.camel="onChoicesShowDropdown"
+                                    @hide-dropdown.camel="onChoicesHideDropdown"
                                 ></select>
                                 <span class="ags-hint">Több is kiválasztható</span>
                             </div>
@@ -268,6 +272,8 @@
                                 x-ref="forrasSelect"
                                 x-model="formData.forras"
                                 multiple="multiple"
+                                @show-dropdown.camel="onChoicesShowDropdown"
+                                @hide-dropdown.camel="onChoicesHideDropdown"
                             ></select>
                             <span class="ags-hint">Több is kiválasztható</span>
                         </div>
@@ -284,6 +290,8 @@
                                 x-ref="cegcsoportSelect"
                                 x-model="formData.cegcsoport"
                                 multiple="multiple"
+                                @show-dropdown.camel="onChoicesShowDropdown"
+                                @hide-dropdown.camel="onChoicesHideDropdown"
                             ></select>
                             <span class="ags-hint">Több is kiválasztható</span>
                         </div>
@@ -295,6 +303,8 @@
                                 id="tamogatottSelect"
                                 x-ref="tamogatottSelect"
                                 x-model="formData.tamogatott"
+                                @show-dropdown.camel="onChoicesShowDropdown"
+                                @hide-dropdown.camel="onChoicesHideDropdown"
                             ></select>
                         </div>
                     </div>
@@ -322,18 +332,19 @@
                                         id="tamosszegtol"
                                         type="text"
                                         x-model="formData.tamosszegtol"
-                                        x-ref="tamosszegtolInput"
                                         class="ags-textbox"
+                                        @keydown="restrictToNumbers"
+                                        @keyup="reformatInputValue"
                                     />
                                 </div>
                                 <div class="ags-min-max-dash">—</div>
                                 <div class="ags-min-max-input-box">
                                     <input
-                                        id="tamosszegig"
                                         class="ags-textbox"
                                         type="text"
                                         x-model="formData.tamosszegig"
-                                        x-ref="tamosszegigInput"
+                                        @keydown="restrictToNumbers"
+                                        @keyup="reformatInputValue"
                                     />
                                 </div>
                             </div>
@@ -365,8 +376,9 @@
                                         id="evestamosszeg"
                                         type="text"
                                         class="ags-textbox"
-                                        x-ref="evestamosszegtolInput"
                                         x-model="formData.evestamosszegtol"
+                                        @keydown="restrictToNumbers"
+                                        @keyup="reformatInputValue"
                                     />
                                 </div>
                                 <div class="ags-min-max-dash">—</div>
@@ -375,7 +387,8 @@
                                         type="text"
                                         class="ags-textbox"
                                         x-model="formData.evestamosszegig"
-                                        x-ref="evestamosszegigInput"
+                                        @keydown="restrictToNumbers"
+                                        @keyup="reformatInputValue"
                                     />
                                 </div>
                             </div>

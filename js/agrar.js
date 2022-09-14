@@ -1,18 +1,3 @@
-var zIndexClassName = "ags-opened-choice-container";
-var choiceParentClassName = "ags-form-row";
-
-function addZIndexToChoiceParent(choiceEl) {
-    choiceEl.parentNode
-        .closest(`.${choiceParentClassName}`)
-        .classList.add(zIndexClassName);
-}
-
-function removeZIndexFromChoiceParent(choiceEl) {
-    choiceEl.parentNode
-        .closest(`.${choiceParentClassName}`)
-        .classList.remove(zIndexClassName);
-}
-
 document.addEventListener("alpine:init", () => {
     Alpine.data("searchForm", () => ({
         formData: {
@@ -44,10 +29,6 @@ document.addEventListener("alpine:init", () => {
             tamogatasosszeg: null,
             evestamogatasosszeg: null,
         },
-        displayValues: {
-            evestamosszegtol: null,
-            evestamosszegig: null,
-        },
         per_page: 15,
         submitText: "Keresés",
         submitting: false,
@@ -58,35 +39,58 @@ document.addEventListener("alpine:init", () => {
         resultMeta: null,
         resultLinks: null,
         resultLoaded: false,
+        choicesOptions: {
+            silent: false,
+            allowHTML: false,
+            removeItemButton: true,
+            searchFloor: 4,
+            searchResultLimit: 100,
+            searchFields: ["label"],
+            itemSelectText: "",
+            loadingText: "Betöltés...",
+            noResultsText: "Nincs találat",
+            noChoicesText: "Nincs már mit kiválasztani",
+            fuseOptions: {
+                treshold: 0.0,
+                minMatchCharLength: 4,
+                ignoreLocation: true,
+            },
+        },
+        reformatInputValue(e) {
+            if (e.target.value !== "" && e.target.value !== "-") {
+                e.target._x_model.set(
+                    this.numToStr(this.strToNum(e.target.value))
+                );
+            }
+        },
         restrictToNumbers(e) {
-            if (!e.key.toString().match(/^\d+$/)) {
+            if (
+                !e.key.toString().match(/^\d+$/) &&
+                !e.key
+                    .toString()
+                    .match(
+                        /ArrowLeft|Delete|ArrowRight|Backspace|Home|End|Enter|Tab|-|F5|F1/
+                    )
+            ) {
                 e.preventDefault();
             }
         },
-        numberWithSpaces(x) {
-            return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ");
-        },
-        dotToComma(num) {
-            if (num.toString().indexOf(".") < 0) {
-                return num;
-            } else {
-                return num.toString().replace(".", ",");
+        numToStr(num) {
+            if (num !== null) {
+                return num
+                    .toString()
+                    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, " ")
+                    .replace(".", ",");
             }
+            return "";
         },
-        formatNum(num) {
-            return this.dotToComma(this.numberWithSpaces(num));
-        },
-        reformatNum(str) {
-            let convertedToFloat;
-            if (str.indexOf(",") === -1) {
-                convertedToFloat = str;
-            } else {
-                convertedToFloat = str.replace(",", ".");
+        strToNum(str) {
+            let sanitized = str.replace(",", ".").split(" ").join(""),
+                retval = parseFloat(sanitized);
+            if (isNaN(retval)) {
+                return null;
             }
-
-            const withoutSpaces = convertedToFloat.split(" ").join("");
-
-            return parseFloat(withoutSpaces);
+            return retval;
         },
         isEmpty(val) {
             return (
@@ -96,20 +100,35 @@ document.addEventListener("alpine:init", () => {
             );
         },
         setTamosszegDefaults() {
-            this.formData.tamosszegtol = this.formatNum(
+            this.formData.tamosszegtol = this.numToStr(
                 this.lists.tamogatasosszeg.min
             );
-            this.formData.tamosszegig = this.formatNum(
+            this.formData.tamosszegig = this.numToStr(
                 this.lists.tamogatasosszeg.max
             );
         },
         setEvestamosszegDefaults() {
-            this.formData.evestamosszegtol = this.formatNum(
+            this.formData.evestamosszegtol = this.numToStr(
                 this.lists.evestamogatasosszeg.min
             );
-            this.formData.evestamosszegig = this.formatNum(
+            this.formData.evestamosszegig = this.numToStr(
                 this.lists.evestamogatasosszeg.max
             );
+        },
+        zIndexClassName: "ags-opened-choice-container",
+        choiceParentClassName: "ags-form-row",
+        onChoicesShowDropdown(e) {
+            if ("parentIFrame" in window) {
+                parentIFrame.size();
+            }
+            e.target.parentNode
+                .closest(`.${this.choiceParentClassName}`)
+                .classList.add(this.zIndexClassName);
+        },
+        onChoicesHideDropdown(e) {
+            e.target.parentNode
+                .closest(`.${this.choiceParentClassName}`)
+                .classList.remove(this.zIndexClassName);
         },
         getLists() {
             this.$watch("detailedSearchOpened", (value) => {
@@ -177,23 +196,10 @@ document.addEventListener("alpine:init", () => {
                 .then((data) => (this.lists.jogcimek = data.data))
                 .then(() => {
                     this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.jogcimSelect, {
-                            silent: false,
-                            allowHTML: false,
-                            removeItemButton: true,
-                            searchFloor: 4,
-                            searchResultLimit: 100,
-                            searchFields: ["label"],
-                            itemSelectText: "",
-                            loadingText: "Betöltés...",
-                            noResultsText: "Nincs találat",
-                            noChoicesText: "Nincs már mit kiválasztani",
-                            fuseOptions: {
-                                treshold: 0.0,
-                                minMatchCharLength: 4,
-                                ignoreLocation: true,
-                            },
-                        });
+                        let choices = new Choices(
+                            this.$refs.jogcimSelect,
+                            this.choicesOptions
+                        );
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
@@ -205,21 +211,6 @@ document.addEventListener("alpine:init", () => {
                             );
                         };
                         refreshChoices();
-                        this.$refs.jogcimSelect.addEventListener(
-                            "showDropdown",
-                            (e) => {
-                                if ("parentIFrame" in window) {
-                                    parentIFrame.size();
-                                }
-                                addZIndexToChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.jogcimSelect.addEventListener(
-                            "hideDropdown",
-                            (e) => {
-                                removeZIndexFromChoiceParent(e.target);
-                            }
-                        );
                         this.$refs.jogcimSelect.addEventListener(
                             "change",
                             () => {
@@ -235,23 +226,10 @@ document.addEventListener("alpine:init", () => {
                 .then((data) => (this.lists.alapok = data.data))
                 .then(() => {
                     this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.alapSelect, {
-                            silent: false,
-                            allowHTML: false,
-                            removeItemButton: true,
-                            searchFloor: 4,
-                            searchResultLimit: 100,
-                            searchFields: ["label"],
-                            itemSelectText: "",
-                            loadingText: "Betöltés...",
-                            noResultsText: "Nincs találat",
-                            noChoicesText: "Nincs már mit kiválasztani",
-                            fuseOptions: {
-                                treshold: 0.0,
-                                minMatchCharLength: 4,
-                                ignoreLocation: true,
-                            },
-                        });
+                        let choices = new Choices(
+                            this.$refs.alapSelect,
+                            this.choicesOptions
+                        );
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
@@ -266,18 +244,6 @@ document.addEventListener("alpine:init", () => {
                         this.$refs.alapSelect.addEventListener("change", () => {
                             this.formData.alap = choices.getValue(true);
                         });
-                        this.$refs.alapSelect.addEventListener(
-                            "showDropdown",
-                            (e) => {
-                                addZIndexToChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.alapSelect.addEventListener(
-                            "hideDropdown",
-                            (e) => {
-                                removeZIndexFromChoiceParent(e.target);
-                            }
-                        );
                         this.$watch("formData.alap", () => refreshChoices());
                         this.$watch("lists.alapok", () => refreshChoices());
                     });
@@ -287,23 +253,10 @@ document.addEventListener("alpine:init", () => {
                 .then((data) => (this.lists.forrasok = data.data))
                 .then(() => {
                     this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.forrasSelect, {
-                            silent: false,
-                            allowHTML: false,
-                            removeItemButton: true,
-                            searchFloor: 4,
-                            searchResultLimit: 100,
-                            searchFields: ["label"],
-                            itemSelectText: "",
-                            loadingText: "Betöltés...",
-                            noResultsText: "Nincs találat",
-                            noChoicesText: "Nincs már mit kiválasztani",
-                            fuseOptions: {
-                                treshold: 0.0,
-                                minMatchCharLength: 4,
-                                ignoreLocation: true,
-                            },
-                        });
+                        let choices = new Choices(
+                            this.$refs.forrasSelect,
+                            this.choicesOptions
+                        );
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
@@ -321,18 +274,6 @@ document.addEventListener("alpine:init", () => {
                                 this.formData.forras = choices.getValue(true);
                             }
                         );
-                        this.$refs.forrasSelect.addEventListener(
-                            "showDropdown",
-                            (e) => {
-                                addZIndexToChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.forrasSelect.addEventListener(
-                            "hideDropdown",
-                            (e) => {
-                                removeZIndexFromChoiceParent(e.target);
-                            }
-                        );
                         this.$watch("formData.forras", () => refreshChoices());
                         this.$watch("lists.forrasok", () => refreshChoices());
                     });
@@ -342,23 +283,10 @@ document.addEventListener("alpine:init", () => {
                 .then((data) => (this.lists.cegcsoportok = data.data))
                 .then(() => {
                     this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.cegcsoportSelect, {
-                            silent: false,
-                            allowHTML: false,
-                            removeItemButton: true,
-                            searchFloor: 4,
-                            searchResultLimit: 100,
-                            searchFields: ["label"],
-                            itemSelectText: "",
-                            loadingText: "Betöltés...",
-                            noResultsText: "Nincs találat",
-                            noChoicesText: "Nincs már mit kiválasztani",
-                            fuseOptions: {
-                                treshold: 0.0,
-                                minMatchCharLength: 4,
-                                ignoreLocation: true,
-                            },
-                        });
+                        let choices = new Choices(
+                            this.$refs.cegcsoportSelect,
+                            this.choicesOptions
+                        );
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
@@ -378,18 +306,6 @@ document.addEventListener("alpine:init", () => {
                                     choices.getValue(true);
                             }
                         );
-                        this.$refs.cegcsoportSelect.addEventListener(
-                            "showDropdown",
-                            (e) => {
-                                addZIndexToChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.cegcsoportSelect.addEventListener(
-                            "hideDropdown",
-                            (e) => {
-                                removeZIndexFromChoiceParent(e.target);
-                            }
-                        );
                         this.$watch("formData.cegcsoport", () =>
                             refreshChoices()
                         );
@@ -403,23 +319,10 @@ document.addEventListener("alpine:init", () => {
                 .then((data) => (this.lists.tamogatottak = data.data))
                 .then(() => {
                     this.$nextTick(() => {
-                        let choices = new Choices(this.$refs.tamogatottSelect, {
-                            silent: false,
-                            allowHTML: false,
-                            searchFloor: 4,
-                            searchResultLimit: 100,
-                            searchFields: ["label"],
-                            removeItemButton: true,
-                            itemSelectText: "",
-                            loadingText: "Betöltés...",
-                            noResultsText: "Nincs találat",
-                            noChoicesText: "Nincs már mit kiválasztani",
-                            fuseOptions: {
-                                treshold: 0.0,
-                                minMatchCharLength: 4,
-                                ignoreLocation: true,
-                            },
-                        });
+                        let choices = new Choices(
+                            this.$refs.tamogatottSelect,
+                            this.choicesOptions
+                        );
                         let refreshChoices = () => {
                             choices.clearStore();
                             choices.setChoices(
@@ -436,21 +339,6 @@ document.addEventListener("alpine:init", () => {
                             );
                         };
                         refreshChoices();
-                        this.$refs.tamogatottSelect.addEventListener(
-                            "showDropdown",
-                            (e) => {
-                                if ("parentIFrame" in window) {
-                                    parentIFrame.size();
-                                }
-                                addZIndexToChoiceParent(e.target);
-                            }
-                        );
-                        this.$refs.tamogatottSelect.addEventListener(
-                            "hideDropdown",
-                            (e) => {
-                                removeZIndexFromChoiceParent(e.target);
-                            }
-                        );
                         this.$refs.tamogatottSelect.addEventListener(
                             "change",
                             () => {
@@ -482,10 +370,10 @@ document.addEventListener("alpine:init", () => {
                             },
                             format: {
                                 to: (value) => {
-                                    return this.formatNum(value.toFixed(0));
+                                    return this.numToStr(value.toFixed(0));
                                 },
                                 from: (value) => {
-                                    return this.reformatNum(value);
+                                    return this.strToNum(value);
                                 },
                             },
                         });
@@ -499,10 +387,6 @@ document.addEventListener("alpine:init", () => {
                                 this.formData.tamosszegig = values[1];
                             }
                         );
-                        this.$refs.tamosszegtolInput.addEventListener(
-                            "keydown",
-                            this.restrictToNumbers
-                        );
                         this.$watch("formData.tamosszegtol", () => {
                             this.$refs.tamosszegSlider.noUiSlider.set([
                                 this.formData.tamosszegtol,
@@ -515,10 +399,6 @@ document.addEventListener("alpine:init", () => {
                                 this.formData.tamosszegig,
                             ]);
                         });
-                        this.$refs.tamosszegigInput.addEventListener(
-                            "keydown",
-                            this.restrictToNumbers
-                        );
                     });
                 });
             fetch(API_URL + "/api/evestamogatasosszeg")
@@ -537,10 +417,10 @@ document.addEventListener("alpine:init", () => {
                             },
                             format: {
                                 to: (value) => {
-                                    return this.formatNum(value.toFixed(0));
+                                    return this.numToStr(value.toFixed(0));
                                 },
                                 from: (value) => {
-                                    return this.reformatNum(value);
+                                    return this.strToNum(value);
                                 },
                             },
                         });
@@ -560,20 +440,12 @@ document.addEventListener("alpine:init", () => {
                                 null,
                             ]);
                         });
-                        this.$refs.evestamosszegtolInput.addEventListener(
-                            "keydown",
-                            this.restrictToNumbers
-                        );
                         this.$watch("formData.evestamosszegig", () => {
                             this.$refs.evestamosszegSlider.noUiSlider.set([
                                 null,
                                 this.formData.evestamosszegig,
                             ]);
                         });
-                        this.$refs.evestamosszegigInput.addEventListener(
-                            "keydown",
-                            this.restrictToNumbers
-                        );
                     });
                 });
         },
@@ -593,36 +465,35 @@ document.addEventListener("alpine:init", () => {
             this.exportText = "Export";
             this.exporting = false;
         },
+        resetSubmitOsszeg(osszeg, hatar) {
+            osszeg = this.strToNum(osszeg);
+            if (osszeg === hatar) {
+                osszeg = null;
+            }
+            return osszeg;
+        },
         getSubmitableData() {
             let tosubmit = JSON.parse(JSON.stringify(this.formData));
 
-            tosubmit.tamosszegtol = this.reformatNum(tosubmit.tamosszegtol);
-            if (tosubmit.tamosszegtol === this.lists.tamogatasosszeg.min) {
-                tosubmit.tamosszegtol = null;
-            }
-
-            tosubmit.tamosszegig = this.reformatNum(tosubmit.tamosszegig);
-            if (tosubmit.tamosszegig === this.lists.tamogatasosszeg.max) {
-                tosubmit.tamosszegig = null;
-            }
-
-            tosubmit.evestamosszegtol = this.reformatNum(
-                tosubmit.evestamosszegtol
+            tosubmit.tamosszegtol = this.resetSubmitOsszeg(
+                tosubmit.tamosszegtol,
+                this.lists.tamogatasosszeg.min
             );
-            if (
-                tosubmit.evestamosszegtol === this.lists.evestamogatasosszeg.min
-            ) {
-                tosubmit.evestamosszegtol = null;
-            }
 
-            tosubmit.evestamosszegig = this.reformatNum(
-                tosubmit.evestamosszegig
+            tosubmit.tamosszegig = this.resetSubmitOsszeg(
+                tosubmit.tamosszegig,
+                this.lists.tamogatasosszeg.max
             );
-            if (
-                tosubmit.evestamosszegig === this.lists.evestamogatasosszeg.max
-            ) {
-                tosubmit.evestamosszegig = null;
-            }
+
+            tosubmit.evestamosszegtol = this.resetSubmitOsszeg(
+                tosubmit.evestamosszegtol,
+                this.lists.evestamogatasosszeg.min
+            );
+
+            tosubmit.evestamosszegig = this.resetSubmitOsszeg(
+                tosubmit.evestamosszegig,
+                this.lists.evestamogatasosszeg.max
+            );
 
             Object.keys(tosubmit).forEach((key) => {
                 if (this.isEmpty(tosubmit[key])) {
