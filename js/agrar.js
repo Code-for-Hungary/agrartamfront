@@ -4,13 +4,13 @@ document.addEventListener("alpine:init", () => {
             nev: null,
             isfirm: "",
             gender: null,
-            varos: null,
             ev: [],
             megye: null,
             jogcim: [],
             alap: [],
             forras: [],
             cegcsoport: [],
+            telepules: [],
             tamogatott: null,
             tamosszegtol: null,
             tamosszegig: null,
@@ -20,6 +20,7 @@ document.addEventListener("alpine:init", () => {
         lists: {
             evek: null,
             megyek: null,
+            telepulesek: null,
             jogcimek: null,
             alapok: null,
             forrasok: null,
@@ -132,9 +133,9 @@ document.addEventListener("alpine:init", () => {
         getLists() {
             this.$watch("detailedSearchOpened", (value) => {
                 if (!value) {
-                    this.formData.varos = null;
                     this.formData.ev = [];
                     this.formData.megye = null;
+                    this.formData.telepules = [];
                     this.formData.jogcim = [];
                     this.formData.alap = [];
                     this.formData.forras = [];
@@ -189,6 +190,46 @@ document.addEventListener("alpine:init", () => {
             fetch(API_URL + "/api/megyes")
                 .then((response) => response.json())
                 .then((data) => (this.lists.megyek = data.data));
+            fetch(API_URL + "/api/telepules")
+                .then((response) => response.json())
+                .then((data) => (this.lists.telepulesek = data.data))
+                .then(() => {
+                    this.$nextTick(() => {
+                        let choices = new Choices(
+                            this.$refs.telepulesSelect,
+                            this.choicesOptions
+                        );
+                        let refreshChoices = () => {
+                            choices.clearStore();
+                            choices.setChoices(
+                                this.lists.telepulesek.map(
+                                    ({ id, name, irszam }) => ({
+                                        value: id,
+                                        label: name + ", " + irszam,
+                                        selected:
+                                            this.formData.telepules.includes(
+                                                id
+                                            ),
+                                    })
+                                )
+                            );
+                        };
+                        refreshChoices();
+                        this.$refs.telepulesSelect.addEventListener(
+                            "change",
+                            () => {
+                                this.formData.telepules =
+                                    choices.getValue(true);
+                            }
+                        );
+                        this.$watch("formData.telepules", () =>
+                            refreshChoices()
+                        );
+                        this.$watch("lists.telepulesek", () =>
+                            refreshChoices()
+                        );
+                    });
+                });
             fetch(API_URL + "/api/jogcims")
                 .then((response) => response.json())
                 .then((data) => (this.lists.jogcimek = data.data))
