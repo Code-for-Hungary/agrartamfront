@@ -130,19 +130,28 @@ document.addEventListener("alpine:init", () => {
                 .closest(`.${this.choiceParentClassName}`)
                 .classList.remove(this.zIndexClassName);
         },
+        clearSearchFields(onlydetailed = false) {
+            if (!onlydetailed) {
+                this.formData.nev = null;
+                this.formData.isfirm = "";
+                this.formData.gender = null;
+            }
+
+            this.formData.ev = [];
+            this.formData.megye = null;
+            this.formData.telepules = [];
+            this.formData.jogcim = [];
+            this.formData.alap = [];
+            this.formData.forras = [];
+            this.formData.cegcsoport = [];
+            this.formData.tamogatott = null;
+            this.setTamosszegDefaults();
+            this.setEvestamosszegDefaults();
+        },
         getLists() {
             this.$watch("detailedSearchOpened", (value) => {
                 if (!value) {
-                    this.formData.ev = [];
-                    this.formData.megye = null;
-                    this.formData.telepules = [];
-                    this.formData.jogcim = [];
-                    this.formData.alap = [];
-                    this.formData.forras = [];
-                    this.formData.cegcsoport = [];
-                    this.formData.tamogatott = null;
-                    this.setTamosszegDefaults();
-                    this.setEvestamosszegDefaults();
+                    this.clearSearchFields(true);
                 }
             });
             this.$watch("per_page", () => {
