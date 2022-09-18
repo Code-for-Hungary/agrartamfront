@@ -46,7 +46,7 @@
             crossorigin="anonymous"
             src="https://cdn.jsdelivr.net/npm/element-closest@3.0.2/browser.min.js"
         ></script>
-        <script src="/js/agrar.js?v=1.12"></script>
+        <script src="/js/agrar.js?v=1.13"></script>
 
         <script
             defer
@@ -516,7 +516,7 @@
                                             >Összeg:&nbsp;</strong
                                         >
                                         <span
-                                            x-text="formatNum(row.osszeg)"
+                                            x-text="numToStr(row.osszeg)"
                                             class="ags-no-wrap"
                                         ></span
                                         >&nbsp;<em class="ags-hide-desktop"
