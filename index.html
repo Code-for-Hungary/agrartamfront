@@ -201,13 +201,16 @@
                         </div>
 
                         <div class="ags-form-row ags-col-2">
-                            <label for="varos" class="ags-label">Település:</label>
-                            <input
-                                id="varos"
-                                type="text"
-                                x-model="formData.varos"
+                            <label for="telepulesSelect" class="ags-label">Település:</label>
+                            <select
+                                id="telepulesSelect"
+                                x-ref="telepulesSelect"
+                                x-model="formData.telepules"
+                                multiple="multiple"
                                 class="ags-textbox"
-                            />
+                                @show-dropdown.camel="onChoicesShowDropdown"
+                                @hide-dropdown.camel="onChoicesHideDropdown"
+                            ></select>
                         </div>
                     </div>
 
