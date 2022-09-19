@@ -479,7 +479,7 @@
                                         <div
                                             x-text="row.irszam + ' ' + row.varos + ', ' + row.utca"
                                         ></div>
-                                        <div x-text="row.megye.name"></div>
+                                        <div x-text="row.megye ? row.megye.name : ''"></div>
                                     </td>
                                     <td
                                         :class="!row.tamogatott && !row.cegcsoport ? 'ags-result-cell-empty' : ''"
