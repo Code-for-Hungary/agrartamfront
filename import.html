@@ -5,7 +5,15 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Agrár import</title>
-
+        <style>
+            .padded {
+                padding-bottom: 5px;
+            }
+            .bordered {
+                border: solid black 2px;
+                padding: 5px;
+            }
+        </style>
         <script src="config.js"></script>
     </head>
     <body>
@@ -15,26 +23,58 @@
             method="post"
             enctype="multipart/form-data"
         >
-            <div>
+            <div class="padded">
                 <label for="pwEdit">Jelszó</label>
                 <input id="pwEdit" type="password" name="password" />
             </div>
-            <div>
-                <label for="fileEdit">Fájl</label>
-                <input
-                    id="fileEdit"
-                    type="file"
-                    name="import"
-                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-                application/vnd.ms-excel,application/vnd.oasis.opendocument.spreadsheet"
-                />
+            <div class="bordered">
+                <div class="padded">
+                    <label for="fileEdit">Fájl</label>
+                    <input
+                        id="fileEdit"
+                        type="file"
+                        name="import"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+                    application/vnd.ms-excel,application/vnd.oasis.opendocument.spreadsheet"
+                    />
+                </div>
+                <div class="padded">
+                    <label for="cegcsoportEdit">Cégcsoport fájl</label>
+                    <input
+                        id="cegcsoportEdit"
+                        type="file"
+                        name="cegcsoportimport"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+                    application/vnd.ms-excel,application/vnd.oasis.opendocument.spreadsheet"
+                    />
+                </div>
+                <div class="padded">
+                    <label for="entitasEdit">Entitás fájl</label>
+                    <input
+                        id="entitasEdit"
+                        type="file"
+                        name="entitasimport"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+                    application/vnd.ms-excel,application/vnd.oasis.opendocument.spreadsheet"
+                    />
+                </div>
+                <div class="padded"><button type="submit">Feltölt</button></div>
             </div>
-            <div><button type="submit">Feltölt</button></div>
         </form>
+        <div class="bordered">
+            <button id="cegcsoportExportButton" type="button">Cégcsoport export</button>
+            <button id="entitasExportButton" type="button">Entitás export</button>
+        </div>
         <script>
             document.getElementById(
                 "importForm"
             ).action = `${API_URL}/api/import`;
+            document.getElementById("cegcsoportExportButton").addEventListener('click', function(e) {
+                window.location = `${API_URL}/api/cegcsoportexport`;
+            })
+            document.getElementById("entitasExportButton").addEventListener('click', function(e) {
+                window.location = `${API_URL}/api/tamogatottexport`;
+            })
         </script>
     </body>
 </html>
