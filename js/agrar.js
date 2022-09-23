@@ -148,6 +148,11 @@ document.addEventListener("alpine:init", () => {
             this.setTamosszegDefaults();
             this.setEvestamosszegDefaults();
         },
+        clearResults() {
+            this.resultData = [];
+            this.resultMeta = null;
+            this.resultLinks = null;
+        },
         getLists() {
             this.$watch("detailedSearchOpened", (value) => {
                 if (!value) {
@@ -563,8 +568,7 @@ document.addEventListener("alpine:init", () => {
                 this.resetSubmitBtn();
             } else {
                 tosubmit.per_page = this.per_page;
-                let msg = "Valami baj történt";
-                fetch(API_URL + "/api/count", {
+                fetch(url, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -573,33 +577,26 @@ document.addEventListener("alpine:init", () => {
                 })
                     .then((response) => response.json())
                     .then((respdata) => {
-                        if (respdata.data.count >= MAX_RESULT_COUNT) {
-                            msg = "Túl sok az eredmény: " + respdata.data.count;
-                            return false;
-                        }
-                        if (respdata.data.count === 0) {
-                            msg = "Nincs a keresésnek megfelelő adat";
-                            return false;
-                        }
-                        return fetch(url, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(tosubmit),
-                        });
-                    })
-                    .then((response) => response.json())
-                    .then((respdata) => {
                         this.resultData = respdata.data;
                         this.resultMeta = respdata.meta;
                         this.resultLinks = respdata.links;
                         this.resultMeta.links.shift();
                         this.resultMeta.links.pop();
+                        if (this.resultMeta.total >= MAX_RESULT_COUNT) {
+                            throw new Error(
+                                "Túl sok az eredmény: " + this.resultMeta.total
+                            );
+                        }
+                        if (this.resultMeta.total === 0) {
+                            throw new Error(
+                                "Nincs a keresésnek megfelelő adat"
+                            );
+                        }
                         this.resultLoaded = true;
                     })
-                    .catch(() => {
-                        alert(msg);
+                    .catch((error) => {
+                        this.clearResults();
+                        alert(error);
                     })
                     .finally(() => {
                         this.resetSubmitBtn();
@@ -615,7 +612,6 @@ document.addEventListener("alpine:init", () => {
                 this.resetExportBtn();
             } else {
                 toexport.per_page = this.per_page;
-                let msg = "Valami baj történt";
                 fetch(API_URL + "/api/count", {
                     method: "POST",
                     headers: {
@@ -626,12 +622,14 @@ document.addEventListener("alpine:init", () => {
                     .then((response) => response.json())
                     .then((respdata) => {
                         if (respdata.data.count >= MAX_RESULT_COUNT) {
-                            msg = "Túl sok az eredmény: " + respdata.data.count;
-                            return false;
+                            throw new Error(
+                                "Túl sok az eredmény: " + respdata.data.count
+                            );
                         }
                         if (respdata.data.count === 0) {
-                            msg = "Nincs a keresésnek megfelelő adat";
-                            return false;
+                            throw new Error(
+                                "Nincs a keresésnek megfelelő adat"
+                            );
                         }
                         return fetch(API_URL + "/api/exportforedit", {
                             method: "POST",
@@ -646,8 +644,8 @@ document.addEventListener("alpine:init", () => {
                         this.resetExportBtn();
                         window.location = respdata.data;
                     })
-                    .catch(() => {
-                        alert(msg);
+                    .catch((error) => {
+                        alert(error);
                     })
                     .finally(() => {
                         this.resetExportBtn();
