@@ -31,6 +31,8 @@ if (typeof agrarloader !== "object") {
                 return arr2;
             }
 
+            console.log(window.location);
+
             var myScripts = []
                 .concat(_toConsumableArray(scripts))
                 .filter(function (x) {
