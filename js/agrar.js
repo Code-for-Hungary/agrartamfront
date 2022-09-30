@@ -39,22 +39,25 @@ document.addEventListener("alpine:init", () => {
         resultMeta: null,
         resultLinks: null,
         resultLoaded: false,
-        choicesOptions: {
-            silent: false,
-            allowHTML: false,
-            removeItemButton: true,
-            searchFloor: 4,
-            searchResultLimit: 100,
-            searchFields: ["label"],
-            itemSelectText: "",
-            loadingText: "Betöltés...",
-            noResultsText: "Nincs találat",
-            noChoicesText: "Nincs már mit kiválasztani",
-            fuseOptions: {
-                treshold: 0.0,
-                minMatchCharLength: 4,
-                ignoreLocation: true,
-            },
+        choicesOptions(shouldSort) {
+            return {
+                silent: false,
+                allowHTML: false,
+                removeItemButton: true,
+                shouldSort: shouldSort,
+                searchFloor: 4,
+                searchResultLimit: 100,
+                searchFields: ["label"],
+                itemSelectText: "",
+                loadingText: "Betöltés...",
+                noResultsText: "Nincs találat",
+                noChoicesText: "Nincs már mit kiválasztani",
+                fuseOptions: {
+                    treshold: 0.0,
+                    minMatchCharLength: 4,
+                    ignoreLocation: true,
+                },
+            };
         },
         reformatInputValue(e) {
             if (e.target.value !== "" && e.target.value !== "-") {
@@ -211,7 +214,7 @@ document.addEventListener("alpine:init", () => {
                     this.$nextTick(() => {
                         let choices = new Choices(
                             this.$refs.telepulesSelect,
-                            this.choicesOptions
+                            this.choicesOptions(true)
                         );
                         let refreshChoices = () => {
                             choices.clearStore();
@@ -251,7 +254,7 @@ document.addEventListener("alpine:init", () => {
                     this.$nextTick(() => {
                         let choices = new Choices(
                             this.$refs.jogcimSelect,
-                            this.choicesOptions
+                            this.choicesOptions(false)
                         );
                         let refreshChoices = () => {
                             choices.clearStore();
@@ -281,7 +284,7 @@ document.addEventListener("alpine:init", () => {
                     this.$nextTick(() => {
                         let choices = new Choices(
                             this.$refs.alapSelect,
-                            this.choicesOptions
+                            this.choicesOptions(false)
                         );
                         let refreshChoices = () => {
                             choices.clearStore();
@@ -308,7 +311,7 @@ document.addEventListener("alpine:init", () => {
                     this.$nextTick(() => {
                         let choices = new Choices(
                             this.$refs.forrasSelect,
-                            this.choicesOptions
+                            this.choicesOptions(true)
                         );
                         let refreshChoices = () => {
                             choices.clearStore();
@@ -338,7 +341,7 @@ document.addEventListener("alpine:init", () => {
                     this.$nextTick(() => {
                         let choices = new Choices(
                             this.$refs.cegcsoportSelect,
-                            this.choicesOptions
+                            this.choicesOptions(true)
                         );
                         let refreshChoices = () => {
                             choices.clearStore();
@@ -374,7 +377,7 @@ document.addEventListener("alpine:init", () => {
                     this.$nextTick(() => {
                         let choices = new Choices(
                             this.$refs.tamogatottSelect,
-                            this.choicesOptions
+                            this.choicesOptions(true)
                         );
                         let refreshChoices = () => {
                             choices.clearStore();
