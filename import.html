@@ -58,12 +58,34 @@
                     application/vnd.ms-excel,application/vnd.oasis.opendocument.spreadsheet"
                     />
                 </div>
+                <div class="padded">
+                    <label for="entitasEdit">Alap fájl (csak sorrend betöltés)</label>
+                    <input
+                        id="alapEdit"
+                        type="file"
+                        name="alapimport"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+                    application/vnd.ms-excel,application/vnd.oasis.opendocument.spreadsheet"
+                    />
+                </div>
+                <div class="padded">
+                    <label for="entitasEdit">Jogcím fájl (csak sorrend betöltés)</label>
+                    <input
+                        id="jogcimEdit"
+                        type="file"
+                        name="jogcimimport"
+                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+                    application/vnd.ms-excel,application/vnd.oasis.opendocument.spreadsheet"
+                    />
+                </div>
                 <div class="padded"><button type="submit">Feltölt</button></div>
             </div>
         </form>
         <div class="bordered">
             <button id="cegcsoportExportButton" type="button">Cégcsoport export</button>
             <button id="entitasExportButton" type="button">Entitás export</button>
+            <button id="alapExportButton" type="button">Alap export</button>
+            <button id="jogcimExportButton" type="button">Jogcím export</button>
         </div>
         <script>
             document.getElementById(
@@ -74,6 +96,12 @@
             })
             document.getElementById("entitasExportButton").addEventListener('click', function(e) {
                 window.location = `${API_URL}/api/tamogatottexport`;
+            })
+            document.getElementById("alapExportButton").addEventListener('click', function(e) {
+                window.location = `${API_URL}/api/alapexport`;
+            })
+            document.getElementById("jogcimExportButton").addEventListener('click', function(e) {
+                window.location = `${API_URL}/api/jogcimexport`;
             })
         </script>
     </body>
