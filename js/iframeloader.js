@@ -10,20 +10,10 @@ if (typeof agrarloader !== "object") {
                 .match(/(http|https):\/\/(.[^\/]+)\//i);
             agrarloader.BaseUrl = matches[0];
         },
-        getUrlParameter(name) {
-            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
-            var results = regex.exec(agrarloader.params);
-            return results === null
-                ? ""
-                : decodeURIComponent(results[1].replace(/\+/g, " "));
-        },
         IFrameOnLoad: function () {
             iFrameResize({}, "#" + agrarloader.iFrameId);
         },
         Init: function () {
-            var scripts = document.getElementsByTagName("script");
-
             function _toConsumableArray(arr) {
                 for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
                     arr2[i] = arr[i];
@@ -31,17 +21,19 @@ if (typeof agrarloader !== "object") {
                 return arr2;
             }
 
-            console.log(window.location);
+            console.log(window.location.search);
 
-            var myScripts = []
-                .concat(_toConsumableArray(scripts))
-                .filter(function (x) {
-                    return x.src.match(/iframeloader\.js/);
-                });
-            var me = myScripts[myScripts.length - 1];
-            var src = me.src.split("?");
-            agrarloader.params = "?" + src[1];
+            let scripts = document.getElementsByTagName("script"),
+                myScripts = []
+                    .concat(_toConsumableArray(scripts))
+                    .filter(function (x) {
+                        return x.src.match(/iframeloader\.js/);
+                    }),
+                me = myScripts[myScripts.length - 1],
+                src = me.src.split("?");
+
             agrarloader.SetBaseUrl(src[0]);
+            agrarloader.params = window.location.search;
 
             var iframe = document.createElement("iframe");
             if (iframe.attachEvent) {
@@ -57,7 +49,10 @@ if (typeof agrarloader !== "object") {
                     false
                 );
             }
-            iframe.setAttribute("src", agrarloader.BaseUrl);
+            iframe.setAttribute(
+                "src",
+                agrarloader.BaseUrl + agrarloader.params
+            );
             iframe.setAttribute("id", agrarloader.iFrameId);
             iframe.setAttribute("height", "100%");
             iframe.setAttribute("width", "100%");
