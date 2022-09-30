@@ -21,8 +21,6 @@ if (typeof agrarloader !== "object") {
                 return arr2;
             }
 
-            console.log(window.location.search);
-
             let scripts = document.getElementsByTagName("script"),
                 myScripts = []
                     .concat(_toConsumableArray(scripts))
