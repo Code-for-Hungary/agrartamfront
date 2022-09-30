@@ -431,10 +431,10 @@
                         <thead>
                             <tr>
                                 <th>Év</th>
-                                <th>Gender</th>
                                 <th>Név</th>
+                                <th>Nyertes jellege</th>
                                 <th>Cím</th>
-                                <th>Csoport</th>
+                                <th>Cégcsoport</th>
                                 <th></th>
                                 <th class="ags-text-right-desktop">
                                     <span class="ags-no-wrap">
@@ -458,6 +458,12 @@
                                         <span x-text="row.ev"></span>
                                     </td>
                                     <td>
+                                        <strong class="ags-hide-desktop">
+                                            Név:&nbsp;
+                                        </strong>
+                                        <span x-text="row.name"></span>
+                                    </td>
+                                    <td>
                                         <template x-if="row.is_firm">
                                             <div>Jogi személy</div>
                                         </template>
@@ -469,12 +475,6 @@
                                                 ></span>
                                             </div>
                                         </template>
-                                    </td>
-                                    <td>
-                                        <strong class="ags-hide-desktop">
-                                            Név:&nbsp;
-                                        </strong>
-                                        <span x-text="row.name"></span>
                                     </td>
                                     <td>
                                         <strong class="ags-hide-desktop">
