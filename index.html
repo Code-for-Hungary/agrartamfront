@@ -28,7 +28,10 @@
 
         <script defer src="/js/vendor/choices.min.js"></script>
 
-        <script defer src="/js/vendor/iframeResizer.contentWindow.min.js"></script>
+        <script
+            defer
+            src="/js/vendor/iframeResizer.contentWindow.min.js"
+        ></script>
         <script defer src="/js/vendor/nouislider.min.js"></script>
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -172,7 +175,9 @@
                         </div>
 
                         <div class="ags-form-row ags-col-2">
-                            <label for="telepulesSelect" class="ags-label">Település:</label>
+                            <label for="telepulesSelect" class="ags-label"
+                                >Település:</label
+                            >
                             <select
                                 id="telepulesSelect"
                                 x-ref="telepulesSelect"
@@ -187,7 +192,9 @@
 
                     <div class="ags-col-container ags-col-container-wrap">
                         <div class="ags-form-row ags-col-1-mobile-3-desktop">
-                            <label for="jogcimSelect" class="ags-label">Jogcím:</label>
+                            <label for="jogcimSelect" class="ags-label"
+                                >Jogcím:</label
+                            >
                             <select
                                 id="jogcimSelect"
                                 x-ref="jogcimSelect"
@@ -202,7 +209,8 @@
                         <div class="ags-form-row ags-col-2-mobile-3-desktop">
                             <div class="ags-padd-x-middle-desktop">
                                 <label for="alapSelect" class="ags-label"
-                                    >Alap:</label>
+                                    >Alap:</label
+                                >
                                 <select
                                     id="alapSelect"
                                     x-ref="alapSelect"
@@ -211,11 +219,15 @@
                                     @show-dropdown.camel="onChoicesShowDropdown"
                                     @hide-dropdown.camel="onChoicesHideDropdown"
                                 ></select>
-                                <span class="ags-hint">Több is kiválasztható</span>
+                                <span class="ags-hint"
+                                    >Több is kiválasztható</span
+                                >
                             </div>
                         </div>
                         <div class="ags-form-row ags-col-2-mobile-3-desktop">
-                            <label for="forrasSelect" class="ags-label">Forrás:</label>
+                            <label for="forrasSelect" class="ags-label"
+                                >Forrás:</label
+                            >
                             <select
                                 id="forrasSelect"
                                 x-ref="forrasSelect"
@@ -230,7 +242,9 @@
 
                     <div class="ags-col-container">
                         <div class="ags-form-row ags-col-2">
-                            <label for="cegcsoportSelect" class="ags-label">Cégcsoport:</label>
+                            <label for="cegcsoportSelect" class="ags-label"
+                                >Cégcsoport:</label
+                            >
                             <select
                                 class="ags-textbox"
                                 id="cegcsoportSelect"
@@ -243,7 +257,9 @@
                             <span class="ags-hint">Több is kiválasztható</span>
                         </div>
                         <div class="ags-form-row ags-col-2">
-                            <label for="tamogatottSelect" class="ags-label">Cégcsoporthoz tartozó nyertes:</label>
+                            <label for="tamogatottSelect" class="ags-label"
+                                >Cégcsoporthoz tartozó nyertes:</label
+                            >
                             <select
                                 id="tamogatottSelect"
                                 x-ref="tamogatottSelect"
@@ -382,7 +398,9 @@
                             class="ags-button"
                             @click="clearSearchFields()"
                             x-cloak
-                        >Keresés törlése</button>
+                        >
+                            Keresés törlése
+                        </button>
                     </div>
                     <div class="ags-submit-container">
                         <button
@@ -432,7 +450,32 @@
                                         <strong class="ags-hide-desktop">
                                             Név:&nbsp;
                                         </strong>
-                                        <span x-text="row.name"></span>
+                                        <template x-if="!row.tamogatott">
+                                            <span x-text="row.name"></span>
+                                        </template>
+                                        <template
+                                            x-if="row.tamogatott && row.tamogatott.kurl"
+                                        >
+                                            <a
+                                                x-bind:href="row.tamogatott.kurl"
+                                                target="_blank"
+                                                class="ags-text-with-icon"
+                                            >
+                                                <span x-text="row.name"></span>
+                                                <i
+                                                    class="ags-icon ags-icon-on-the-right ags-icon-s"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 48 48"
+                                                    >
+                                                        <path
+                                                            d="M9 42q-1.2 0-2.1-.9Q6 40.2 6 39V9q0-1.2.9-2.1Q7.8 6 9 6h13.95v3H9v30h30V25.05h3V39q0 1.2-.9 2.1-.9.9-2.1.9Zm10.1-10.95L17 28.9 36.9 9H25.95V6H42v16.05h-3v-10.9Z"
+                                                        />
+                                                    </svg>
+                                                </i>
+                                            </a>
+                                        </template>
                                     </td>
                                     <td>
                                         <template x-if="row.is_firm">
@@ -455,25 +498,17 @@
                                         <div
                                             x-text="row.irszam + ' ' + row.varos + ', ' + row.utca"
                                         ></div>
-                                        <div x-text="row.megye ? row.megye.name : ''"></div>
+                                        <div
+                                            x-text="row.megye ? row.megye.name : ''"
+                                        ></div>
                                     </td>
                                     <td
-                                        :class="!row.tamogatott && !row.cegcsoport ? 'ags-result-cell-empty' : ''"
+                                        :class="row.cegcsoport ? 'ags-result-cell-empty' : ''"
                                     >
-                                        <div x-show="row.tamogatott">
-                                            <strong>
-                                                Cégcsoporthoz tartozó nyertes:&nbsp;
-                                            </strong>
-                                            <span
-                                                x-text="row.tamogatott ? row.tamogatott.name : ''"
-                                            ></span>
-                                        </div>
-                                        <div x-show="row.cegcsoport">
-                                            <strong>Cégcsoport:&nbsp;</strong>
-                                            <span
-                                                x-text="row.cegcsoport ? row.cegcsoport.name : ''"
-                                            ></span>
-                                        </div>
+                                        <span
+                                            x-show="row.cegcsoport"
+                                            x-text="row.cegcsoport ? row.cegcsoport.name : ''"
+                                        ></span>
                                     </td>
                                     <td>
                                         <div x-show="row.alap">
@@ -509,15 +544,16 @@
                                     </td>
                                     <td class="ags-text-right-desktop">
                                         <strong class="ags-hide-desktop"
-                                        >Adott évi összes támogatás:&nbsp;</strong
+                                            >Adott évi összes
+                                            támogatás:&nbsp;</strong
                                         >
                                         <span
                                             x-text="numToStr(row.evesosszeg)"
                                             class="ags-no-wrap"
                                         ></span
                                         >&nbsp;<em class="ags-hide-desktop"
-                                    >Ft</em
-                                    >
+                                            >Ft</em
+                                        >
                                     </td>
                                 </tr>
                             </template>
