@@ -412,8 +412,49 @@ body {
     padding: 8px;
 }
 
+.ags-results-container table td a {
+    color: var(--brand-color);
+    transition: all 0.3s ease-in-out;
+    text-decoration: underline;
+}
+
+.ags-results-container table td a:hover,
+.ags-results-container table td a:focus,
+.ags-results-container table td a:active {
+    opacity: 0.8;
+    text-decoration: none;
+}
+
+.ags-results-container table td a:visited {
+    color: var(--purple-color);
+}
+
 .ags-no-wrap {
     white-space: nowrap;
+}
+
+.ags-icon {
+    display: inline-block;
+}
+
+.ags-text-with-icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.ags-icon > svg {
+    fill: currentColor;
+    width: 100%;
+    height: auto;
+}
+
+.ags-icon-s {
+    width: 16px;
+    height: 16px;
+}
+
+.ags-icon-on-the-right {
+    margin-left: 4px;
 }
 
 @media screen and (min-width: 992px) {
