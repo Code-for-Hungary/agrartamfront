@@ -29,6 +29,7 @@ document.addEventListener("alpine:init", () => {
             tamogatasosszeg: null,
             evestamogatasosszeg: null,
         },
+        isDirty: false,
         per_page: 15,
         submitText: "Keresés",
         submitting: false,
@@ -150,6 +151,7 @@ document.addEventListener("alpine:init", () => {
             this.formData.tamogatott = null;
             this.setTamosszegDefaults();
             this.setEvestamosszegDefaults();
+            this.isDirty = false;
         },
         clearResults() {
             this.resultData = [];
@@ -441,6 +443,9 @@ document.addEventListener("alpine:init", () => {
                             (values) => {
                                 this.formData.tamosszegtol = values[0];
                                 this.formData.tamosszegig = values[1];
+                                // have to trigger this manually on all the slider changes
+                                // cause the <form>'s onChange doesn't get fired when the sliders get changed
+                                this.setIsDirty();
                             }
                         );
                         this.$watch("formData.tamosszegtol", () => {
@@ -488,6 +493,9 @@ document.addEventListener("alpine:init", () => {
                             (values) => {
                                 this.formData.evestamosszegtol = values[0];
                                 this.formData.evestamosszegig = values[1];
+                                // have to trigger this manually on all the slider changes
+                                // cause the <form>'s onChange doesn't get fired when the sliders get changed
+                                this.setIsDirty();
                             }
                         );
                         this.$watch("formData.evestamosszegtol", () => {
@@ -560,6 +568,9 @@ document.addEventListener("alpine:init", () => {
         },
         submit() {
             this.search(API_URL + "/api/search");
+        },
+        setIsDirty() {
+            this.isDirty = true;
         },
         search(url) {
             this.disableSubmitBtn();
