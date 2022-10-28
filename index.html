@@ -46,7 +46,11 @@
     </head>
     <body x-data="searchForm" x-init="getLists">
         <div class="ags-app">
-            <form @submit.prevent="submit" class="ags-form">
+            <form
+                @submit.prevent="submit"
+                class="ags-form"
+                @change="setIsDirty"
+            >
                 <div class="ags-form-row">
                     <label for="nev" class="ags-label">Nyertes neve:</label>
                     <div class="ags-icon-wrapper">
@@ -395,14 +399,13 @@
                     <div class="ags-submit-container">
                         <button
                             type="button"
-                            class="ags-button"
+                            class="ags-button ags-button-secondary"
                             @click="clearSearchFields()"
                             x-cloak
+                            x-show="isDirty"
                         >
                             Keresés törlése
                         </button>
-                    </div>
-                    <div class="ags-submit-container">
                         <button
                             type="submit"
                             class="ags-button"
