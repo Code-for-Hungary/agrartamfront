@@ -69,3 +69,16 @@ A Prettiernek köszönhetően van egy parancsunk, amivel a projekt összes file-
 Futasd az `npm run format` parancsot a projekt könyvtárban (ehhez természetesen [Node.js](http://nodejs.org/)-re lesz szükséged).
 
 Ez a parancs megformáza az összes forrásfile-t.
+
+# Tooltipek
+
+Bizonyos szöveg elemekre rárakhatunk egy tooltipet kódból, amellyel külfönféle magyarázó szövegeket jeleníthetünk meg. Ezt a funkcionalitást egy plugin, konkrétan a [ryangjchandler/alpine-tooltip](https://github.com/ryangjchandler/alpine-tooltip) nevű Alpine.js plugin segítségével valósítjuk meg. A plugin gyakorlatilag egy [Alpine.js](https://alpinejs.dev/) wrapper a [Tippy.js](https://atomiks.github.io/tippyjs/) tooltip library-hoz.
+
+Javasolt használat:
+
+```html
+<span x-tooltip.raw.html.interactive="A bonyolult dolog magyarázata...">
+    Valami bonyolult dolog, ami magyarázatra szorul
+    <span class="ags-asterisk">&nbsp;*</span>
+</span>
+```
