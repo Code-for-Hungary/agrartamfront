@@ -353,12 +353,6 @@ body {
     width: 100%;
 }
 
-.ags-asterisk {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: var(--brand-color);
-}
-
 @media screen and (min-width: 480px) and (max-width: 991px) {
     .ags-button-row {
         max-width: 50%;
