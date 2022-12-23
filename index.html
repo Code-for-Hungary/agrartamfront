@@ -24,7 +24,7 @@
         <script defer src="/js/vendor/persist.min.js"></script>
         <script defer src="/js/vendor/alpinejs.min.js"></script>
         <script defer src="/js/vendor/element-closest.js"></script>
-        <script src="/js/agrar.js?v=1.15"></script>
+        <script src="/js/agrar.js?v=1.20"></script>
 
         <script defer src="/js/vendor/choices.min.js"></script>
 
@@ -564,79 +564,92 @@
                             </template>
                         </tbody>
                     </table>
-                    <div style="display: flex; justify-content: center">
-                        <nav class="ags-pager">
-                            <button
-                                @click.prevent="search(resultLinks.first)"
-                                class="ags-button ags-button-secondary"
-                                type="button"
-                                :disabled="!resultLinks.first"
-                                title="Első oldal"
-                            >
-                                «
-                            </button>
-                            <button
-                                @click.prevent="search(resultLinks.prev)"
-                                class="ags-button ags-button-secondary"
-                                title="Előző oldal"
-                                type="button"
-                                :disabled="!resultLinks.prev"
-                            >
-                                ‹
-                            </button>
-                            <template x-for="item in resultMeta.links">
+                    <template x-if="resultMeta.total > DEFAULT_PER_PAGE">
+                        <div style="display: flex; justify-content: center">
+                            <nav class="ags-pager">
+                                <button
+                                    @click.prevent="search(resultLinks.first)"
+                                    class="ags-button ags-button-secondary"
+                                    type="button"
+                                    :disabled="!resultLinks.first"
+                                    title="Első oldal"
+                                >
+                                    «
+                                </button>
+                                <button
+                                    @click.prevent="search(resultLinks.prev)"
+                                    class="ags-button ags-button-secondary"
+                                    title="Előző oldal"
+                                    type="button"
+                                    :disabled="!resultLinks.prev"
+                                >
+                                    ‹
+                                </button>
+                                <template x-for="item in resultMeta.links">
+                                    <button
+                                        type="button"
+                                        @click.prevent="search(item.url)"
+                                        x-text="item.label"
+                                        class="ags-button"
+                                        :disabled="!item.url"
+                                        :class="{
+                                            'ags-button-secondary': !item.active
+                                        }"
+                                    ></button>
+                                </template>
+                                <button
+                                    @click.prevent="search(resultLinks.next)"
+                                    class="ags-button ags-button-secondary"
+                                    title="Következő oldal"
+                                    :disabled="!resultLinks.next"
+                                >
+                                    ›
+                                </button>
                                 <button
                                     type="button"
-                                    @click.prevent="search(item.url)"
-                                    x-text="item.label"
-                                    class="ags-button"
-                                    :disabled="!item.url"
-                                    :class="{
-                                        'ags-button-secondary': !item.active
-                                    }"
-                                ></button>
-                            </template>
-                            <button
-                                @click.prevent="search(resultLinks.next)"
-                                class="ags-button ags-button-secondary"
-                                title="Következő oldal"
-                                :disabled="!resultLinks.next"
-                            >
-                                ›
-                            </button>
-                            <button
-                                type="button"
-                                @click.prevent="search(resultLinks.last)"
-                                class="ags-button ags-button-secondary"
-                                title="Utolsó oldal"
-                                :disabled="!resultLinks.last"
-                            >
-                                »
-                            </button>
-                        </nav>
-                    </div>
+                                    @click.prevent="search(resultLinks.last)"
+                                    class="ags-button ags-button-secondary"
+                                    title="Utolsó oldal"
+                                    :disabled="!resultLinks.last"
+                                >
+                                    »
+                                </button>
+                            </nav>
+                        </div>
+                    </template>
 
                     <div class="ags-pager-settings">
                         <div style="display: flex; align-items: center">
-                            <label
-                                for="itemsPerPage"
-                                style="
-                                    white-space: nowrap;
-                                    display: inline-block;
-                                    margin-right: 4px;
-                                "
+                            <template
+                                x-if="resultMeta.total > DEFAULT_PER_PAGE"
                             >
-                                sor / oldal
-                            </label>
-                            <select
-                                x-model="per_page"
-                                id="itemsPerPage"
-                                class="ags-textbox ags-textbox-has-border"
+                                <label
+                                    for="itemsPerPage"
+                                    style="
+                                        white-space: nowrap;
+                                        display: inline-block;
+                                        margin-right: 4px;
+                                    "
+                                >
+                                    sor / oldal
+                                </label>
+                            </template>
+                            <template
+                                x-if="resultMeta.total > DEFAULT_PER_PAGE"
                             >
-                                <option value="15">15</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
+                                <select
+                                    x-model="per_page"
+                                    id="itemsPerPage"
+                                    class="ags-textbox ags-textbox-has-border"
+                                >
+                                    <option
+                                        x-bind:value="DEFAULT_PER_PAGE"
+                                        x-text="DEFAULT_PER_PAGE"
+                                    ></option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </template>
                         </div>
 
                         <div style="white-space: nowrap">
