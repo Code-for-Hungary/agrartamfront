@@ -453,9 +453,6 @@
                                         <strong class="ags-hide-desktop">
                                             Név:&nbsp;
                                         </strong>
-                                        <template x-if="!row.tamogatott">
-                                            <span x-text="row.name"></span>
-                                        </template>
                                         <template
                                             x-if="row.tamogatott && row.tamogatott.kurl"
                                         >
@@ -478,6 +475,11 @@
                                                     </svg>
                                                 </i>
                                             </a>
+                                        </template>
+                                        <template
+                                            x-if="(row.tamogatott && !row.tamogatott.kurl) || (!row.tamogatott && row.name)"
+                                        >
+                                            <span x-text="row.name"></span>
                                         </template>
                                     </td>
                                     <td>
