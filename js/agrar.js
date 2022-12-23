@@ -1,3 +1,5 @@
+const DEFAULT_PER_PAGE = 15;
+
 document.addEventListener("alpine:init", () => {
     Alpine.data("searchForm", () => ({
         formData: {
@@ -30,7 +32,7 @@ document.addEventListener("alpine:init", () => {
             evestamogatasosszeg: null,
         },
         isDirty: false,
-        per_page: 15,
+        per_page: DEFAULT_PER_PAGE,
         submitText: "Keresés",
         submitting: false,
         exportText: "Export",
